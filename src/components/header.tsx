@@ -2,25 +2,34 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BaguaSymbol } from "./bagua-decorations";
 
 const NAV_ITEMS = [
-  { href: "/", label: "首页", bagua: "li" as const },
-  { href: "/blog", label: "博客", bagua: "kan" as const },
-  { href: "/shan-hai-jing", label: "山海经", bagua: "gen" as const },
-  { href: "/about", label: "关于", bagua: "kun" as const },
+  { href: "/", label: "首页", symbol: "☯" },
+  { href: "/blog", label: "博客", symbol: "☵" },
+  { href: "/shan-hai-jing", label: "山海经", symbol: "☶" },
+  { href: "/about", label: "关于", symbol: "☷" },
 ];
 
 export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--border)]" style={{ backgroundColor: "color-mix(in srgb, var(--bg-primary) 80%, transparent)" }}>
+    <header
+      className="sticky top-0 z-50 border-b"
+      style={{
+        backgroundColor: "rgba(10,10,10,0.85)",
+        borderColor: "rgba(255,255,255,0.06)",
+        backdropFilter: "blur(20px)",
+      }}
+    >
       <nav className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <span className="text-2xl" style={{ opacity: 0.7 }}>☯</span>
-          <span className="text-xl font-semibold tracking-tight" style={{ letterSpacing: "-0.02em" }}>
+          <span className="text-2xl" style={{ color: "rgba(255,255,255,0.5)" }}>☯</span>
+          <span
+            className="text-lg tracking-wide"
+            style={{ color: "rgba(255,255,255,0.8)" }}
+          >
             三秒
           </span>
         </Link>
@@ -33,17 +42,14 @@ export function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 hover:bg-[var(--bg-secondary)]"
+                  className="relative flex items-center gap-2 px-4 py-2 text-sm rounded-md transition-all duration-200 hover:bg-white/5"
                   style={{
-                    color: isActive ? "var(--text-primary)" : "var(--text-secondary)",
-                    backgroundColor: isActive ? "var(--bg-secondary)" : "transparent",
+                    color: isActive ? "#ffffff" : "rgba(255,255,255,0.45)",
+                    backgroundColor: isActive ? "rgba(255,255,255,0.06)" : "transparent",
                   }}
                 >
-                  <BaguaSymbol name={item.bagua} size={14} />
+                  <span style={{ opacity: 0.6 }}>{item.symbol}</span>
                   {item.label}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full" style={{ backgroundColor: "var(--text-primary)" }} />
-                  )}
                 </Link>
               </li>
             );

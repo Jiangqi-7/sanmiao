@@ -16,7 +16,7 @@ const BAGUA_GRID = [
   { key: "kun", name: "坤", direction: "西南", href: "/about", desc: "关于我们", color: "#facc15" },
   { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#4ade80" },
   { key: "center", name: "中", direction: "宫", href: "/", desc: "道法自然", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#a3a3a3" },
+  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#d4d4d4" },
   { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#d97706" },
   { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章", color: "#38bdf8" },
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#eab308" },
@@ -29,22 +29,19 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
   return (
     <Link
       href={cell.href}
-      className="relative flex flex-col rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+      className="relative flex flex-col rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.02] ink-card"
       style={{
         height: "260px",
-        background: isCenter
-          ? "linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%)"
-          : "linear-gradient(180deg, #1a1a1a 0%, #141414 100%)",
         borderColor: isCenter ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.08)",
       }}
     >
-      {/* 大背景符号 - 更明显 */}
+      {/* 大背景符号 */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <span
-          className="text-[100px] font-bold select-none"
+          className="text-[90px] font-bold select-none"
           style={{
             color: color,
-            opacity: isCenter ? 0.08 : 0.12,
+            opacity: isCenter ? 0.1 : 0.12,
           }}
         >
           {isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol}
@@ -55,7 +52,7 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
       <div className="pt-6 pb-1 flex flex-col items-center shrink-0 relative z-10">
         <span
           className="text-2xl"
-          style={{ color: color, opacity: 0.9 }}
+          style={{ color: color, opacity: 0.85 }}
         >
           {isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol}
         </span>
@@ -67,18 +64,16 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
         </span>
       </div>
 
-      {/* 中间区域 - 留空让背景符号更突出 */}
-
       {/* 底部区域 */}
       <div className="pb-6 pt-auto flex flex-col items-center shrink-0 relative z-10 mt-auto">
-        <span className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>
+        <span className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
           {isCenter ? "sanmiao" : cell.direction}
         </span>
         <span
           className="text-xs px-3 py-1 rounded-full mt-2"
           style={{
             backgroundColor: "rgba(255,255,255,0.06)",
-            color: "rgba(255,255,255,0.7)",
+            color: "rgba(255,255,255,0.65)",
             border: "1px solid rgba(255,255,255,0.1)",
           }}
         >
@@ -86,9 +81,9 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
         </span>
       </div>
 
-      {/* 顶部水墨光效 - 更明显 */}
+      {/* 顶部水墨光效 */}
       <div
-        className="absolute top-0 left-0 right-0 h-20 pointer-events-none"
+        className="absolute top-0 left-0 right-0 h-24 pointer-events-none"
         style={{
           background: "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%)",
         }}
@@ -96,9 +91,17 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
 
       {/* 底部水墨光效 */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
         style={{
           background: "linear-gradient(0deg, rgba(255,255,255,0.04) 0%, transparent 100%)",
+        }}
+      />
+
+      {/* 右侧水墨晕染 */}
+      <div
+        className="absolute top-1/4 right-0 w-16 h-32 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at 100% 50%, rgba(255,255,255,0.03) 0%, transparent 70%)",
         }}
       />
     </Link>
@@ -107,28 +110,26 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
 
 export default function HomePage() {
   return (
-    <div
-      className="flex flex-col min-h-screen"
-      style={{ backgroundColor: "#0a0a0a" }}
-    >
-      {/* 顶部标题区 */}
-      <header className="pt-20 pb-14 text-center">
-        {/* 顶部装饰线 */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="w-16 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)" }} />
-          <span className="text-3xl" style={{ color: "rgba(255,255,255,0.4)" }}>☯</span>
-          <div className="w-16 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)" }} />
+    <div className="flex flex-col min-h-screen ink-bg">
+      {/* 顶部标题区 - 毛笔字体 */}
+      <header className="pt-20 pb-14 text-center relative">
+        {/* 顶部装饰 */}
+        <div className="flex items-center justify-center gap-6 mb-6">
+          <div className="w-20 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
+          <span className="text-2xl" style={{ color: "rgba(255,255,255,0.35)" }}>☯</span>
+          <div className="w-20 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
         </div>
 
+        {/* 水墨标题 - 毛笔字体 */}
         <h1
-          className="text-5xl md:text-6xl font-bold tracking-[0.2em]"
-          style={{ color: "#ffffff" }}
+          className="font-brush text-6xl md:text-7xl font-normal tracking-wider"
+          style={{ color: "#f0f0f0" }}
         >
           道法自然
         </h1>
         <p
-          className="text-base tracking-[0.3em] mt-3"
-          style={{ color: "rgba(255,255,255,0.4)" }}
+          className="font-brush text-xl tracking-[0.4em] mt-4"
+          style={{ color: "rgba(255,255,255,0.35)" }}
         >
           AI 为用
         </p>
@@ -146,22 +147,19 @@ export default function HomePage() {
       </main>
 
       {/* 底部八卦循环 */}
-      <footer
-        className="py-10 text-center"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-      >
+      <footer className="py-10 text-center" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="flex items-center justify-center gap-6 mb-4">
           {["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"].map((key) => (
             <span
               key={key}
               className="text-base"
-              style={{ color: "rgba(255,255,255,0.2)" }}
+              style={{ color: "rgba(255,255,255,0.18)" }}
             >
               {BAGUA.positions[key as keyof typeof BAGUA.positions].symbol}
             </span>
           ))}
         </div>
-        <p className="text-xs tracking-[0.25em]" style={{ color: "rgba(255,255,255,0.25)" }}>
+        <p className="font-brush text-sm tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.2)" }}>
           後天八卦 · 九宮格
         </p>
       </footer>
