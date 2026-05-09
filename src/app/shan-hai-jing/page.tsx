@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 import { BaguaWheel } from "@/components/bagua-decorations";
 import { CopyButton } from "@/components/copy-button";
+import { ImageLightbox } from "@/components/image-lightbox";
 
 // 山海经异兽数据 - 从 llm-wiki 迁移 + 用户生成的图片
 const CREATURES = [
@@ -40,33 +41,40 @@ function CreatureCard({ creature }: { creature: typeof CREATURES[0] }) {
         borderColor: "var(--border)",
       }}
     >
-      {/* 顶部大图 */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <img
-          src={creature.image}
-          alt={creature.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+      {/* 顶部大图 - 可点击放大 */}
+      <ImageLightbox src={creature.image} alt={creature.name}>
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <img
+            src={creature.image}
+            alt={creature.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
 
-        {/* 渐变遮罩 */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)",
-          }}
-        />
-
-        {/* 名称和出处叠加在图片上 */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm opacity-70">{BAGUA.positions[creature.bagua].symbol}</span>
-            <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: "rgba(255,255,255,0.2)" }}>
-              {creature.source}
-            </span>
+          {/* 放大提示 */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+            <span className="text-white text-sm bg-black/50 px-3 py-1.5 rounded-full">点击放大</span>
           </div>
-          <h3 className="text-2xl font-bold">{creature.name}</h3>
+
+          {/* 渐变遮罩 */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)",
+            }}
+          />
+
+          {/* 名称和出处叠加在图片上 */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-sm opacity-70">{BAGUA.positions[creature.bagua].symbol}</span>
+              <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: "rgba(255,255,255,0.2)" }}>
+                {creature.source}
+              </span>
+            </div>
+            <h3 className="text-2xl font-bold">{creature.name}</h3>
+          </div>
         </div>
-      </div>
+      </ImageLightbox>
 
       {/* 原文区域 */}
       <div className="p-4 border-b" style={{ borderColor: "var(--border)" }}>
