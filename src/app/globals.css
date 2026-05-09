@@ -1,36 +1,18 @@
 @import "tailwindcss";
 
-/* 道家阴阳 · 水墨黑 Theme */
 :root {
-  /* 核心色彩 - 阴阳 */
-  --yin: #0a0a0a;      /* 阴：极黑 */
-  --yang: #ffffff;     /* 阳：极白 */
-
-  /* 水墨色系 */
-  --ink-dark: #0a0a0a;
-  --ink-medium: #1f1f1f;
-  --ink-light: #2a2a2a;
-  --ink-accent: #d4c5a9;  /* 宣纸色 */
-  --ink-muted: #888888;
-
-  /* 当前主题 - 默认阴（黑） */
-  --bg-primary: var(--ink-dark);
-  --bg-secondary: var(--ink-medium);
-  --bg-card: var(--ink-medium);
-  --text-primary: var(--ink-accent);
-  --text-secondary: var(--ink-muted);
-  --text-muted: #666666;
-  --border: var(--ink-light);
-  --border-strong: #3a3a3a;
-  --link: var(--ink-accent);
-  --focus: rgba(212, 197, 169, 0.4);
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #141414;
+  --bg-card: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.5);
+  --text-muted: rgba(255,255,255,0.3);
+  --border: rgba(255,255,255,0.08);
 }
 
 @theme inline {
   --color-background: var(--bg-primary);
   --color-foreground: var(--text-primary);
-  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono, monospace;
 }
 
 * {
@@ -44,31 +26,13 @@ html {
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-weight: 400;
-  line-height: 1.6;
+  font-family: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-h1 {
-  letter-spacing: 0.15em;
-}
-
-h2 {
-  letter-spacing: 0.1em;
-}
-
-/* Link Styles */
 a {
-  color: var(--link);
+  color: var(--text-primary);
   text-decoration: none;
   transition: all 0.25s ease;
 }
@@ -77,19 +41,6 @@ a:hover {
   opacity: 0.7;
 }
 
-/* Focus Ring */
-*:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-}
-
-/* Selection */
-::selection {
-  background: var(--ink-accent);
-  color: var(--ink-dark);
-}
-
-/* Custom Scrollbar - 水墨风格 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -100,58 +51,11 @@ a:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3a3a3a;
+  background: rgba(255,255,255,0.15);
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #4a4a4a;
-}
-
-/* 太极动效 */
-@keyframes yin-yang-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* 水墨晕染效果 */
-.ink-wash {
-  background: radial-gradient(ellipse at 50% 50%, rgba(212,197,169,0.05) 0%, transparent 70%);
-}
-
-/* 渐变边框效果 */
-.border-gradient {
-  position: relative;
-}
-
-.border-gradient::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(212,197,169,0.2) 0%, transparent 50%, rgba(212,197,169,0.1) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  border-radius: inherit;
-  pointer-events: none;
+::selection {
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
 }
