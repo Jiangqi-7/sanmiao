@@ -15,7 +15,7 @@ const CREATURES = [
     promptZh: "生成一张山海经烛龙插图，巨大的红色人面蛇身神占据画面中央，烛龙的眼睛睁闭之间控制昼夜交替，通体散发着日月般的光芒，周围风雨环绕，背景是幽暗神秘的山海世界，水墨古风，武侠电影般的史诗氛围。",
     promptEn: "A legendary Chinese fire deity Zhu Long, ancient ink wash painting style, a massive red humanoid face atop an enormous serpent body stretching across the landscape, eyes closed for night and open for day, glowing like the sun and moon, surrounded by swirling mist and wind, dramatic Wu Xia cinematic atmosphere, dark mystical background with red and gold accents, intricate scales, powerful divine presence, Chinese mythological art, detailed texture, no text, no watermark",
     tags: ["大荒北经", "神祇", "昼夜"],
-    image: "https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-05-10%2FMiniMax-M2.7%2F2030867529949253797%2Ffcc80bac60a78648b4ecdb4a61562f9cb397c05b50db057dd882a94bd95d8d2b..jpeg?Expires=1778441352&OSSAccessKeyId=LTAI5tGLnRTkBjLuYPjNcKQ8&Signature=hifZS6eTIBSW6GtDKaaSAvp%2FTI8%3D",
+    image: "https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-05-10%2FMiniMax-M2.7%2F2030867529949253797%2F0dbed19cb6a1248a660c6762b4c77f56d8c9f485df20efa40ea471fd17dc2175..jpeg?Expires=1778441353&OSSAccessKeyId=LTAI5tGLnRTkBjLuYPjNcKQ8&Signature=zqHqdG8pcOILX1oZZw9%2FW8lFhB8%3D",
     bagua: "kan" as const,
   },
   {
@@ -26,7 +26,7 @@ const CREATURES = [
     promptZh: "生成一张山海经夔牛插图，独脚青灰色神牛站在雷雨交加的东海之中，单眼如烈日般炽烈燃烧，周身风雨大作，青铜器纹饰风格，远景海浪翻涌，肃穆而震撼的中国神话氛围。",
     promptEn: "A mythical Chinese beast Kui Niu, ancient bronze ritual vessel art style, single-legged blue-grey bull standing in a thunderstorm sea, its body glowing like moonlight, lightning and rain surrounding it, one cyclopean eye blazing like the sun, dramatic silhouette, dark stormy ocean backdrop, ancient Chinese mythological creature, bronze mask aesthetic, visceral powerful presence, no text, no watermark",
     tags: ["大荒东经", "神兽", "雷兽"],
-    image: "https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-05-10%2FMiniMax-M2.7%2F2030867529949253797%2F0dbed19cb6a1248a660c6762b4c77f56d8c9f485df20efa40ea471fd17dc2175..jpeg?Expires=1778441353&OSSAccessKeyId=LTAI5tGLnRTkBjLuYPjNcKQ8&Signature=zqHqdG8pcOILX1oZZw9%2FW8lFhB8%3D",
+    image: "https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-05-10%2FMiniMax-M2.7%2F2030867529949253797%2Ffcc80bac60a78648b4ecdb4a61562f9cb397c05b50db057dd882a94bd95d8d2b..jpeg?Expires=1778441352&OSSAccessKeyId=LTAI5tGLnRTkBjLuYPjNcKQ8&Signature=hifZS6eTIBSW6GtDKaaSAvp%2FTI8%3D",
     bagua: "gen" as const,
   },
 ];
