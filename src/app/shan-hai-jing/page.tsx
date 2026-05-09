@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 import { BaguaWheel } from "@/components/bagua-decorations";
+import { CopyButton } from "@/components/copy-button";
 
 // 山海经异兽数据 - 从 Obsidian 迁移
 const CREATURES = [
@@ -126,18 +129,7 @@ function CreatureCard({ creature }: { creature: typeof CREATURES[0] }) {
           <div>
             <p className="text-xs font-medium mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
               中文提示词
-              <button
-                onClick={(e) => {
-                  navigator.clipboard.writeText(creature.promptZh);
-                  const btn = e.currentTarget;
-                  btn.textContent = "已复制!";
-                  setTimeout(() => (btn.textContent = "复制"), 1500);
-                }}
-                className="ml-auto text-xs px-2 py-1 rounded transition-all hover:opacity-80"
-                style={{ backgroundColor: "var(--text-primary)", color: "var(--bg-primary)" }}
-              >
-                复制
-              </button>
+              <CopyButton text={creature.promptZh} lang="zh" />
             </p>
             <p
               className="text-sm p-3 rounded-md leading-relaxed"
@@ -151,18 +143,7 @@ function CreatureCard({ creature }: { creature: typeof CREATURES[0] }) {
           <div>
             <p className="text-xs font-medium mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
               English Prompt
-              <button
-                onClick={(e) => {
-                  navigator.clipboard.writeText(creature.promptEn);
-                  const btn = e.currentTarget;
-                  btn.textContent = "Copied!";
-                  setTimeout(() => (btn.textContent = "Copy"), 1500);
-                }}
-                className="ml-auto text-xs px-2 py-1 rounded transition-all hover:opacity-80"
-                style={{ backgroundColor: "var(--text-primary)", color: "var(--bg-primary)" }}
-              >
-                Copy
-              </button>
+              <CopyButton text={creature.promptEn} lang="en" />
             </p>
             <p
               className="text-xs p-3 rounded-md font-mono leading-relaxed"
