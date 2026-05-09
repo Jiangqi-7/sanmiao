@@ -108,24 +108,25 @@ export default function HomePage() {
             OpenClaw · 扣子 · 山海经异兽图鉴
           </p>
 
-          {/* CTA 按钮 */}
+          {/* CTA 按钮 - 主题自适应 */}
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link
               href="/blog"
-              className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium rounded-md transition-all duration-200"
+              className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90"
               style={{
-                backgroundColor: "var(--yin)",
-                color: "var(--yang)",
+                backgroundColor: "var(--text-primary)",
+                color: "var(--bg-primary)",
               }}
             >
               浏览博客
             </Link>
             <Link
               href="/shan-hai-jing"
-              className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium rounded-md border transition-all duration-200"
+              className="inline-flex items-center justify-center px-8 py-4 text-sm font-medium rounded-md border transition-all duration-200 hover:opacity-80"
               style={{
                 backgroundColor: "transparent",
                 borderColor: "var(--border-strong)",
+                color: "var(--text-primary)",
               }}
             >
               山海经图鉴
