@@ -22,6 +22,91 @@ const BAGUA_GRID = [
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#fbbf24" },
 ];
 
+function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
+  if (cell.isCenter) {
+    return (
+      <Link
+        href={cell.href}
+        className="relative flex flex-col rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+        style={{
+          aspectRatio: "1",
+          backgroundColor: "var(--bg-card)",
+          borderColor: "var(--border)",
+        }}
+      >
+        {/* 顶部区域 */}
+        <div className="pt-8 pb-4 flex flex-col items-center">
+          <span className="text-3xl" style={{ color: "var(--text-primary)", opacity: 0.5 }}>☯</span>
+          <span className="text-lg font-semibold mt-2" style={{ color: "var(--text-primary)" }}>三秒</span>
+        </div>
+
+        {/* 中间大背景 */}
+        <div className="flex-1 flex items-center justify-center">
+          <span
+            className="text-[120px] font-bold select-none pointer-events-none"
+            style={{ color: "var(--text-primary)", opacity: 0.04 }}
+          >
+            ☯
+          </span>
+        </div>
+
+        {/* 底部区域 */}
+        <div className="pb-8 pt-4 flex flex-col items-center">
+          <span className="text-sm" style={{ color: "var(--text-secondary)" }}>sanmiao</span>
+          <span
+            className="text-xs px-3 py-1.5 rounded-full mt-3"
+            style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
+          >
+            道法自然
+          </span>
+        </div>
+      </Link>
+    );
+  }
+
+  const baguaKey = cell.key as keyof typeof BAGUA.positions;
+  const symbol = BAGUA.positions[baguaKey]?.symbol || "☰";
+
+  return (
+    <Link
+      href={cell.href}
+      className="relative flex flex-col rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+      style={{
+        aspectRatio: "1",
+        backgroundColor: "var(--bg-card)",
+        borderColor: "var(--border)",
+      }}
+    >
+      {/* 顶部区域 */}
+      <div className="pt-6 pb-2 flex flex-col items-center">
+        <span className="text-2xl" style={{ color: cell.color }}>{symbol}</span>
+        <span className="text-base font-semibold mt-2" style={{ color: "var(--text-primary)" }}>{cell.name}</span>
+      </div>
+
+      {/* 中间大背景符号 */}
+      <div className="flex-1 flex items-center justify-center">
+        <span
+          className="text-[80px] font-bold select-none pointer-events-none"
+          style={{ color: cell.color, opacity: 0.08 }}
+        >
+          {symbol}
+        </span>
+      </div>
+
+      {/* 底部区域 */}
+      <div className="pb-6 pt-2 flex flex-col items-center">
+        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{cell.direction}</span>
+        <span
+          className="text-xs px-3 py-1.5 rounded-full mt-2"
+          style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
+        >
+          {cell.desc}
+        </span>
+      </div>
+    </Link>
+  );
+}
+
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -37,73 +122,9 @@ export default function HomePage() {
       <main className="flex-1 flex items-center justify-center px-8 py-6">
         <div className="w-full max-w-[900px]">
           <div className="grid grid-cols-3 gap-6">
-            {BAGUA_GRID.map((cell) => {
-              if (cell.isCenter) {
-                return (
-                  <Link
-                    key={cell.key}
-                    href={cell.href}
-                    className="relative flex flex-col items-center justify-center rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
-                    style={{
-                      aspectRatio: "1",
-                      backgroundColor: "var(--bg-card)",
-                      borderColor: "var(--border)",
-                    }}
-                  >
-                    {/* 大背景太极 */}
-                    <span
-                      className="absolute text-[160px] font-bold select-none pointer-events-none"
-                      style={{ color: "var(--text-primary)", opacity: 0.04 }}
-                    >
-                      ☯
-                    </span>
-
-                    <span className="text-5xl mb-8 relative z-10" style={{ color: "var(--text-primary)", opacity: 0.6 }}>☯</span>
-                    <span className="text-xl font-semibold mb-3 relative z-10" style={{ color: "var(--text-primary)" }}>三秒</span>
-                    <span className="text-sm relative z-10" style={{ color: "var(--text-secondary)" }}>sanmiao</span>
-                  </Link>
-                );
-              }
-
-              const baguaKey = cell.key as keyof typeof BAGUA.positions;
-              const symbol = BAGUA.positions[baguaKey]?.symbol || "☰";
-
-              return (
-                <Link
-                  key={cell.key}
-                  href={cell.href}
-                  className="relative flex flex-col items-center justify-center rounded-2xl border transition-all duration-300 hover:scale-[1.02] group"
-                  style={{
-                    aspectRatio: "1",
-                    backgroundColor: "var(--bg-card)",
-                    borderColor: "var(--border)",
-                  }}
-                >
-                  {/* 大背景八卦符号 */}
-                  <span
-                    className="absolute text-[100px] font-bold select-none pointer-events-none transition-transform duration-500 group-hover:scale-110"
-                    style={{ color: cell.color, opacity: 0.1 }}
-                  >
-                    {symbol}
-                  </span>
-
-                  {/* 前景符号 */}
-                  <span className="text-3xl mb-6 relative z-10" style={{ color: cell.color }}>{symbol}</span>
-
-                  {/* 宫位名称 */}
-                  <span className="text-base font-semibold mb-2 relative z-10" style={{ color: "var(--text-primary)" }}>{cell.name}</span>
-                  <span className="text-sm mb-8 relative z-10" style={{ color: "var(--text-secondary)" }}>{cell.direction}</span>
-
-                  {/* 描述标签 */}
-                  <span
-                    className="text-xs px-3 py-1.5 rounded-full relative z-10"
-                    style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
-                  >
-                    {cell.desc}
-                  </span>
-                </Link>
-              );
-            })}
+            {BAGUA_GRID.map((cell) => (
+              <BaguaCell key={cell.key} cell={cell} />
+            ))}
           </div>
         </div>
       </main>
@@ -111,22 +132,13 @@ export default function HomePage() {
       {/* 底部八卦循环 */}
       <footer className="py-10 text-center border-t" style={{ borderColor: "var(--border)" }}>
         <div className="flex items-center justify-center gap-6 mb-3">
-          {[
-            { key: "kan" },
-            { key: "gen" },
-            { key: "zhen" },
-            { key: "xun" },
-            { key: "li" },
-            { key: "kun" },
-            { key: "dui" },
-            { key: "qian" },
-          ].map((item) => (
+          {["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"].map((key) => (
             <span
-              key={item.key}
-              className="text-sm cursor-default"
+              key={key}
+              className="text-sm"
               style={{ color: "var(--text-muted)" }}
             >
-              {BAGUA.positions[item.key as keyof typeof BAGUA.positions].symbol}
+              {BAGUA.positions[key as keyof typeof BAGUA.positions].symbol}
             </span>
           ))}
         </div>
