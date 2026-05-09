@@ -16,7 +16,7 @@ const BAGUA_GRID = [
   { key: "kun", name: "坤", direction: "西南", href: "/about", desc: "关于我们", color: "#eab308" },
   { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#22c55e" },
   { key: "center", name: "中", direction: "宫", href: "/", desc: "道法自然", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#e5e5e5" },
+  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#d4d4d4" },
   { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#d97706" },
   { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章", color: "#3b82f6" },
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#fbbf24" },
@@ -29,22 +29,22 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
   return (
     <Link
       href={cell.href}
-      className="relative flex flex-col rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+      className="relative flex flex-col rounded-2xl border transition-all duration-300 hover:scale-[1.02] overflow-hidden"
       style={{
-        height: "280px",
+        height: "260px",
         backgroundColor: "var(--bg-card)",
         borderColor: "var(--border)",
       }}
     >
       {/* 顶部区域 */}
-      <div className="pt-6 pb-2 flex flex-col items-center shrink-0">
+      <div className="pt-5 pb-1 flex flex-col items-center shrink-0">
         <span
-          className="text-2xl"
+          className="text-xl"
           style={{ color: isCenter ? "var(--text-primary)" : color, opacity: isCenter ? 0.6 : 1 }}
         >
           {isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol}
         </span>
-        <span className="text-base font-semibold mt-2" style={{ color: "var(--text-primary)" }}>
+        <span className="text-sm font-semibold mt-1" style={{ color: "var(--text-primary)" }}>
           {isCenter ? "三秒" : cell.name}
         </span>
       </div>
@@ -52,7 +52,7 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
       {/* 中间大背景符号 */}
       <div className="flex-1 flex items-center justify-center">
         <span
-          className="text-[80px] font-bold select-none pointer-events-none"
+          className="text-[70px] font-bold select-none pointer-events-none"
           style={{ color: color, opacity: 0.08 }}
         >
           {isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol}
@@ -60,12 +60,12 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
       </div>
 
       {/* 底部区域 */}
-      <div className="pb-6 pt-2 flex flex-col items-center shrink-0">
-        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
+      <div className="pb-4 pt-1 flex flex-col items-center shrink-0">
+        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
           {isCenter ? "sanmiao" : cell.direction}
         </span>
         <span
-          className="text-xs px-3 py-1.5 rounded-full mt-2"
+          className="text-xs px-2 py-1 rounded-full mt-1"
           style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
         >
           {isCenter ? "道法自然" : cell.desc}
@@ -89,7 +89,7 @@ export default function HomePage() {
       {/* 九宫格主区域 */}
       <main className="flex-1 flex items-center justify-center px-8 py-6">
         <div className="w-full max-w-[900px]">
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-5">
             {BAGUA_GRID.map((cell) => (
               <BaguaCell key={cell.key} cell={cell} />
             ))}
