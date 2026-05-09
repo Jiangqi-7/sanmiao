@@ -11,15 +11,15 @@ import { BAGUA } from "@/lib/design-system";
 //   艮(东北)  │   坎(北)   │   乾(西北)
 
 const BAGUA_GRID = [
-  { key: "xun", name: "巽", direction: "东南", href: "/blog?category=workflow", desc: "AI 工作流", color: "#4ade80" },
+  { key: "xun", name: "巽", direction: "东南", href: "/blog?category=workflow", desc: "AI 工作流", color: "#22c55e" },
   { key: "li", name: "离", direction: "南", href: "/shan-hai-jing", desc: "山海经图鉴", color: "#ef4444" },
   { key: "kun", name: "坤", direction: "西南", href: "/about", desc: "关于我们", color: "#eab308" },
-  { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#fb923c" },
+  { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#22c55e" },
   { key: "center", name: "中", direction: "宫", href: "/", desc: "道法自然", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#06b6d4" },
-  { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#a855f7" },
+  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#f5f5f5" },
+  { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#d97706" },
   { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章", color: "#3b82f6" },
-  { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#ec4899" },
+  { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#fbbf24" },
 ];
 
 export default function HomePage() {
