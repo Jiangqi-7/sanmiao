@@ -30,10 +30,10 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen">
       {/* 顶部标题区 */}
       <header className="pt-16 pb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2" style={{ letterSpacing: "-0.04em" }}>
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2" style={{ letterSpacing: "-0.04em", color: "var(--text-primary)" }}>
           道法自然
         </h1>
-        <p className="text-sm opacity-50 tracking-wide">AI 为用</p>
+        <p className="text-sm tracking-wide" style={{ color: "var(--text-secondary)" }}>AI 为用</p>
       </header>
 
       {/* 九宫格主区域 */}
@@ -55,8 +55,8 @@ export default function HomePage() {
                     }}
                   >
                     {/* 太极符号背景 */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-[0.03]">
-                      <span className="text-[200px] font-bold">☯</span>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-[200px] font-bold" style={{ color: "var(--text-primary)", opacity: 0.05 }}>☯</span>
                     </div>
 
                     {/* 太极光效 */}
@@ -68,9 +68,9 @@ export default function HomePage() {
                     />
 
                     <div className="relative z-10 text-center">
-                      <span className="text-5xl mb-3 block opacity-60 group-hover:opacity-80 transition-opacity">☯</span>
-                      <span className="text-lg font-semibold tracking-tight">三秒</span>
-                      <span className="block text-xs opacity-40 mt-1">sanmiao</span>
+                      <span className="text-5xl mb-3 block" style={{ color: "var(--text-primary)", opacity: 0.7 }}>☯</span>
+                      <span className="text-lg font-semibold tracking-tight" style={{ color: "var(--text-primary)" }}>三秒</span>
+                      <span className="block text-xs mt-1" style={{ color: "var(--text-secondary)", opacity: 0.6 }}>sanmiao</span>
                     </div>
                   </Link>
                 );
@@ -98,22 +98,22 @@ export default function HomePage() {
 
                   {/* 背景大符号 */}
                   <span
-                    className="absolute text-[100px] opacity-[0.04] font-bold select-none transition-transform duration-500 group-hover:scale-110"
-                    style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
+                    className="absolute text-[100px] font-bold select-none transition-transform duration-500 group-hover:scale-110"
+                    style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "var(--text-primary)", opacity: 0.08 }}
                   >
                     {symbol}
                   </span>
 
                   {/* 格子内容 */}
                   <div className="relative z-10 flex flex-col items-center text-center">
-                    <span className="text-3xl mb-2 opacity-60 group-hover:opacity-80 transition-opacity">{symbol}</span>
-                    <span className="text-base font-medium tracking-tight">{cell.name}</span>
-                    <span className="text-xs opacity-40 mb-2">{cell.direction}</span>
+                    <span className="text-3xl mb-2 opacity-80 group-hover:opacity-100 transition-opacity" style={{ color: "var(--text-primary)" }}>{symbol}</span>
+                    <span className="text-base font-medium tracking-tight" style={{ color: "var(--text-primary)" }}>{cell.name}</span>
+                    <span className="text-xs opacity-50 mb-2" style={{ color: "var(--text-secondary)" }}>{cell.direction}</span>
                     <span
                       className="text-xs px-2 py-1 rounded-full transition-colors"
                       style={{
                         backgroundColor: "var(--bg-secondary)",
-                        color: "var(--text-muted)",
+                        color: "var(--text-primary)",
                       }}
                     >
                       {cell.desc}
