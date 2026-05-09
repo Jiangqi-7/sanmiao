@@ -16,7 +16,7 @@ const BAGUA_GRID = [
   { key: "kun", name: "坤", direction: "西南", href: "/about", desc: "关于我们", color: "#eab308" },
   { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#22c55e" },
   { key: "center", name: "中", direction: "宫", href: "/", desc: "道法自然", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#d4d4d4" },
+  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#525252" },
   { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#d97706" },
   { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章", color: "#3b82f6" },
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#fbbf24" },
