@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#ffffff] text-[#171717]">
+      <body className="min-h-full flex flex-col" style={{ backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

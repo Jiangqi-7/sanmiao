@@ -1,50 +1,29 @@
 @import "tailwindcss";
 
-/* 道家阴阳 · 黑与白 Theme */
+/* 道家阴阳 · 水墨黑 Theme */
 :root {
   /* 核心色彩 - 阴阳 */
   --yin: #0a0a0a;      /* 阴：极黑 */
   --yang: #ffffff;     /* 阳：极白 */
-  --yin-light: #171717; /* 阴之浅 */
-  --yang-dark: #f5f5f5; /* 阳之暗 */
 
-  /* 中性灰度（过渡） */
-  --gray-900: #171717;
-  --gray-800: #1a1a1a;
-  --gray-700: #2a2a2a;
-  --gray-600: #4d4d4d;
-  --gray-500: #666666;
-  --gray-400: #808080;
-  --gray-300: #a3a3a3;
-  --gray-200: #d4d4d4;
-  --gray-100: #ebebeb;
-  --gray-50: #fafafa;
+  /* 水墨色系 */
+  --ink-dark: #0a0a0a;
+  --ink-medium: #1f1f1f;
+  --ink-light: #2a2a2a;
+  --ink-accent: #d4c5a9;  /* 宣纸色 */
+  --ink-muted: #888888;
 
-  /* 交互色 */
-  --accent: #ffffff;
-  --link: #ffffff;
-  --focus: rgba(255, 255, 255, 0.8);
-
-  /* 八卦方位色（传统五行配色） */
-  --bagua-qian: #e879f9;  /* 乾·西北·天·粉 */
-  --bagua-dun: #4ade80;  /* 巽·东南·风·绿 */
-  --bagua-kan: #38bdf8;  /* 坎·北·水·蓝 */
-  --bagua-gen: #a78bfa;  /* 艮·东北·山·紫 */
-  --bagua-zhen: #fb923c; /* 震·东·雷·橙 */
-  --bagua-xun: #4ade80;  /* 巽·东南·风·绿 */
-  --bagua-li: #f87171;   /* 离·南·火·红 */
-  --bagua-kun: #facc15;  /* 坤·西南·地·黄 */
-  --bagua-dui: #22d3ee;  /* 兑·西·泽·青 */
-
-  /* 当前主题 - 默认阳（白） */
-  --bg-primary: var(--yang);
-  --bg-secondary: var(--yang-dark);
-  --bg-card: var(--yang);
-  --text-primary: var(--yin);
-  --text-secondary: var(--gray-600);
-  --text-muted: var(--gray-400);
-  --border: var(--gray-200);
-  --border-strong: var(--gray-300);
+  /* 当前主题 - 默认阴（黑） */
+  --bg-primary: var(--ink-dark);
+  --bg-secondary: var(--ink-medium);
+  --bg-card: var(--ink-medium);
+  --text-primary: var(--ink-accent);
+  --text-secondary: var(--ink-muted);
+  --text-muted: #666666;
+  --border: var(--ink-light);
+  --border-strong: #3a3a3a;
+  --link: var(--ink-accent);
+  --focus: rgba(212, 197, 169, 0.4);
 }
 
 @theme inline {
@@ -52,21 +31,6 @@
   --color-foreground: var(--text-primary);
   --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "Geist Mono", ui-monospace, SFMono, monospace;
-}
-
-/* 暗色主题 - 阴（黑） */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: var(--yin);
-    --bg-secondary: var(--gray-900);
-    --bg-card: var(--yin-light);
-    --text-primary: var(--yang);
-    --text-secondary: var(--gray-300);
-    --text-muted: var(--gray-500);
-    --border: var(--gray-800);
-    --border-strong: var(--gray-700);
-    --link: var(--gray-200);
-  }
 }
 
 * {
@@ -88,35 +52,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 太极 Typography */
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
-  letter-spacing: -0.03em;
   line-height: 1.2;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  letter-spacing: -0.04em;
+  letter-spacing: 0.15em;
 }
 
 h2 {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-}
-
-h3 {
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  letter-spacing: 0.1em;
 }
 
 /* Link Styles */
 a {
   color: var(--link);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 a:hover {
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 /* Focus Ring */
@@ -127,11 +85,11 @@ a:hover {
 
 /* Selection */
 ::selection {
-  background: var(--yin);
-  color: var(--yang);
+  background: var(--ink-accent);
+  color: var(--ink-dark);
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - 水墨风格 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -142,42 +100,28 @@ a:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-500);
+  background: #3a3a3a;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-400);
+  background: #4a4a4a;
 }
 
 /* 太极动效 */
 @keyframes yin-yang-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 .animate-fade-in-up {
@@ -186,6 +130,11 @@ a:hover {
 
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* 水墨晕染效果 */
+.ink-wash {
+  background: radial-gradient(ellipse at 50% 50%, rgba(212,197,169,0.05) 0%, transparent 70%);
 }
 
 /* 渐变边框效果 */
@@ -198,18 +147,11 @@ a:hover {
   position: absolute;
   inset: 0;
   padding: 1px;
-  background: linear-gradient(135deg, var(--gray-200) 0%, var(--gray-400) 50%, var(--gray-200) 100%);
+  background: linear-gradient(135deg, rgba(212,197,169,0.2) 0%, transparent 50%, rgba(212,197,169,0.1) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   border-radius: inherit;
   pointer-events: none;
-}
-
-/* 暗色主题下的渐变边框 */
-@media (prefers-color-scheme: dark) {
-  .border-gradient::before {
-    background: linear-gradient(135deg, var(--gray-700) 0%, var(--gray-600) 50%, var(--gray-700) 100%);
-  }
 }
