@@ -5,51 +5,29 @@ import { BAGUA } from "@/lib/design-system";
 import { BaguaWheel } from "@/components/bagua-decorations";
 import { CopyButton } from "@/components/copy-button";
 
-// 山海经异兽数据 - 从 Obsidian 迁移
+// 山海经异兽数据 - 从 llm-wiki 迁移 + 用户生成的图片
 const CREATURES = [
   {
-    id: "chi-ru",
-    name: "赤鱬",
-    source: "《山海经·南山经》",
-    rawText: "英水出焉，南流注于即翼之泽。其中多赤鱬，其状如鱼而人面，其音如鸳鸯，食之不疥。",
-    promptZh: "生成一张山海经赤鱬插图，人面鱼身的奇异生物在幽蓝湖底游弋，鱼身晶莹透明，人面清晰可辨，周围是水草和珊瑚，远处光斑透入水面，中国神话水中灵兽，水墨彩绘风格。",
-    promptEn: "A mystical Chinese creature Chi Ru, Shan Hai Jing illustration, fish with a human face swimming in a deep crystal lake, translucent body showing internal organs, clearly defined humanoid face, coral and seaweed surroundings, light rays penetrating from above, ethereal blue atmosphere, ancient Chinese mythological water spirit, ink wash painting style, no text, no watermark",
-    tags: ["南山经", "水族", "祥瑞"],
-    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80",
+    id: "zhu-long",
+    name: "烛龙",
+    source: "《山海经·大荒北经》",
+    rawText: "西北海之外，赤水之北，有章尾山。有神，人面蛇身而赤，直目正乘，其瞑乃晦，其视乃明，不食不寝不息，风雨是谒。是烛九阴，是烛龙。",
+    promptZh: "生成一张山海经烛龙插图，巨大的红色人面蛇身神占据画面中央，烛龙的眼睛睁闭之间控制昼夜交替，通体散发着日月般的光芒，周围风雨环绕，背景是幽暗神秘的山海世界，水墨古风，武侠电影般的史诗氛围。",
+    promptEn: "A legendary Chinese fire deity Zhu Long, ancient ink wash painting style, a massive red humanoid face atop an enormous serpent body stretching across the landscape, eyes closed for night and open for day, glowing like the sun and moon, surrounded by swirling mist and wind, dramatic Wu Xia cinematic atmosphere, dark mystical background with red and gold accents, intricate scales, powerful divine presence, Chinese mythological art, detailed texture, no text, no watermark",
+    tags: ["大荒北经", "神祇", "昼夜"],
+    image: "https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-05-10%2FMiniMax-M2.7%2F2030867529949253797%2Ffcc80bac60a78648b4ecdb4a61562f9cb397c05b50db057dd882a94bd95d8d2b..jpeg?Expires=1778441352&OSSAccessKeyId=LTAI5tGLnRTkBjLuYPjNcKQ8&Signature=hifZS6eTIBSW6GtDKaaSAvp%2FTI8%3D",
     bagua: "kan" as const,
   },
   {
-    id: "li-li",
-    name: "狸力",
-    source: "《山海经·南山经》",
-    rawText: "柜山，有兽焉，其状如豚，有距，其音如狗吠，其名曰狸力，见则其县多土功。",
-    promptZh: "生成一张山海经狸力插图，小猪身形却长着锋利的鸡爪，在挖掘泥土，地面隆起堆成小山，尘土飞扬，周围是古代县城的工地，中国上古劳作之兽，水墨淡彩风格。",
-    promptEn: "A diligent Chinese beast Li Li, Shan Hai Jing illustration, piglet-sized creature with rooster-like talons digging earth, mounds of soil piling up around it, dust flying in the air, ancient county construction site in background, hardworking mythical creature from Chinese folklore, muted ink wash style with earth tones, no text, no watermark",
-    tags: ["南山经", "山兽", "土功"],
-    image: "https://images.unsplash.com/photo-1550947627-6a4a8d7d5b1e?w=800&q=80",
+    id: "kui-niu",
+    name: "夔牛",
+    source: "《山海经·大荒东经》",
+    rawText: "东海中有流波山，入海七千里。其上有兽，状如牛，苍身而无角，一足，出入水则必有风雨，其光如日月，其声如雷，其名曰夔。黄帝得之，以其皮为鼓，橛以雷兽之骨，声闻五百里，以威天下。",
+    promptZh: "生成一张山海经夔牛插图，独脚青灰色神牛站在雷雨交加的东海之中，单眼如烈日般炽烈燃烧，周身风雨大作，青铜器纹饰风格，远景海浪翻涌，肃穆而震撼的中国神话氛围。",
+    promptEn: "A mythical Chinese beast Kui Niu, ancient bronze ritual vessel art style, single-legged blue-grey bull standing in a thunderstorm sea, its body glowing like moonlight, lightning and rain surrounding it, one cyclopean eye blazing like the sun, dramatic silhouette, dark stormy ocean backdrop, ancient Chinese mythological creature, bronze mask aesthetic, visceral powerful presence, no text, no watermark",
+    tags: ["大荒东经", "神兽", "雷兽"],
+    image: "https://minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com/ccv2%2F2026-05-10%2FMiniMax-M2.7%2F2030867529949253797%2F0dbed19cb6a1248a660c6762b4c77f56d8c9f485df20efa40ea471fd17dc2175..jpeg?Expires=1778441353&OSSAccessKeyId=LTAI5tGLnRTkBjLuYPjNcKQ8&Signature=zqHqdG8pcOILX1oZZw9%2FW8lFhB8%3D",
     bagua: "gen" as const,
-  },
-  {
-    id: "lei",
-    name: "类",
-    source: "《山海经·南山经》",
-    rawText: "亶爰之山，多水，无草木。有兽焉，其状如狸而有髦，其名曰类，自为牝牡，食者不妒。",
-    promptZh: "生成一张山海经类插图，野猫身形却披散长发，雌雄同体的神秘生物在幽暗密林间独行，双性特征模糊难辨，周围是潮湿的亚热带植被，月光透过树叶，中国神话神秘异兽，水墨写意风格。",
-    promptEn: "A mysterious Chinese beast Lei, Shan Hai Jing ancient illustration, wildcat-like creature with long flowing hair, androgynous form with ambiguous gender features, prowling through dark dense subtropical forest, moonlight filtering through leaves, fog swirling at its feet, enigmatic Chinese mythological creature, sparse ink wash painting, no text, no watermark",
-    tags: ["南山经", "山兽", "神秘"],
-    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80",
-    bagua: "kun" as const,
-  },
-  {
-    id: "bo-yi",
-    name: "猼訑",
-    source: "《山海经·南山经》",
-    rawText: "基山，有兽焉，其状如羊，九尾，四耳，其目在背，其名曰猼訑，佩之不畏。",
-    promptZh: "生成一张山海经猼訑插图，羊身九尾奇异神兽，背生四耳各朝不同方向，眼睛长在后背，九尾如彩带飘散，周身散发无畏神光，佩之不畏的祥瑞之兽，中国上古神怪画风。",
-    promptEn: "A fearless Chinese mythical beast Bo Yi, Shan Hai Jing ancient illustration, goat-like creature with nine flowing tails and four ears on its back, eyes positioned on its back watching all directions, divine fearless glow surrounding it, ethereal mystical atmosphere, ancient Chinese supernatural art, nine tails fanning out dramatically, no text, no watermark",
-    tags: ["南山经", "山兽", "祥瑞"],
-    image: "https://images.unsplash.com/photo-1577493340887-b7bfff550145?w=800&q=80",
-    bagua: "zhen" as const,
   },
 ];
 
@@ -223,11 +201,11 @@ export default function ShanHaiJingPage() {
       {/* 异兽展示 */}
       <section className="py-12 flex-1">
         <div className="max-w-[1400px] mx-auto px-6">
-          {/* 南山经 */}
-          <div id="nan" className="mb-16">
+          {/* 大荒北经 */}
+          <div id="bei" className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-              <span className="text-3xl">{BAGUA.positions.xun.symbol}</span>
-              <h2 className="text-2xl font-semibold">南山经</h2>
+              <span className="text-3xl">{BAGUA.positions.kan.symbol}</span>
+              <h2 className="text-2xl font-semibold">大荒北经</h2>
               <span
                 className="text-sm px-3 py-1 rounded-full"
                 style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}
@@ -251,7 +229,7 @@ export default function ShanHaiJingPage() {
             <span className="text-4xl opacity-20 block mb-4">{BAGUA.positions.dui.symbol}</span>
             <p className="text-lg mb-2">更多经文正在整理中</p>
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-              西山经 · 北山经 · 东山经 · 中山经 · 海外经 · 大荒经
+              南山经 · 西山经 · 北山经 · 东山经 · 中山经 · 海外经 · 大荒经
             </p>
           </div>
         </div>
