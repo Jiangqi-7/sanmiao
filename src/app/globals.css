@@ -25,15 +25,16 @@
   --link: #ffffff;
   --focus: rgba(255, 255, 255, 0.8);
 
-  /* 八卦方位色（微妙的氛围色） */
-  --bagua-li: rgba(220, 38, 38, 0.08);    /* 离·南·火·红 */
-  --bagua-kan: rgba(59, 130, 246, 0.08);  /* 坎·北·水·蓝 */
-  --bagua-dun: rgba(16, 185, 129, 0.08);  /* 巽·东南·风·绿 */
-  --bagua-zhen: rgba(245, 158, 11, 0.08); /* 震·东·雷·橙 */
-  --bagua-gen: rgba(139, 92, 246, 0.08);  /* 艮·东北·山·紫 */
-  --bagua-qian: rgba(236, 72, 153, 0.08); /* 乾·西北·天·粉 */
-  --bagua-kun: rgba(234, 179, 8, 0.08);   /* 坤·西南·地·黄 */
-  --bagua-dui: rgba(6, 182, 212, 0.08);   /* 兑·西·泽·青 */
+  /* 八卦方位色（传统五行配色） */
+  --bagua-qian: #e879f9;  /* 乾·西北·天·粉 */
+  --bagua-dun: #4ade80;  /* 巽·东南·风·绿 */
+  --bagua-kan: #38bdf8;  /* 坎·北·水·蓝 */
+  --bagua-gen: #a78bfa;  /* 艮·东北·山·紫 */
+  --bagua-zhen: #fb923c; /* 震·东·雷·橙 */
+  --bagua-xun: #4ade80;  /* 巽·东南·风·绿 */
+  --bagua-li: #f87171;   /* 离·南·火·红 */
+  --bagua-kun: #facc15;  /* 坤·西南·地·黄 */
+  --bagua-dui: #22d3ee;  /* 兑·西·泽·青 */
 
   /* 当前主题 - 默认阳（白） */
   --bg-primary: var(--yang);
@@ -65,16 +66,6 @@
     --border: var(--gray-800);
     --border-strong: var(--gray-700);
     --link: var(--gray-200);
-
-    /* 暗色下八卦色更浓郁 */
-    --bagua-li: rgba(220, 38, 38, 0.15);
-    --bagua-kan: rgba(59, 130, 246, 0.15);
-    --bagua-dun: rgba(16, 185, 129, 0.15);
-    --bagua-zhen: rgba(245, 158, 11, 0.15);
-    --bagua-gen: rgba(139, 92, 246, 0.15);
-    --bagua-qian: rgba(236, 72, 153, 0.15);
-    --bagua-kun: rgba(234, 179, 8, 0.15);
-    --bagua-dui: rgba(6, 182, 212, 0.15);
   }
 }
 
@@ -221,28 +212,4 @@ a:hover {
   .border-gradient::before {
     background: linear-gradient(135deg, var(--gray-700) 0%, var(--gray-600) 50%, var(--gray-700) 100%);
   }
-}
-
-/* 九宫格悬停光效 */
-.bagua-cell {
-  position: relative;
-  overflow: hidden;
-}
-
-.bagua-cell::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(255, 255, 255, 0.15) 0%,
-    transparent 60%
-  );
-}
-
-.bagua-cell:hover::after {
-  opacity: 1;
 }
