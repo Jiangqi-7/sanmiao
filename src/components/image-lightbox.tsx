@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 interface ImageLightboxProps {
   src: string;
   alt: string;
-  children: React.ReNode;
+  children: React.ReactNode;
 }
 
 export function ImageLightbox({ src, alt, children }: ImageLightboxProps) {
