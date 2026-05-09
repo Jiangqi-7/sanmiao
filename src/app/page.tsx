@@ -58,8 +58,8 @@ export default function HomePage() {
                       ☯
                     </span>
 
-                    <span className="text-5xl mb-4 relative z-10" style={{ color: "var(--text-primary)", opacity: 0.6 }}>☯</span>
-                    <span className="text-xl font-semibold mb-1 relative z-10" style={{ color: "var(--text-primary)" }}>三秒</span>
+                    <span className="text-5xl mb-8 relative z-10" style={{ color: "var(--text-primary)", opacity: 0.6 }}>☯</span>
+                    <span className="text-xl font-semibold mb-3 relative z-10" style={{ color: "var(--text-primary)" }}>三秒</span>
                     <span className="text-sm relative z-10" style={{ color: "var(--text-secondary)" }}>sanmiao</span>
                   </Link>
                 );
@@ -88,11 +88,11 @@ export default function HomePage() {
                   </span>
 
                   {/* 前景符号 */}
-                  <span className="text-3xl mb-4 relative z-10" style={{ color: cell.color }}>{symbol}</span>
+                  <span className="text-3xl mb-6 relative z-10" style={{ color: cell.color }}>{symbol}</span>
 
                   {/* 宫位名称 */}
-                  <span className="text-base font-semibold mb-1 relative z-10" style={{ color: "var(--text-primary)" }}>{cell.name}</span>
-                  <span className="text-sm mb-6 relative z-10" style={{ color: "var(--text-secondary)" }}>{cell.direction}</span>
+                  <span className="text-base font-semibold mb-2 relative z-10" style={{ color: "var(--text-primary)" }}>{cell.name}</span>
+                  <span className="text-sm mb-8 relative z-10" style={{ color: "var(--text-secondary)" }}>{cell.direction}</span>
 
                   {/* 描述标签 */}
                   <span
