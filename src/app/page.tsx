@@ -16,91 +16,59 @@ const BAGUA_GRID = [
   { key: "kun", name: "坤", direction: "西南", href: "/about", desc: "关于我们", color: "#eab308" },
   { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#22c55e" },
   { key: "center", name: "中", direction: "宫", href: "/", desc: "道法自然", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#f5f5f5" },
+  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#e5e5e5" },
   { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#d97706" },
   { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章", color: "#3b82f6" },
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#fbbf24" },
 ];
 
 function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
-  if (cell.isCenter) {
-    return (
-      <Link
-        href={cell.href}
-        className="relative flex flex-col rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
-        style={{
-          aspectRatio: "1",
-          backgroundColor: "var(--bg-card)",
-          borderColor: "var(--border)",
-        }}
-      >
-        {/* 顶部区域 */}
-        <div className="pt-8 pb-4 flex flex-col items-center">
-          <span className="text-3xl" style={{ color: "var(--text-primary)", opacity: 0.5 }}>☯</span>
-          <span className="text-lg font-semibold mt-2" style={{ color: "var(--text-primary)" }}>三秒</span>
-        </div>
-
-        {/* 中间大背景 */}
-        <div className="flex-1 flex items-center justify-center">
-          <span
-            className="text-[120px] font-bold select-none pointer-events-none"
-            style={{ color: "var(--text-primary)", opacity: 0.04 }}
-          >
-            ☯
-          </span>
-        </div>
-
-        {/* 底部区域 */}
-        <div className="pb-8 pt-4 flex flex-col items-center">
-          <span className="text-sm" style={{ color: "var(--text-secondary)" }}>sanmiao</span>
-          <span
-            className="text-xs px-3 py-1.5 rounded-full mt-3"
-            style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
-          >
-            道法自然
-          </span>
-        </div>
-      </Link>
-    );
-  }
-
-  const baguaKey = cell.key as keyof typeof BAGUA.positions;
-  const symbol = BAGUA.positions[baguaKey]?.symbol || "☰";
+  const isCenter = cell.isCenter;
+  const color = isCenter ? "#888888" : cell.color;
 
   return (
     <Link
       href={cell.href}
       className="relative flex flex-col rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
       style={{
-        aspectRatio: "1",
+        height: "280px",
         backgroundColor: "var(--bg-card)",
         borderColor: "var(--border)",
       }}
     >
       {/* 顶部区域 */}
-      <div className="pt-6 pb-2 flex flex-col items-center">
-        <span className="text-2xl" style={{ color: cell.color }}>{symbol}</span>
-        <span className="text-base font-semibold mt-2" style={{ color: "var(--text-primary)" }}>{cell.name}</span>
+      <div className="pt-6 pb-2 flex flex-col items-center shrink-0">
+        <span
+          className="text-2xl"
+          style={{ color: isCenter ? "var(--text-primary)" : color, opacity: isCenter ? 0.6 : 1 }}
+        >
+          {isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol}
+        </span>
+        <span className="text-base font-semibold mt-2" style={{ color: "var(--text-primary)" }}>
+          {isCenter ? "三秒" : cell.name}
+        </span>
       </div>
 
       {/* 中间大背景符号 */}
       <div className="flex-1 flex items-center justify-center">
         <span
           className="text-[80px] font-bold select-none pointer-events-none"
-          style={{ color: cell.color, opacity: 0.08 }}
+          style={{ color: color, opacity: 0.08 }}
         >
-          {symbol}
+          {isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol}
         </span>
       </div>
 
       {/* 底部区域 */}
-      <div className="pb-6 pt-2 flex flex-col items-center">
-        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{cell.direction}</span>
+      <div className="pb-6 pt-2 flex flex-col items-center shrink-0">
+        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {isCenter ? "sanmiao" : cell.direction}
+        </span>
         <span
           className="text-xs px-3 py-1.5 rounded-full mt-2"
           style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
         >
-          {cell.desc}
+          {isCenter ? "道法自然" : cell.desc}
         </span>
       </div>
     </Link>
