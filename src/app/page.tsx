@@ -5,15 +5,15 @@ import { BAGUA } from "@/lib/design-system";
 
 // 后天八卦九宫格布局
 const BAGUA_GRID = [
-  { key: "xun", name: "巽", direction: "东南", href: "/blog?category=workflow", color: "#22c55e" },
-  { key: "li", name: "离", direction: "南", href: "/shan-hai-jing", desc: "山海经图鉴", color: "#ef4444" },
-  { key: "kun", name: "坤", direction: "西南", href: "/about", desc: "关于我们", color: "#eab308" },
-  { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#22c55e" },
+  { key: "xun", name: "巽", direction: "东南", href: "/blog?category=workflow", color: "#16a34a" },
+  { key: "li", name: "离", direction: "南", href: "/shan-hai-jing", desc: "山海经图鉴", color: "#dc2626" },
+  { key: "kun", name: "坤", direction: "西南", href: "/about", desc: "关于我们", color: "#ca8a04" },
+  { key: "zhen", name: "震", direction: "东", href: "/blog?category=video", desc: "视频生成", color: "#16a34a" },
   { key: "center", name: "中", direction: "宫", href: "/", desc: "道法自然", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#a3a3a3" },
-  { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#d97706" },
-  { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章", color: "#3b82f6" },
-  { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#fbbf24" },
+  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image", desc: "图片生成", color: "#525252" },
+  { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools", desc: "工具教程", color: "#a16207" },
+  { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章", color: "#2563eb" },
+  { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#ca8a04" },
 ];
 
 function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
@@ -52,24 +52,18 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
         </div>
         <span
           className="text-2xl transition-all duration-300 group-hover:scale-110"
-          style={{ color: isCenter ? "#000000" : cell.color, opacity: 0.15 }}
+          style={{ color: isCenter ? "#000000" : cell.color, opacity: 0.2 }}
         >
           {symbol}
         </span>
       </div>
 
       {/* 底部标签 */}
-      <div className="relative z-10 mt-auto flex items-center justify-between">
-        <span
-          className="text-xs px-2 py-1 rounded"
-          style={{ backgroundColor: "#f5f5f5", color: "#666666" }}
-        >
+      <div className="relative z-10 mt-auto flex flex-col items-center gap-2">
+        <span className="text-sm" style={{ color: "#333333" }}>
           {tag}
         </span>
-        <span
-          className="text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-8px] group-hover:translate-x-0"
-          style={{ color: "#999999" }}
-        >
+        <span className="text-xs opacity-0 group-hover:opacity-100 transition-all duration-300" style={{ color: "#999999" }}>
           →
         </span>
       </div>
