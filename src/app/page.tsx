@@ -29,104 +29,99 @@ function WindowFlower({ position, color = "#8b4513" }: { position: string; color
   return <div className="absolute w-3 h-3" style={styles[position]} />;
 }
 
-// 传统石狮子 SVG（传统造型，大头蓬鬃）
+// 抽象石狮子 SVG（传统石刻风格）
 function StoneLionSVG({ mirror = false }) {
   return (
     <svg
       width="60"
-      height="68"
-      viewBox="0 0 60 68"
+      height="70"
+      viewBox="0 0 60 70"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         transform: mirror ? "scaleX(-1)" : "none",
         opacity: 0.45,
-        filter: "drop-shadow(2px 2px 3px rgba(0,0,0,0.3))",
+        filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.3))",
       }}
     >
       {/* 底座 */}
-      <rect x="4" y="60" width="52" height="6" rx="1" fill="#9a9488" />
-      {/* 身体 */}
-      <ellipse cx="30" cy="50" rx="20" ry="15" fill="#b8b5ac" />
-      {/* 后腿 */}
-      <ellipse cx="16" cy="56" rx="7" ry="6" fill="#a8a59c" />
-      <ellipse cx="44" cy="56" rx="7" ry="6" fill="#a8a59c" />
-      {/* 前腿 */}
-      <rect x="12" y="44" width="10" height="14" rx="3" fill="#b8b5ac" />
-      <rect x="38" y="44" width="10" height="14" rx="3" fill="#b8b5ac" />
-      {/* 大头（传统石狮大头） */}
-      <circle cx="30" cy="24" r="20" fill="#c4c1b8" />
-      {/* 蓬松鬃毛（块状） */}
-      <path d="M10 20 Q4 12 14 8 Q10 4 18 6 Q16 2 24 4 L20 10 Q26 6 30 8 Q28 4 34 6 Q38 2 42 8 Q46 6 44 12 Q50 14 44 20" fill="#8a8880" stroke="#7a7870" strokeWidth="1" />
-      <path d="M10 20 Q6 26 10 32 Q4 30 8 24 Q4 20 10 18" fill="#8a8880" />
-      <path d="M50 20 Q54 26 50 32 Q56 30 52 24 Q56 20 50 18" fill="#8a8880" />
-      {/* 眉毛（浓密） */}
-      <path d="M16 16 Q22 12 26 18" stroke="#5a5858" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M44 16 Q38 12 34 18" stroke="#5a5858" strokeWidth="3" fill="none" strokeLinecap="round" />
-      {/* 眼睛（大而圆） */}
-      <circle cx="22" cy="22" r="5" fill="#3a3a3a" />
-      <circle cx="38" cy="22" r="5" fill="#3a3a3a" />
-      <circle cx="23" cy="21" r="1.5" fill="white" opacity="0.7" />
-      <circle cx="39" cy="21" r="1.5" fill="white" opacity="0.7" />
+      <rect x="2" y="62" width="56" height="6" rx="1" fill="#8a847a" />
+      {/* 身体轮廓 */}
+      <ellipse cx="30" cy="52" rx="22" ry="16" fill="#a8a49a" />
+      {/* 前腿（站立） */}
+      <rect x="10" y="46" width="12" height="18" rx="4" fill="#a8a49a" />
+      <rect x="38" y="46" width="12" height="18" rx="4" fill="#a8a49a" />
+      {/* 脚爪 */}
+      <ellipse cx="16" cy="64" rx="7" ry="4" fill="#9a948a" />
+      <ellipse cx="44" cy="64" rx="7" ry="4" fill="#9a948a" />
+      {/* 头部（圆形） */}
+      <circle cx="30" cy="26" r="22" fill="#b8b4aa" />
+      {/* 鬃毛（卷曲线条） */}
+      <path d="M8 20 Q0 10 10 4 Q6 0 14 2 Q12 -4 20 0 Q28 -6 38 0 Q46 -4 44 2 Q52 0 50 10 Q60 18 52 24" stroke="#787068" strokeWidth="4" fill="none" strokeLinecap="round" />
+      <path d="M10 24 Q2 30 8 38" stroke="#787068" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M50 24 Q58 30 52 38" stroke="#787068" strokeWidth="3" fill="none" strokeLinecap="round" />
+      {/* 浓眉 */}
+      <path d="M14 18 Q22 10 28 20" stroke="#4a4a42" strokeWidth="4" strokeLinecap="round" fill="none" />
+      <path d="M46 18 Q38 10 32 20" stroke="#4a4a42" strokeWidth="4" strokeLinecap="round" fill="none" />
+      {/* 眼睛（大圆） */}
+      <circle cx="20" cy="26" r="6" fill="#3a3a32" />
+      <circle cx="40" cy="26" r="6" fill="#3a3a32" />
+      <circle cx="22" cy="24" r="2" fill="white" opacity="0.8" />
+      <circle cx="42" cy="24" r="2" fill="white" opacity="0.8" />
       {/* 鼻子（大扁） */}
-      <ellipse cx="30" cy="28" rx="6" ry="4" fill="#5a5a58" />
-      {/* 大嘴张开展示 */}
-      <path d="M18 34 Q30 46 42 34 Q36 40 30 42 Q24 40 18 34" fill="#5a5a58" />
-      {/* 嘴里绣球（圆球带穗） */}
-      <circle cx="30" cy="38" r="6" fill="#d4a84b" />
-      <circle cx="30" cy="38" r="3" fill="#b8922e" />
-      <path d="M26 38 Q30 42 34 38" stroke="#8b6914" strokeWidth="1" fill="none" />
-      {/* 下巴厚重 */}
-      <path d="M18 38 Q30 48 42 38 Q36 44 30 45 Q24 44 18 38" fill="#a8a59c" />
+      <ellipse cx="30" cy="32" rx="7" ry="5" fill="#5a5a52" />
+      {/* 嘴（含绣球） */}
+      <path d="M18 40 Q30 52 42 40 Q34 48 30 50 Q26 48 18 40" fill="#5a5a52" />
+      <circle cx="30" cy="46" r="8" fill="#d4a84b" stroke="#8b6914" strokeWidth="2" />
+      <circle cx="30" cy="46" r="4" fill="#b8922e" />
     </svg>
   );
 }
 
-// 传统大红灯笼 SVG（经典造型）
+// 传统灯笼 SVG（简洁优雅）
 function LanternSVG({ sway }: { sway: boolean }) {
   return (
     <svg
-      width="44"
-      height="78"
-      viewBox="0 0 44 78"
+      width="42"
+      height="76"
+      viewBox="0 0 42 76"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        transform: sway ? "rotate(5deg)" : "rotate(0deg)",
-        transition: "transform 0.7s ease-in-out",
-        filter: "drop-shadow(0 3px 5px rgba(180,50,50,0.4))",
+        transform: sway ? "rotate(4deg)" : "rotate(0deg)",
+        transition: "transform 0.6s ease-in-out",
+        filter: "drop-shadow(0 3px 6px rgba(160,40,40,0.35))",
       }}
     >
       {/* 挂绳 */}
-      <line x1="22" y1="0" x2="22" y2="10" stroke="#7a5a1a" strokeWidth="2" />
-      {/* 灯笼顶框 */}
-      <rect x="14" y="8" width="16" height="4" rx="1" fill="#7a5a1a" />
-      <rect x="12" y="12" width="20" height="3" rx="1" fill="#d4a84b" />
-      {/* 灯笼主体（经典圆润两头细） */}
-      <ellipse cx="22" cy="42" rx="18" ry="26" fill="#c21e1e" />
-      <ellipse cx="22" cy="42" rx="18" ry="26" fill="url(#redGlow)" />
-      {/* 顶部收紧处 */}
-      <ellipse cx="22" cy="18" rx="10" ry="4" fill="#a01818" />
-      {/* 底部收紧处 */}
-      <ellipse cx="22" cy="62" rx="10" ry="4" fill="#a01818" />
-      {/* 金色装饰带 */}
-      <rect x="5" y="26" width="34" height="2" rx="1" fill="#d4a84b" opacity="0.8" />
-      <rect x="5" y="56" width="34" height="2" rx="1" fill="#d4a84b" opacity="0.8" />
-      {/* 金色条纹 */}
-      <line x1="7" y1="30" x2="7" y2="52" stroke="#d4a84b" strokeWidth="1.5" opacity="0.7" />
-      <line x1="37" y1="30" x2="37" y2="52" stroke="#d4a84b" strokeWidth="1.5" opacity="0.7" />
+      <line x1="21" y1="0" x2="21" y2="10" stroke="#6a5010" strokeWidth="2" />
+      {/* 顶盖 */}
+      <rect x="15" y="8" width="12" height="5" rx="1" fill="#6a5010" />
+      <rect x="13" y="13" width="16" height="3" rx="1" fill="#d4a84b" />
+      {/* 灯笼主体（椭圆形） */}
+      <ellipse cx="21" cy="40" rx="17" ry="24" fill="#b81c1c" />
+      <ellipse cx="21" cy="40" rx="17" ry="24" fill="url(#lanternShade)" />
+      {/* 顶部细颈 */}
+      <rect x="17" y="16" width="8" height="6" fill="#a01818" />
+      {/* 底部细颈 */}
+      <rect x="17" y="58" width="8" height="6" fill="#a01818" />
+      {/* 金边装饰 */}
+      <ellipse cx="21" cy="40" rx="17" ry="24" stroke="#d4a84b" strokeWidth="1.5" fill="none" />
+      {/* 金色横线 */}
+      <line x1="5" y1="32" x2="37" y2="32" stroke="#d4a84b" strokeWidth="1.5" />
+      <line x1="5" y1="48" x2="37" y2="48" stroke="#d4a84b" strokeWidth="1.5" />
       {/* 底部金环 */}
-      <ellipse cx="22" cy="64" rx="8" ry="3" fill="#d4a84b" />
+      <rect x="13" y="62" width="16" height="4" rx="1" fill="#d4a84b" />
       {/* 流苏 */}
-      <line x1="18" y1="66" x2="14" y2="76" stroke="#8b6914" strokeWidth="2" />
-      <line x1="22" y1="67" x2="22" y2="78" stroke="#8b6914" strokeWidth="2" />
-      <line x1="26" y1="66" x2="30" y2="76" stroke="#8b6914" strokeWidth="2" />
+      <line x1="16" y1="66" x2="12" y2="74" stroke="#8b6914" strokeWidth="2" />
+      <line x1="21" y1="66" x2="21" y2="76" stroke="#8b6914" strokeWidth="2" />
+      <line x1="26" y1="66" x2="30" y2="74" stroke="#8b6914" strokeWidth="2" />
       {/* 高光 */}
-      <ellipse cx="14" cy="34" rx="4" ry="8" fill="#e85555" opacity="0.5" />
+      <ellipse cx="13" cy="35" rx="3" ry="6" fill="#e84040" opacity="0.5" />
       <defs>
-        <radialGradient id="redGlow" cx="0.3" cy="0.3" r="0.7">
-          <stop offset="0%" stopColor="#e83838" />
-          <stop offset="100%" stopColor="#a01010" />
+        <radialGradient id="lanternShade" cx="0.4" cy="0.3" r="0.6">
+          <stop offset="0%" stopColor="#e03030" />
+          <stop offset="100%" stopColor="#8a1010" />
         </radialGradient>
       </defs>
     </svg>
