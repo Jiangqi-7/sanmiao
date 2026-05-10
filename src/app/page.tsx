@@ -29,100 +29,106 @@ function WindowFlower({ position, color = "#8b4513" }: { position: string; color
   return <div className="absolute w-3 h-3" style={styles[position]} />;
 }
 
-// 传统石狮子 SVG（蹲坐姿态，嘴里含绣球）
+// 传统石狮子 SVG（传统造型，大头蓬鬃）
 function StoneLionSVG({ mirror = false }) {
   return (
     <svg
-      width="56"
-      height="64"
-      viewBox="0 0 56 64"
+      width="60"
+      height="68"
+      viewBox="0 0 60 68"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         transform: mirror ? "scaleX(-1)" : "none",
-        opacity: 0.4,
-        filter: "drop-shadow(2px 3px 3px rgba(0,0,0,0.25))",
+        opacity: 0.45,
+        filter: "drop-shadow(2px 2px 3px rgba(0,0,0,0.3))",
       }}
     >
       {/* 底座 */}
-      <rect x="6" y="56" width="44" height="6" rx="1" fill="#8b7355" />
-      {/* 身体（蹲坐） */}
-      <ellipse cx="28" cy="44" rx="18" ry="14" fill="#a8a8a0" />
-      {/* 后腿蜷曲 */}
-      <ellipse cx="18" cy="50" rx="6" ry="5" fill="#989894" />
-      <ellipse cx="38" cy="50" rx="6" ry="5" fill="#989894" />
-      {/* 前腿直立 */}
-      <rect x="14" y="36" width="8" height="16" rx="3" fill="#a8a8a0" />
-      <rect x="34" y="36" width="8" height="16" rx="3" fill="#a8a8a0" />
-      {/* 爪子 */}
-      <ellipse cx="18" cy="52" rx="5" ry="3" fill="#989894" />
-      <ellipse cx="38" cy="52" rx="5" ry="3" fill="#989894" />
-      {/* 头部 */}
-      <circle cx="28" cy="22" r="16" fill="#a8a8a0" />
-      {/* 鬃毛（卷曲） */}
-      <path d="M12 12 Q8 16 10 22 Q6 18 10 14 Q8 8 14 10" fill="#787878" />
-      <path d="M44 12 Q48 16 46 22 Q50 18 46 14 Q48 8 42 10" fill="#787878" />
-      <path d="M20 6 Q22 2 26 6 Q24 2 28 5" fill="#787878" />
-      <path d="M28 4 Q32 0 34 5 Q34 1 36 6" fill="#787878" />
-      {/* 耳朵 */}
-      <ellipse cx="14" cy="18" rx="4" ry="5" fill="#989894" />
-      <ellipse cx="42" cy="18" rx="4" ry="5" fill="#989894" />
-      {/* 眼睛 */}
-      <circle cx="21" cy="20" r="3" fill="#4a4a48" />
-      <circle cx="35" cy="20" r="3" fill="#4a4a48" />
-      <circle cx="22" cy="19" r="1" fill="white" opacity="0.6" />
-      <circle cx="36" cy="19" r="1" fill="white" opacity="0.6" />
-      {/* 鼻子 */}
-      <ellipse cx="28" cy="26" rx="4" ry="3" fill="#686868" />
-      {/* 张开的嘴 */}
-      <path d="M20 30 Q28 38 36 30 Q32 34 28 35 Q24 34 20 30" fill="#686868" />
-      {/* 嘴里绣球 */}
-      <circle cx="28" cy="32" r="4" fill="#d4a84b" />
-      <circle cx="28" cy="32" r="2" fill="#b8922e" />
-      {/* 下巴 */}
-      <ellipse cx="28" cy="34" rx="8" ry="4" fill="#989894" />
+      <rect x="4" y="60" width="52" height="6" rx="1" fill="#9a9488" />
+      {/* 身体 */}
+      <ellipse cx="30" cy="50" rx="20" ry="15" fill="#b8b5ac" />
+      {/* 后腿 */}
+      <ellipse cx="16" cy="56" rx="7" ry="6" fill="#a8a59c" />
+      <ellipse cx="44" cy="56" rx="7" ry="6" fill="#a8a59c" />
+      {/* 前腿 */}
+      <rect x="12" y="44" width="10" height="14" rx="3" fill="#b8b5ac" />
+      <rect x="38" y="44" width="10" height="14" rx="3" fill="#b8b5ac" />
+      {/* 大头（传统石狮大头） */}
+      <circle cx="30" cy="24" r="20" fill="#c4c1b8" />
+      {/* 蓬松鬃毛（块状） */}
+      <path d="M10 20 Q4 12 14 8 Q10 4 18 6 Q16 2 24 4 L20 10 Q26 6 30 8 Q28 4 34 6 Q38 2 42 8 Q46 6 44 12 Q50 14 44 20" fill="#8a8880" stroke="#7a7870" strokeWidth="1" />
+      <path d="M10 20 Q6 26 10 32 Q4 30 8 24 Q4 20 10 18" fill="#8a8880" />
+      <path d="M50 20 Q54 26 50 32 Q56 30 52 24 Q56 20 50 18" fill="#8a8880" />
+      {/* 眉毛（浓密） */}
+      <path d="M16 16 Q22 12 26 18" stroke="#5a5858" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M44 16 Q38 12 34 18" stroke="#5a5858" strokeWidth="3" fill="none" strokeLinecap="round" />
+      {/* 眼睛（大而圆） */}
+      <circle cx="22" cy="22" r="5" fill="#3a3a3a" />
+      <circle cx="38" cy="22" r="5" fill="#3a3a3a" />
+      <circle cx="23" cy="21" r="1.5" fill="white" opacity="0.7" />
+      <circle cx="39" cy="21" r="1.5" fill="white" opacity="0.7" />
+      {/* 鼻子（大扁） */}
+      <ellipse cx="30" cy="28" rx="6" ry="4" fill="#5a5a58" />
+      {/* 大嘴张开展示 */}
+      <path d="M18 34 Q30 46 42 34 Q36 40 30 42 Q24 40 18 34" fill="#5a5a58" />
+      {/* 嘴里绣球（圆球带穗） */}
+      <circle cx="30" cy="38" r="6" fill="#d4a84b" />
+      <circle cx="30" cy="38" r="3" fill="#b8922e" />
+      <path d="M26 38 Q30 42 34 38" stroke="#8b6914" strokeWidth="1" fill="none" />
+      {/* 下巴厚重 */}
+      <path d="M18 38 Q30 48 42 38 Q36 44 30 45 Q24 44 18 38" fill="#a8a59c" />
     </svg>
   );
 }
 
-// 传统宫灯 SVG（6面宫灯造型）
+// 传统大红灯笼 SVG（经典造型）
 function LanternSVG({ sway }: { sway: boolean }) {
   return (
     <svg
-      width="40"
-      height="80"
-      viewBox="0 0 40 80"
+      width="44"
+      height="78"
+      viewBox="0 0 44 78"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        transform: sway ? "rotate(4deg)" : "rotate(0deg)",
-        transition: "transform 0.6s ease-in-out",
-        filter: "drop-shadow(0 3px 6px rgba(180,60,60,0.35))",
+        transform: sway ? "rotate(5deg)" : "rotate(0deg)",
+        transition: "transform 0.7s ease-in-out",
+        filter: "drop-shadow(0 3px 5px rgba(180,50,50,0.4))",
       }}
     >
       {/* 挂绳 */}
-      <line x1="20" y1="0" x2="20" y2="8" stroke="#8b6914" strokeWidth="2" />
-      {/* 灯笼顶部装饰 */}
-      <rect x="14" y="6" width="12" height="4" rx="1" fill="#8b6914" />
-      <rect x="12" y="10" width="16" height="3" rx="1" fill="#d4a84b" />
-      {/* 灯笼框架（6面） */}
-      <polygon points="20,14 32,18 32,40 20,44 8,40 8,18" fill="#c41e1e" stroke="#d4a84b" strokeWidth="1.5" />
-      {/* 灯笼骨架线 */}
-      <line x1="20" y1="14" x2="20" y2="44" stroke="#d4a84b" strokeWidth="1" />
-      <line x1="8" y1="27" x2="32" y2="27" stroke="#d4a84b" strokeWidth="1" />
-      {/* 灯笼底部装饰 */}
-      <rect x="12" y="44" width="16" height="3" rx="1" fill="#d4a84b" />
-      <rect x="14" y="47" width="12" height="4" rx="1" fill="#8b6914" />
-      {/* 灯笼穗 */}
-      <line x1="20" y1="51" x2="20" y2="62" stroke="#8b6914" strokeWidth="2" />
-      <ellipse cx="20" cy="65" rx="6" ry="4" fill="#d4a84b" />
-      <ellipse cx="20" cy="70" rx="5" ry="3" fill="#d4a84b" />
-      {/* 灯笼高光 */}
-      <polygon points="12,18 18,16 18,26 12,28" fill="#e05555" opacity="0.5" />
-      {/* 顶部流苏 */}
-      <line x1="14" y1="6" x2="12" y2="0" stroke="#8b6914" strokeWidth="1" />
-      <line x1="20" y1="6" x2="20" y2="0" stroke="#8b6914" strokeWidth="1" />
-      <line x1="26" y1="6" x2="28" y2="0" stroke="#8b6914" strokeWidth="1" />
+      <line x1="22" y1="0" x2="22" y2="10" stroke="#7a5a1a" strokeWidth="2" />
+      {/* 灯笼顶框 */}
+      <rect x="14" y="8" width="16" height="4" rx="1" fill="#7a5a1a" />
+      <rect x="12" y="12" width="20" height="3" rx="1" fill="#d4a84b" />
+      {/* 灯笼主体（经典圆润两头细） */}
+      <ellipse cx="22" cy="42" rx="18" ry="26" fill="#c21e1e" />
+      <ellipse cx="22" cy="42" rx="18" ry="26" fill="url(#redGlow)" />
+      {/* 顶部收紧处 */}
+      <ellipse cx="22" cy="18" rx="10" ry="4" fill="#a01818" />
+      {/* 底部收紧处 */}
+      <ellipse cx="22" cy="62" rx="10" ry="4" fill="#a01818" />
+      {/* 金色装饰带 */}
+      <rect x="5" y="26" width="34" height="2" rx="1" fill="#d4a84b" opacity="0.8" />
+      <rect x="5" y="56" width="34" height="2" rx="1" fill="#d4a84b" opacity="0.8" />
+      {/* 金色条纹 */}
+      <line x1="7" y1="30" x2="7" y2="52" stroke="#d4a84b" strokeWidth="1.5" opacity="0.7" />
+      <line x1="37" y1="30" x2="37" y2="52" stroke="#d4a84b" strokeWidth="1.5" opacity="0.7" />
+      {/* 底部金环 */}
+      <ellipse cx="22" cy="64" rx="8" ry="3" fill="#d4a84b" />
+      {/* 流苏 */}
+      <line x1="18" y1="66" x2="14" y2="76" stroke="#8b6914" strokeWidth="2" />
+      <line x1="22" y1="67" x2="22" y2="78" stroke="#8b6914" strokeWidth="2" />
+      <line x1="26" y1="66" x2="30" y2="76" stroke="#8b6914" strokeWidth="2" />
+      {/* 高光 */}
+      <ellipse cx="14" cy="34" rx="4" ry="8" fill="#e85555" opacity="0.5" />
+      <defs>
+        <radialGradient id="redGlow" cx="0.3" cy="0.3" r="0.7">
+          <stop offset="0%" stopColor="#e83838" />
+          <stop offset="100%" stopColor="#a01010" />
+        </radialGradient>
+      </defs>
     </svg>
   );
 }
