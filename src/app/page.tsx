@@ -16,6 +16,38 @@ const BAGUA_GRID = [
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于本站", color: "#ca8a04" },
 ];
 
+// 窗花装饰组件
+function WindowFlower({ position }: { position: string }) {
+  const styles: Record<string, React.CSSProperties> = {
+    "top-left": {
+      top: 0,
+      left: 0,
+      borderTop: "2px solid #d4c5a9",
+      borderLeft: "2px solid #d4c5a9",
+    },
+    "top-right": {
+      top: 0,
+      right: 0,
+      borderTop: "2px solid #d4c5a9",
+      borderRight: "2px solid #d4c5a9",
+    },
+    "bottom-left": {
+      bottom: 0,
+      left: 0,
+      borderBottom: "2px solid #d4c5a9",
+      borderLeft: "2px solid #d4c5a9",
+    },
+    "bottom-right": {
+      bottom: 0,
+      right: 0,
+      borderBottom: "2px solid #d4c5a9",
+      borderRight: "2px solid #d4c5a9",
+    },
+  };
+
+  return <div className="absolute w-4 h-4" style={styles[position]} />;
+}
+
 function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
   const isCenter = cell.isCenter;
   const symbol = isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol;
@@ -32,6 +64,12 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
         borderColor: "#e5e5e5",
       }}
     >
+      {/* 窗花四角装饰 */}
+      <WindowFlower position="top-left" />
+      <WindowFlower position="top-right" />
+      <WindowFlower position="bottom-left" />
+      <WindowFlower position="bottom-right" />
+
       {/* 悬停光晕效果 - 水墨感 */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -79,56 +117,140 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
   );
 }
 
+// 中国结装饰
+function ChineseKnot() {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="w-2 h-8" style={{ backgroundColor: "#dc2626" }} />
+      <div className="w-6 h-3 rounded-full" style={{ backgroundColor: "#dc2626" }} />
+      <div className="w-1 h-6" style={{ backgroundColor: "#dc2626" }} />
+    </div>
+  );
+}
+
 export default function HomePage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#fafafa" }}>
-      {/* 主内容区 - Notion 风格简洁布局 */}
+    <div className="min-h-screen relative" style={{ backgroundColor: "#fafafa" }}>
+      {/* 顶部装饰 - 传统门楣 */}
+      <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, #d4c5a9 20%, #dc2626 50%, #d4c5a9 80%, transparent)" }} />
+
+      {/* 侧边装饰 - 中国结 */}
+      <div className="absolute top-1/2 left-6 transform -translate-y-1/2 opacity-20">
+        <ChineseKnot />
+      </div>
+      <div className="absolute top-1/2 right-6 transform -translate-y-1/2 opacity-20">
+        <ChineseKnot />
+      </div>
+
+      {/* 主内容区 */}
       <main className="max-w-[900px] mx-auto px-6 py-16">
-        {/* 标题区 */}
-        <div className="mb-12 text-center">
-          {/* 八卦符号装饰 */}
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-16 h-px" style={{ backgroundColor: "#e5e5e5" }} />
-            <span className="text-3xl" style={{ color: "#000000", opacity: 0.2 }}>☯</span>
-            <div className="w-16 h-px" style={{ backgroundColor: "#e5e5e5" }} />
+        {/* 标题区 - 牌匾风格 */}
+        <header className="mb-14 text-center">
+          {/* 牌匾框架 */}
+          <div
+            className="relative inline-block px-12 py-8 mb-6"
+            style={{
+              backgroundColor: "#ffffff",
+              border: "3px solid #d4c5a9",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+            }}
+          >
+            {/* 牌匾四角窗花装饰 */}
+            <WindowFlower position="top-left" />
+            <WindowFlower position="top-right" />
+            <WindowFlower position="bottom-left" />
+            <WindowFlower position="bottom-right" />
+
+            {/* 顶部装饰线 - 如同门框 */}
+            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-24 h-0.5" style={{ backgroundColor: "#d4c5a9" }} />
+
+            <h1
+              className="text-5xl font-bold mb-3"
+              style={{ color: "#000000", letterSpacing: "0.15em" }}
+            >
+              道法自然
+            </h1>
+            <p
+              className="text-base"
+              style={{ color: "#666666", letterSpacing: "0.4em" }}
+            >
+              AI 为用
+            </p>
+
+            {/* 底部装饰线 */}
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-0.5" style={{ backgroundColor: "#d4c5a9" }} />
           </div>
 
-          <h1
-            className="text-5xl font-bold mb-3"
-            style={{ color: "#000000", letterSpacing: "-0.02em" }}
-          >
-            道法自然
-          </h1>
-          <p className="text-base" style={{ color: "#666666" }}>
-            AI 为用
-          </p>
-        </div>
+          {/* 八卦符号装饰 */}
+          <div className="flex items-center justify-center gap-6">
+            <div className="w-20 h-px" style={{ backgroundColor: "#e5e5e5" }} />
+            <div className="flex items-center gap-3">
+              <span style={{ color: "#dc2626", opacity: 0.4 }}>☰</span>
+              <span style={{ color: "#000000", opacity: 0.3 }}>☯</span>
+              <span style={{ color: "#2563eb", opacity: 0.4 }}>☷</span>
+            </div>
+            <div className="w-20 h-px" style={{ backgroundColor: "#e5e5e5" }} />
+          </div>
+        </header>
 
-        {/* 九宫格 */}
-        <div className="grid grid-cols-3 gap-4">
+        {/* 九宫格 - 窗棂风格 */}
+        <div className="grid grid-cols-3 gap-5">
           {BAGUA_GRID.map((cell) => (
             <BaguaCell key={cell.key} cell={cell} />
           ))}
         </div>
 
-        {/* 底部说明 */}
-        <div className="mt-12 pt-8 text-center border-t" style={{ borderColor: "#e5e5e5" }}>
-          <p className="text-sm" style={{ color: "#999999" }}>
-            后天八卦 · 九宫格
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-3">
+        {/* 底部说明 - 牌匾风格 */}
+        <footer className="mt-14 pt-8 text-center border-t" style={{ borderColor: "#e5e5e5" }}>
+          {/* 横批风格 */}
+          <div
+            className="inline-block px-6 py-2 mb-4"
+            style={{
+              backgroundColor: "#ffffff",
+              border: "1px solid #d4c5a9",
+            }}
+          >
+            <p className="text-sm tracking-[0.3em]" style={{ color: "#666666" }}>
+              後天八卦 · 九宫格
+            </p>
+          </div>
+
+          {/* 底部八卦小符号 */}
+          <div className="flex items-center justify-center gap-5">
             {["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"].map((key) => (
               <span
                 key={key}
                 className="text-base"
-                style={{ color: "#cccccc" }}
+                style={{ color: "#d4c5a9" }}
               >
                 {BAGUA.positions[key as keyof typeof BAGUA.positions].symbol}
               </span>
             ))}
           </div>
-        </div>
+
+          {/* 底部装饰线 - 如同门槛 */}
+          <div
+            className="w-full h-px mt-8"
+            style={{ background: "linear-gradient(90deg, transparent, #d4c5a9 30%, #dc2626 50%, #d4c5a9 70%, transparent)" }}
+          />
+        </footer>
       </main>
+
+      {/* 角落窗花装饰 */}
+      <div
+        className="absolute bottom-8 left-8 w-12 h-12 opacity-10"
+        style={{
+          border: "2px solid #d4c5a9",
+          transform: "rotate(45deg)",
+        }}
+      />
+      <div
+        className="absolute top-8 right-8 w-12 h-12 opacity-10"
+        style={{
+          border: "2px solid #d4c5a9",
+          transform: "rotate(45deg)",
+        }}
+      />
     </div>
   );
 }
