@@ -19,7 +19,6 @@ const BAGUA_GRID = [
 
 // 窗花装饰组件
 function WindowFlower({ position, color = "#8b4513" }: { position: string; color?: string }) {
-  const size = "12px";
   const styles: Record<string, React.CSSProperties> = {
     "top-left": { top: -2, left: -2, borderTop: `2px solid ${color}`, borderLeft: `2px solid ${color}` },
     "top-right": { top: -2, right: -2, borderTop: `2px solid ${color}`, borderRight: `2px solid ${color}` },
@@ -30,7 +29,92 @@ function WindowFlower({ position, color = "#8b4513" }: { position: string; color
   return <div className="absolute w-3 h-3" style={styles[position]} />;
 }
 
-// 石狮子组件 - 卡通风格
+// 真实风格的石狮子 SVG
+function StoneLionSVG({ mirror = false }) {
+  return (
+    <svg
+      width="48"
+      height="56"
+      viewBox="0 0 48 56"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        transform: mirror ? "scaleX(-1)" : "none",
+        opacity: 0.35,
+        filter: "drop-shadow(2px 2px 2px rgba(0,0,0,0.2))",
+      }}
+    >
+      {/* 底座 */}
+      <rect x="4" y="48" width="40" height="6" rx="1" fill="#9ca3af" />
+      {/* 身体 */}
+      <ellipse cx="24" cy="38" rx="16" ry="12" fill="#a1a1aa" />
+      {/* 前腿 */}
+      <rect x="10" y="42" width="6" height="10" rx="2" fill="#9ca3af" />
+      <rect x="32" y="42" width="6" height="10" rx="2" fill="#9ca3af" />
+      {/* 头部 */}
+      <circle cx="24" cy="22" r="14" fill="#a1a1aa" />
+      {/* 鬃毛 */}
+      <circle cx="14" cy="14" r="5" fill="#71717a" />
+      <circle cx="24" cy="10" r="6" fill="#71717a" />
+      <circle cx="34" cy="14" r="5" fill="#71717a" />
+      {/* 耳朵 */}
+      <ellipse cx="12" cy="18" rx="3" ry="4" fill="#9ca3af" />
+      <ellipse cx="36" cy="18" rx="3" ry="4" fill="#9ca3af" />
+      {/* 眼睛 */}
+      <circle cx="18" cy="22" r="2" fill="#1f2937" />
+      <circle cx="30" cy="22" r="2" fill="#1f2937" />
+      {/* 鼻子 */}
+      <ellipse cx="24" cy="26" rx="3" ry="2" fill="#71717a" />
+      {/* 张嘴 */}
+      <path d="M20 30 Q24 34 28 30" stroke="#71717a" strokeWidth="1.5" fill="none" />
+    </svg>
+  );
+}
+
+// 真实风格的灯笼 SVG
+function LanternSVG({ sway }: { sway: boolean }) {
+  return (
+    <svg
+      width="36"
+      height="72"
+      viewBox="0 0 36 72"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        transform: sway ? "rotate(3deg)" : "rotate(0deg)",
+        transition: "transform 0.5s ease-in-out",
+        filter: "drop-shadow(0 2px 4px rgba(220, 38, 38, 0.3))",
+      }}
+    >
+      {/* 挂绳 */}
+      <line x1="18" y1="0" x2="18" y2="12" stroke="#d4a84b" strokeWidth="2" />
+      {/* 顶盖 */}
+      <rect x="10" y="10" width="16" height="4" rx="1" fill="#d4a84b" />
+      <rect x="12" y="14" width="12" height="2" fill="#8b4513" />
+      {/* 灯笼主体 */}
+      <ellipse cx="18" cy="38" rx="14" ry="20" fill="#dc2626" />
+      <ellipse cx="18" cy="38" rx="14" ry="20" fill="url(#lanternGradient)" />
+      {/* 灯笼装饰线 */}
+      <line x1="6" y1="30" x2="6" y2="46" stroke="#d4a84b" strokeWidth="1" />
+      <line x1="30" y1="30" x2="30" y2="46" stroke="#d4a84b" strokeWidth="1" />
+      {/* 灯笼穗 */}
+      <line x1="18" y1="58" x2="18" y2="66" stroke="#d4a84b" strokeWidth="2" />
+      <ellipse cx="18" cy="68" rx="4" ry="3" fill="#d4a84b" />
+      {/* 底部装饰 */}
+      <rect x="12" y="54" width="12" height="2" rx="1" fill="#d4a84b" />
+      {/* 高光 */}
+      <ellipse cx="12" cy="32" rx="3" ry="6" fill="#fca5a5" opacity="0.4" />
+      <defs>
+        <linearGradient id="lanternGradient" x1="18" y1="18" x2="18" y2="58" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#ef4444" />
+          <stop offset="1" stopColor="#b91c1c" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+// 石狮子组件
 function StoneLion({ side }: { side: "left" | "right" }) {
   const [sway, setSway] = useState(false);
 
@@ -38,42 +122,17 @@ function StoneLion({ side }: { side: "left" | "right" }) {
     const interval = setInterval(() => {
       setSway(true);
       setTimeout(() => setSway(false), 500);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div
       className="absolute bottom-8 flex flex-col items-center"
-      style={{ [side]: "16px" }}
+      style={{ [side]: "20px" }}
     >
-      {/* 红包灯笼 */}
-      <div
-        className="w-10 h-14 rounded-lg mb-3 relative overflow-hidden"
-        style={{
-          background: "linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)",
-          boxShadow: "0 4px 12px rgba(220, 38, 38, 0.4)",
-        }}
-      >
-        {/* 灯笼金边 */}
-        <div className="absolute top-0 left-0 right-0 h-1" style={{ backgroundColor: "#d4a84b" }} />
-        <div className="absolute bottom-0 left-0 right-0 h-1" style={{ backgroundColor: "#d4a84b" }} />
-        {/* 灯笼图案 */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">福</div>
-        {/* 灯笼穗 */}
-        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-5" style={{ backgroundColor: "#d4a84b" }} />
-      </div>
-
-      {/* 卡通狮子 */}
-      <div
-        className="text-5xl cursor-default select-none transition-transform duration-500"
-        style={{
-          transform: sway ? (side === "left" ? "rotate(-5deg)" : "rotate(5deg)") : "rotate(0deg)",
-          filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))",
-        }}
-      >
-        🦁
-      </div>
+      <LanternSVG sway={sway} />
+      <StoneLionSVG mirror={side === "right"} />
     </div>
   );
 }
@@ -82,16 +141,17 @@ function StoneLion({ side }: { side: "left" | "right" }) {
 function FallingPetal({ delay, startX }: { delay: number; startX: number }) {
   const [y, setY] = useState(-20);
   const [opacity, setOpacity] = useState(0);
+  const [x, setX] = useState(startX);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setOpacity(0.6);
+      setOpacity(0.5);
       const interval = setInterval(() => {
         setY((prev) => {
           if (prev > window.innerHeight) return -20;
-          return prev + 1;
+          return prev + 0.8;
         });
-        setOpacity((prev) => (prev > 1.5 ? 0.6 : prev * 0.998));
+        setX((prev) => prev + Math.sin(prev / 25) * 0.4);
       }, 30);
       return () => clearInterval(interval);
     }, delay);
@@ -100,14 +160,15 @@ function FallingPetal({ delay, startX }: { delay: number; startX: number }) {
 
   return (
     <div
-      className="absolute pointer-events-none text-lg"
+      className="absolute pointer-events-none text-sm"
       style={{
-        left: `${startX}%`,
+        left: `${x}%`,
         top: y,
         opacity,
+        color: "#eab308",
       }}
     >
-      🌸
+      ✿
     </div>
   );
 }
@@ -119,8 +180,8 @@ function FloatingCloud({ startX, startY }: { startX: number; startY: number }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setX((prev) => {
-        if (prev > window.innerWidth + 100) return -100;
-        return prev + 0.3;
+        if (prev > window.innerWidth + 100) return -150;
+        return prev + 0.5;
       });
     }, 30);
     return () => clearInterval(interval);
@@ -128,11 +189,11 @@ function FloatingCloud({ startX, startY }: { startX: number; startY: number }) {
 
   return (
     <div
-      className="absolute pointer-events-none text-4xl opacity-20"
+      className="absolute pointer-events-none text-5xl opacity-25"
       style={{
         left: x,
         top: startY,
-        color: "#666",
+        color: "#9ca3af",
       }}
     >
       ☁
@@ -150,18 +211,18 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
   return (
     <Link
       href={cell.href}
-      className="group relative flex flex-col rounded-xl border p-5 transition-all duration-300 hover:border-[#000000] hover:shadow-lg overflow-hidden"
+      className="group relative flex flex-col rounded-xl border p-5 transition-all duration-300 hover:border-[#8b4513] hover:shadow-lg overflow-hidden"
       style={{
-        backgroundColor: "#ffffff",
+        backgroundColor: "#fffef5",
         borderColor: "#d4c5a9",
         boxShadow: "0 2px 8px rgba(139, 69, 19, 0.08)",
       }}
     >
-      {/* 窗花四角装饰 - 更明显 */}
-      <WindowFlower position="top-left" color="#8b4513" />
-      <WindowFlower position="top-right" color="#8b4513" />
-      <WindowFlower position="bottom-left" color="#8b4513" />
-      <WindowFlower position="bottom-right" color="#8b4513" />
+      {/* 窗花四角装饰 */}
+      <WindowFlower position="top-left" />
+      <WindowFlower position="top-right" />
+      <WindowFlower position="bottom-left" />
+      <WindowFlower position="bottom-right" />
 
       {/* 悬停光晕 */}
       <div
@@ -177,13 +238,13 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
           <div className="text-xs mb-1 tracking-wider uppercase" style={{ color: "#8b4513", opacity: 0.7 }}>
             {subtext}
           </div>
-          <h3 className="text-lg font-semibold" style={{ color: "#000000" }}>
+          <h3 className="text-lg font-semibold" style={{ color: "#1a1a1a" }}>
             {label}
           </h3>
         </div>
         <span
           className="text-2xl transition-all duration-300 group-hover:scale-110"
-          style={{ color: isCenter ? "#000000" : cell.color, opacity: 0.3 }}
+          style={{ color: isCenter ? "#1a1a1a" : cell.color, opacity: 0.35 }}
         >
           {symbol}
         </span>
@@ -191,7 +252,7 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
 
       {/* 底部标签 */}
       <div className="relative z-10 mt-auto flex flex-col items-center gap-2">
-        <span className="text-sm" style={{ color: "#333333" }}>
+        <span className="text-sm" style={{ color: "#374151" }}>
           {tag}
         </span>
         <span className="text-xs opacity-0 group-hover:opacity-100 transition-all duration-300" style={{ color: "#8b4513" }}>
@@ -213,11 +274,11 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
 // 瓦当装饰
 function RoofTile() {
   return (
-    <div className="flex items-center justify-center gap-0">
-      {[...Array(15)].map((_, i) => (
+    <div className="flex items-center justify-center">
+      {[...Array(12)].map((_, i) => (
         <div
           key={i}
-          className="w-4 h-3 rounded-t-sm"
+          className="w-5 h-4 rounded-t-sm"
           style={{
             backgroundColor: i % 2 === 0 ? "#8b4513" : "#d4c5a9",
           }}
@@ -237,19 +298,19 @@ export default function HomePage() {
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: "#faf8f5" }}>
       {/* 飘落花瓣 */}
-      {[...Array(8)].map((_, i) => (
-        <FallingPetal key={i} delay={i * 800} startX={10 + i * 10} />
+      {[...Array(6)].map((_, i) => (
+        <FallingPetal key={i} delay={i * 600} startX={8 + i * 14} />
       ))}
 
       {/* 浮云 */}
-      {[...Array(3)].map((_, i) => (
-        <FloatingCloud key={i} startX={i * 300 - 100} startY={50 + i * 80} />
+      {[...Array(2)].map((_, i) => (
+        <FloatingCloud key={i} startX={i * 500 - 100} startY={60 + i * 100} />
       ))}
 
-      {/* 顶部装饰 - 瓦当 */}
+      {/* 顶部装饰 */}
       <div className="absolute top-0 left-0 right-0">
         <div
-          className="h-1"
+          className="h-1.5"
           style={{
             background: "linear-gradient(90deg, transparent 0%, #8b4513 15%, #d4a84b 50%, #8b4513 85%, transparent 100%)",
           }}
@@ -263,13 +324,13 @@ export default function HomePage() {
       <div
         className="absolute left-0 top-0 bottom-0 w-2"
         style={{
-          background: "linear-gradient(180deg, #d4a84b 0%, #8b4513 50%, #d4a84b 100%)",
+          background: "linear-gradient(180deg, #d4a84b 0%, #8b4513 30%, #8b4513 70%, #d4a84b 100%)",
         }}
       />
       <div
         className="absolute right-0 top-0 bottom-0 w-2"
         style={{
-          background: "linear-gradient(180deg, #d4a84b 0%, #8b4513 50%, #d4a84b 100%)",
+          background: "linear-gradient(180deg, #d4a84b 0%, #8b4513 30%, #8b4513 70%, #d4a84b 100%)",
         }}
       />
 
@@ -279,9 +340,8 @@ export default function HomePage() {
 
       {/* 主内容区 */}
       <main className="max-w-[900px] mx-auto px-6 py-16 relative z-10">
-        {/* 标题区 - 牌匾风格 */}
+        {/* 标题区 */}
         <header className="mb-14 text-center">
-          {/* 牌匾框架 */}
           <div
             className={`relative inline-block px-14 py-10 mb-6 transition-all duration-1000 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
             style={{
@@ -290,33 +350,24 @@ export default function HomePage() {
               boxShadow: "0 8px 32px rgba(139, 69, 19, 0.15)",
             }}
           >
-            {/* 牌匾四角窗花装饰 - 更大更明显 */}
-            <WindowFlower position="top-left" color="#8b4513" />
-            <WindowFlower position="top-right" color="#8b4513" />
-            <WindowFlower position="bottom-left" color="#8b4513" />
-            <WindowFlower position="bottom-right" color="#8b4513" />
+            <WindowFlower position="top-left" />
+            <WindowFlower position="top-right" />
+            <WindowFlower position="bottom-left" />
+            <WindowFlower position="bottom-right" />
 
-            {/* 顶部装饰线 */}
             <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-1" style={{ backgroundColor: "#d4a84b" }} />
 
-            <h1
-              className="text-5xl font-bold mb-3 tracking-[0.15em]"
-              style={{ color: "#1a1a1a" }}
-            >
+            <h1 className="text-5xl font-bold mb-3 tracking-[0.15em]" style={{ color: "#1a1a1a" }}>
               道法自然
             </h1>
             <p className="text-base tracking-[0.4em]" style={{ color: "#8b4513" }}>
               AI 为用
             </p>
 
-            {/* 底部装饰线 */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-24 h-1" style={{ backgroundColor: "#d4a84b" }} />
           </div>
 
-          {/* 八卦符号装饰 */}
-          <div
-            className={`flex items-center justify-center gap-6 transition-all duration-1000 delay-300 ${loaded ? "opacity-100" : "opacity-0"}`}
-          >
+          <div className={`flex items-center justify-center gap-6 transition-all duration-1000 delay-300 ${loaded ? "opacity-100" : "opacity-0"}`}>
             <div className="w-20 h-0.5" style={{ backgroundColor: "#d4c5a9" }} />
             <div className="flex items-center gap-4">
               <span className="text-2xl" style={{ color: "#dc2626", opacity: 0.6 }}>☰</span>
@@ -342,7 +393,6 @@ export default function HomePage() {
 
         {/* 底部说明 */}
         <footer className="mt-14 pt-8 text-center border-t" style={{ borderColor: "#d4c5a9" }}>
-          {/* 横批风格 */}
           <div
             className="inline-block px-8 py-3"
             style={{
@@ -355,23 +405,18 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 底部八卦小符号 */}
           <div className="flex items-center justify-center gap-6 mt-6">
-            {["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"].map((key, index) => (
+            {["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"].map((key) => (
               <span
                 key={key}
                 className="text-xl transition-all duration-300 hover:scale-125 cursor-default"
-                style={{
-                  color: "#8b4513",
-                  opacity: 0.5,
-                }}
+                style={{ color: "#8b4513", opacity: 0.5 }}
               >
                 {BAGUA.positions[key as keyof typeof BAGUA.positions].symbol}
               </span>
             ))}
           </div>
 
-          {/* 门槛装饰线 */}
           <div
             className="w-full h-1 mt-8"
             style={{
@@ -381,15 +426,9 @@ export default function HomePage() {
         </footer>
       </main>
 
-      {/* 角落菱形窗花装饰 - 更明显 */}
-      <div
-        className="absolute top-24 right-12 w-10 h-10 opacity-30 rotate-45"
-        style={{ border: "3px solid #8b4513" }}
-      />
-      <div
-        className="absolute bottom-40 left-12 w-8 h-8 opacity-25 rotate-45"
-        style={{ border: "3px solid #8b4513" }}
-      />
+      {/* 角落菱形窗花 */}
+      <div className="absolute top-24 right-12 w-12 h-12 opacity-25 rotate-45" style={{ border: "3px solid #8b4513" }} />
+      <div className="absolute bottom-40 left-12 w-10 h-10 opacity-20 rotate-45" style={{ border: "3px solid #8b4513" }} />
     </div>
   );
 }
