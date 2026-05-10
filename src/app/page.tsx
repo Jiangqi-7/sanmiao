@@ -70,60 +70,57 @@ function StoneLionSVG({ mirror = false }) {
       <circle cx="42" cy="24" r="2" fill="white" opacity="0.8" />
       {/* 鼻子（大扁） */}
       <ellipse cx="30" cy="32" rx="7" ry="5" fill="#5a5a52" />
-      {/* 嘴（含绣球） */}
-      <path d="M18 40 Q30 52 42 40 Q34 48 30 50 Q26 48 18 40" fill="#5a5a52" />
-      <circle cx="30" cy="46" r="8" fill="#d4a84b" stroke="#8b6914" strokeWidth="2" />
-      <circle cx="30" cy="46" r="4" fill="#b8922e" />
+      {/* 大张嘴（嘴里有绣球） */}
+      <path d="M16 38 Q30 54 44 38" fill="#4a4a42" />
+      <path d="M16 38 Q30 50 44 38" fill="#5a5a52" />
+      {/* 绣球（在嘴中间） */}
+      <circle cx="30" cy="46" r="7" fill="#d4a84b" stroke="#8b6914" strokeWidth="2" />
+      <circle cx="30" cy="46" r="3.5" fill="#b8922e" />
+      <path d="M26 46 L30 50 L34 46" stroke="#8b6914" strokeWidth="1" fill="none" />
     </svg>
   );
 }
 
-// 传统灯笼 SVG（简洁优雅）
+// 传统八角宫灯 SVG
 function LanternSVG({ sway }: { sway: boolean }) {
   return (
     <svg
-      width="42"
-      height="76"
-      viewBox="0 0 42 76"
+      width="44"
+      height="80"
+      viewBox="0 0 44 80"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        transform: sway ? "rotate(4deg)" : "rotate(0deg)",
+        transform: sway ? "rotate(3deg)" : "rotate(0deg)",
         transition: "transform 0.6s ease-in-out",
         filter: "drop-shadow(0 3px 6px rgba(160,40,40,0.35))",
       }}
     >
       {/* 挂绳 */}
-      <line x1="21" y1="0" x2="21" y2="10" stroke="#6a5010" strokeWidth="2" />
-      {/* 顶盖 */}
-      <rect x="15" y="8" width="12" height="5" rx="1" fill="#6a5010" />
-      <rect x="13" y="13" width="16" height="3" rx="1" fill="#d4a84b" />
-      {/* 灯笼主体（椭圆形） */}
-      <ellipse cx="21" cy="40" rx="17" ry="24" fill="#b81c1c" />
-      <ellipse cx="21" cy="40" rx="17" ry="24" fill="url(#lanternShade)" />
-      {/* 顶部细颈 */}
-      <rect x="17" y="16" width="8" height="6" fill="#a01818" />
-      {/* 底部细颈 */}
-      <rect x="17" y="58" width="8" height="6" fill="#a01818" />
-      {/* 金边装饰 */}
-      <ellipse cx="21" cy="40" rx="17" ry="24" stroke="#d4a84b" strokeWidth="1.5" fill="none" />
-      {/* 金色横线 */}
-      <line x1="5" y1="32" x2="37" y2="32" stroke="#d4a84b" strokeWidth="1.5" />
-      <line x1="5" y1="48" x2="37" y2="48" stroke="#d4a84b" strokeWidth="1.5" />
-      {/* 底部金环 */}
-      <rect x="13" y="62" width="16" height="4" rx="1" fill="#d4a84b" />
+      <line x1="22" y1="0" x2="22" y2="8" stroke="#6a5010" strokeWidth="2" />
+      {/* 顶部装饰 */}
+      <rect x="14" y="6" width="16" height="4" rx="1" fill="#6a5010" />
+      <rect x="12" y="10" width="20" height="3" rx="1" fill="#d4a84b" />
+      {/* 八角宫灯主体（八边形） */}
+      <polygon points="22,14 36,18 40,32 36,46 22,50 8,46 4,32 8,18" fill="#b81c1c" stroke="#d4a84b" strokeWidth="1.5" />
+      {/* 骨架线 */}
+      <line x1="22" y1="14" x2="22" y2="50" stroke="#d4a84b" strokeWidth="1" />
+      <line x1="4" y1="32" x2="40" y2="32" stroke="#d4a84b" strokeWidth="1" />
+      <line x1="8" y1="18" x2="36" y2="46" stroke="#d4a84b" strokeWidth="0.8" />
+      <line x1="36" y1="18" x2="8" y2="46" stroke="#d4a84b" strokeWidth="0.8" />
+      {/* 顶部斗拱装饰 */}
+      <rect x="10" y="50" width="24" height="3" rx="1" fill="#d4a84b" />
+      <rect x="12" y="53" width="20" height="4" rx="1" fill="#6a5010" />
       {/* 流苏 */}
-      <line x1="16" y1="66" x2="12" y2="74" stroke="#8b6914" strokeWidth="2" />
-      <line x1="21" y1="66" x2="21" y2="76" stroke="#8b6914" strokeWidth="2" />
-      <line x1="26" y1="66" x2="30" y2="74" stroke="#8b6914" strokeWidth="2" />
+      <line x1="18" y1="57" x2="14" y2="70" stroke="#8b6914" strokeWidth="2" />
+      <line x1="22" y1="57" x2="22" y2="72" stroke="#8b6914" strokeWidth="2" />
+      <line x1="26" y1="57" x2="30" y2="70" stroke="#8b6914" strokeWidth="2" />
+      {/* 顶部流苏 */}
+      <line x1="14" y1="6" x2="10" y2="2" stroke="#6a5010" strokeWidth="1" />
+      <line x1="22" y1="6" x2="22" y2="0" stroke="#6a5010" strokeWidth="1" />
+      <line x1="30" y1="6" x2="34" y2="2" stroke="#6a5010" strokeWidth="1" />
       {/* 高光 */}
-      <ellipse cx="13" cy="35" rx="3" ry="6" fill="#e84040" opacity="0.5" />
-      <defs>
-        <radialGradient id="lanternShade" cx="0.4" cy="0.3" r="0.6">
-          <stop offset="0%" stopColor="#e03030" />
-          <stop offset="100%" stopColor="#8a1010" />
-        </radialGradient>
-      </defs>
+      <polygon points="10,20 16,17 17,26 10,28" fill="#e84040" opacity="0.4" />
     </svg>
   );
 }
