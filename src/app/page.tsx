@@ -29,87 +29,100 @@ function WindowFlower({ position, color = "#8b4513" }: { position: string; color
   return <div className="absolute w-3 h-3" style={styles[position]} />;
 }
 
-// 真实风格的石狮子 SVG
+// 传统石狮子 SVG（蹲坐姿态，嘴里含绣球）
 function StoneLionSVG({ mirror = false }) {
   return (
     <svg
-      width="48"
-      height="56"
-      viewBox="0 0 48 56"
+      width="56"
+      height="64"
+      viewBox="0 0 56 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         transform: mirror ? "scaleX(-1)" : "none",
-        opacity: 0.35,
-        filter: "drop-shadow(2px 2px 2px rgba(0,0,0,0.2))",
+        opacity: 0.4,
+        filter: "drop-shadow(2px 3px 3px rgba(0,0,0,0.25))",
       }}
     >
       {/* 底座 */}
-      <rect x="4" y="48" width="40" height="6" rx="1" fill="#9ca3af" />
-      {/* 身体 */}
-      <ellipse cx="24" cy="38" rx="16" ry="12" fill="#a1a1aa" />
-      {/* 前腿 */}
-      <rect x="10" y="42" width="6" height="10" rx="2" fill="#9ca3af" />
-      <rect x="32" y="42" width="6" height="10" rx="2" fill="#9ca3af" />
+      <rect x="6" y="56" width="44" height="6" rx="1" fill="#8b7355" />
+      {/* 身体（蹲坐） */}
+      <ellipse cx="28" cy="44" rx="18" ry="14" fill="#a8a8a0" />
+      {/* 后腿蜷曲 */}
+      <ellipse cx="18" cy="50" rx="6" ry="5" fill="#989894" />
+      <ellipse cx="38" cy="50" rx="6" ry="5" fill="#989894" />
+      {/* 前腿直立 */}
+      <rect x="14" y="36" width="8" height="16" rx="3" fill="#a8a8a0" />
+      <rect x="34" y="36" width="8" height="16" rx="3" fill="#a8a8a0" />
+      {/* 爪子 */}
+      <ellipse cx="18" cy="52" rx="5" ry="3" fill="#989894" />
+      <ellipse cx="38" cy="52" rx="5" ry="3" fill="#989894" />
       {/* 头部 */}
-      <circle cx="24" cy="22" r="14" fill="#a1a1aa" />
-      {/* 鬃毛 */}
-      <circle cx="14" cy="14" r="5" fill="#71717a" />
-      <circle cx="24" cy="10" r="6" fill="#71717a" />
-      <circle cx="34" cy="14" r="5" fill="#71717a" />
+      <circle cx="28" cy="22" r="16" fill="#a8a8a0" />
+      {/* 鬃毛（卷曲） */}
+      <path d="M12 12 Q8 16 10 22 Q6 18 10 14 Q8 8 14 10" fill="#787878" />
+      <path d="M44 12 Q48 16 46 22 Q50 18 46 14 Q48 8 42 10" fill="#787878" />
+      <path d="M20 6 Q22 2 26 6 Q24 2 28 5" fill="#787878" />
+      <path d="M28 4 Q32 0 34 5 Q34 1 36 6" fill="#787878" />
       {/* 耳朵 */}
-      <ellipse cx="12" cy="18" rx="3" ry="4" fill="#9ca3af" />
-      <ellipse cx="36" cy="18" rx="3" ry="4" fill="#9ca3af" />
+      <ellipse cx="14" cy="18" rx="4" ry="5" fill="#989894" />
+      <ellipse cx="42" cy="18" rx="4" ry="5" fill="#989894" />
       {/* 眼睛 */}
-      <circle cx="18" cy="22" r="2" fill="#1f2937" />
-      <circle cx="30" cy="22" r="2" fill="#1f2937" />
+      <circle cx="21" cy="20" r="3" fill="#4a4a48" />
+      <circle cx="35" cy="20" r="3" fill="#4a4a48" />
+      <circle cx="22" cy="19" r="1" fill="white" opacity="0.6" />
+      <circle cx="36" cy="19" r="1" fill="white" opacity="0.6" />
       {/* 鼻子 */}
-      <ellipse cx="24" cy="26" rx="3" ry="2" fill="#71717a" />
-      {/* 张嘴 */}
-      <path d="M20 30 Q24 34 28 30" stroke="#71717a" strokeWidth="1.5" fill="none" />
+      <ellipse cx="28" cy="26" rx="4" ry="3" fill="#686868" />
+      {/* 张开的嘴 */}
+      <path d="M20 30 Q28 38 36 30 Q32 34 28 35 Q24 34 20 30" fill="#686868" />
+      {/* 嘴里绣球 */}
+      <circle cx="28" cy="32" r="4" fill="#d4a84b" />
+      <circle cx="28" cy="32" r="2" fill="#b8922e" />
+      {/* 下巴 */}
+      <ellipse cx="28" cy="34" rx="8" ry="4" fill="#989894" />
     </svg>
   );
 }
 
-// 真实风格的灯笼 SVG
+// 传统宫灯 SVG（6面宫灯造型）
 function LanternSVG({ sway }: { sway: boolean }) {
   return (
     <svg
-      width="36"
-      height="72"
-      viewBox="0 0 36 72"
+      width="40"
+      height="80"
+      viewBox="0 0 40 80"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        transform: sway ? "rotate(3deg)" : "rotate(0deg)",
-        transition: "transform 0.5s ease-in-out",
-        filter: "drop-shadow(0 2px 4px rgba(220, 38, 38, 0.3))",
+        transform: sway ? "rotate(4deg)" : "rotate(0deg)",
+        transition: "transform 0.6s ease-in-out",
+        filter: "drop-shadow(0 3px 6px rgba(180,60,60,0.35))",
       }}
     >
       {/* 挂绳 */}
-      <line x1="18" y1="0" x2="18" y2="12" stroke="#d4a84b" strokeWidth="2" />
-      {/* 顶盖 */}
-      <rect x="10" y="10" width="16" height="4" rx="1" fill="#d4a84b" />
-      <rect x="12" y="14" width="12" height="2" fill="#8b4513" />
-      {/* 灯笼主体 */}
-      <ellipse cx="18" cy="38" rx="14" ry="20" fill="#dc2626" />
-      <ellipse cx="18" cy="38" rx="14" ry="20" fill="url(#lanternGradient)" />
-      {/* 灯笼装饰线 */}
-      <line x1="6" y1="30" x2="6" y2="46" stroke="#d4a84b" strokeWidth="1" />
-      <line x1="30" y1="30" x2="30" y2="46" stroke="#d4a84b" strokeWidth="1" />
+      <line x1="20" y1="0" x2="20" y2="8" stroke="#8b6914" strokeWidth="2" />
+      {/* 灯笼顶部装饰 */}
+      <rect x="14" y="6" width="12" height="4" rx="1" fill="#8b6914" />
+      <rect x="12" y="10" width="16" height="3" rx="1" fill="#d4a84b" />
+      {/* 灯笼框架（6面） */}
+      <polygon points="20,14 32,18 32,40 20,44 8,40 8,18" fill="#c41e1e" stroke="#d4a84b" strokeWidth="1.5" />
+      {/* 灯笼骨架线 */}
+      <line x1="20" y1="14" x2="20" y2="44" stroke="#d4a84b" strokeWidth="1" />
+      <line x1="8" y1="27" x2="32" y2="27" stroke="#d4a84b" strokeWidth="1" />
+      {/* 灯笼底部装饰 */}
+      <rect x="12" y="44" width="16" height="3" rx="1" fill="#d4a84b" />
+      <rect x="14" y="47" width="12" height="4" rx="1" fill="#8b6914" />
       {/* 灯笼穗 */}
-      <line x1="18" y1="58" x2="18" y2="66" stroke="#d4a84b" strokeWidth="2" />
-      <ellipse cx="18" cy="68" rx="4" ry="3" fill="#d4a84b" />
-      {/* 底部装饰 */}
-      <rect x="12" y="54" width="12" height="2" rx="1" fill="#d4a84b" />
-      {/* 高光 */}
-      <ellipse cx="12" cy="32" rx="3" ry="6" fill="#fca5a5" opacity="0.4" />
-      <defs>
-        <linearGradient id="lanternGradient" x1="18" y1="18" x2="18" y2="58" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#ef4444" />
-          <stop offset="1" stopColor="#b91c1c" />
-        </linearGradient>
-      </defs>
+      <line x1="20" y1="51" x2="20" y2="62" stroke="#8b6914" strokeWidth="2" />
+      <ellipse cx="20" cy="65" rx="6" ry="4" fill="#d4a84b" />
+      <ellipse cx="20" cy="70" rx="5" ry="3" fill="#d4a84b" />
+      {/* 灯笼高光 */}
+      <polygon points="12,18 18,16 18,26 12,28" fill="#e05555" opacity="0.5" />
+      {/* 顶部流苏 */}
+      <line x1="14" y1="6" x2="12" y2="0" stroke="#8b6914" strokeWidth="1" />
+      <line x1="20" y1="6" x2="20" y2="0" stroke="#8b6914" strokeWidth="1" />
+      <line x1="26" y1="6" x2="28" y2="0" stroke="#8b6914" strokeWidth="1" />
     </svg>
   );
 }
