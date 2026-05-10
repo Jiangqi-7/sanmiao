@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #fafafa;
-  --bg-secondary: #ffffff;
-  --bg-card: #ffffff;
-  --text-primary: #000000;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --border: #e5e5e5;
+  --bg-primary: #f5f0e6;
+  --bg-secondary: #fffef8;
+  --bg-card: #fffef8;
+  --text-primary: #2a2a2a;
+  --text-secondary: #8b6914;
+  --text-muted: #d4c5a9;
+  --border: #d4c5a9;
 }
 
 * {
@@ -40,11 +40,76 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e5e5e5;
+  background: #d4c5a9;
   border-radius: 3px;
 }
 
 ::selection {
-  background: rgba(0,0,0,0.08);
-  color: #000000;
+  background: rgba(139, 105, 20, 0.15);
+  color: #2a2a2a;
+}
+
+/* 传统窗花边框效果 */
+.window-frame {
+  position: relative;
+}
+
+.window-frame::before,
+.window-frame::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--text-secondary);
+}
+
+.window-frame::before {
+  top: -3px;
+  left: -3px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.window-frame::after {
+  top: -3px;
+  right: -3px;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+
+/* 水墨晕染效果 */
+.ink-wash {
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(139, 105, 20, 0.08) 0%,
+    transparent 60%
+  );
+}
+
+/* 朱砂红强调色 */
+.vermilion-accent {
+  color: #b83a3a;
+}
+
+/* 藏青色强调 */
+.indigo-accent {
+  color: #2a4a6b;
+}
+
+/* 玉石绿强调 */
+.jade-accent {
+  color: #1a5f4a;
+}
+
+/* 金色点缀 */
+.gold-accent {
+  color: #d4a84b;
+}
+
+/* 宣纸背景 */
+.paper-bg {
+  background-color: #fffef8;
+  background-image:
+    linear-gradient(180deg, rgba(139,105,20,0.02) 0%, transparent 100%),
+    linear-gradient(0deg, rgba(139,105,20,0.02) 0%, transparent 100%);
 }
