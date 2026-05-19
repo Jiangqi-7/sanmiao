@@ -7,9 +7,8 @@ import path from 'path';
 import { Bookmark, CreateBookmarkInput } from './types';
 
 // Vercel serverless 环境允许写入 /tmp
-// 本地开发环境用 process.cwd()/data
-const isVercel = process.env.VERCEL === 'true';
-const DATA_DIR = isVercel ? '/tmp/sanmiao-data' : path.join(process.cwd(), 'data');
+// 数据目录
+const DATA_DIR = '/tmp/sanmiao-data';
 const DB_PATH = path.join(DATA_DIR, 'bookmarks.json');
 
 /**
