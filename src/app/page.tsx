@@ -11,10 +11,10 @@ const BAGUA_GRID = [
   { key: "kun", name: "坤", direction: "西南", href: "/about" },
   { key: "zhen", name: "震", direction: "东", href: "/blog?category=video" },
   { key: "center", name: "中", direction: "宫", href: "/", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/blog?category=image" },
+  { key: "dui", name: "兑", direction: "西", href: "/bookmarks", desc: "书签收藏" },
   { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools" },
-  { key: "kan", name: "坎", direction: "北", href: "/blog" },
-  { key: "qian", name: "乾", direction: "西北", href: "/about" },
+  { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章" },
+  { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于" },
 ];
 
 function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
@@ -22,7 +22,7 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
   const symbol = isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol;
   const label = isCenter ? "三秒" : cell.name;
   const subtext = isCenter ? "sanmiao" : cell.direction;
-  const desc = isCenter ? "道法自然" : cell.direction;
+  const desc = isCenter ? "道法自然" : ("desc" in cell ? cell.desc : cell.direction);
 
   return (
     <Link
