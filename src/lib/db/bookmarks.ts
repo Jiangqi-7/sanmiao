@@ -1,13 +1,15 @@
 /**
  * JSON 文件存储 - 书签管理
- * 替代 SQLite，数据存在 /data/bookmarks.json
+ * 数据存在 /tmp 目录（Vercel 允许写入）
  */
 import fs from 'fs';
 import path from 'path';
 import { Bookmark, CreateBookmarkInput } from './types';
 
-// 数据库文件路径
-const DATA_DIR = path.join(process.cwd(), 'data');
+// Vercel serverless 环境允许写入 /tmp
+// 本地开发环境用 process.cwd()/data
+const isVercel = process.env.VERCEL === 'true';
+const DATA_DIR = isVercel ? '/tmp/sanmiao-data' : path.join(process.cwd(), 'data');
 const DB_PATH = path.join(DATA_DIR, 'bookmarks.json');
 
 /**
