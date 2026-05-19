@@ -3,9 +3,7 @@
  * GET/PUT/DELETE /api/bookmarks/[id]
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { initDb, getBookmarkById, updateBookmark, deleteBookmark } from '@/lib/db/bookmarks';
-
-initDb();
+import { getBookmarkById, updateBookmark, deleteBookmark } from '@/lib/db/bookmarks';
 
 /**
  * 获取单个书签

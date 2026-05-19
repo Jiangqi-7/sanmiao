@@ -3,9 +3,7 @@
  * GET /api/bookmarks/search?q=keyword
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { initDb, searchBookmarks } from '@/lib/db/bookmarks';
-
-initDb();
+import { searchBookmarks } from '@/lib/db/bookmarks';
 
 export async function GET(request: NextRequest) {
   try {

@@ -1,41 +1,42 @@
 /**
- * SQLite 数据库操作 - 书签管理
+ * JSON 文件存储 - 书签管理
+ * 替代 SQLite，数据存在 /data/bookmarks.json
  */
-import Database from 'better-sqlite3';
+import fs from 'fs';
 import path from 'path';
 import { Bookmark, CreateBookmarkInput } from './types';
 
 // 数据库文件路径
-const DB_PATH = path.join(process.cwd(), 'data', 'bookmarks.db');
+const DATA_DIR = path.join(process.cwd(), 'data');
+const DB_PATH = path.join(DATA_DIR, 'bookmarks.json');
 
 /**
- * 初始化数据库连接
+ * 确保数据目录存在
  */
-function getDb(): Database.Database {
-  return new Database(DB_PATH);
+function ensureDataDir(): void {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
 }
 
 /**
- * 初始化数据库表
- * 如果表不存在则创建
+ * 读取所有书签
  */
-export function initDb(): void {
-  const db = getDb();
+function readAll(): Bookmark[] {
+  ensureDataDir();
+  if (!fs.existsSync(DB_PATH)) {
+    return [];
+  }
+  const data = fs.readFileSync(DB_PATH, 'utf-8');
+  return JSON.parse(data);
+}
 
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS bookmarks (
-      id TEXT PRIMARY KEY,
-      title TEXT NOT NULL,
-      url TEXT NOT NULL,
-      category TEXT DEFAULT '',
-      tags TEXT DEFAULT '[]',
-      description TEXT DEFAULT '',
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    )
-  `);
-
-  db.close();
+/**
+ * 写入所有书签
+ */
+function writeAll(bookmarks: Bookmark[]): void {
+  ensureDataDir();
+  fs.writeFileSync(DB_PATH, JSON.stringify(bookmarks, null, 2), 'utf-8');
 }
 
 /**
@@ -46,69 +47,44 @@ function generateId(): string {
 }
 
 /**
- * 将数据库行转换为 Bookmark 对象
- */
-function toBookmark(row: Record<string, unknown>): Bookmark {
-  return {
-    id: row.id as string,
-    title: row.title as string,
-    url: row.url as string,
-    category: row.category as string,
-    tags: JSON.parse((row.tags as string) || '[]'),
-    description: row.description as string,
-    createdAt: row.created_at as string,
-    updatedAt: row.updated_at as string,
-  };
-}
-
-/**
  * 获取所有书签
  */
 export function getAllBookmarks(): Bookmark[] {
-  const db = getDb();
-  const rows = db.prepare('SELECT * FROM bookmarks ORDER BY created_at DESC').all();
-  db.close();
-  return rows.map(toBookmark);
+  return readAll().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
 /**
  * 根据分类获取书签
  */
 export function getBookmarksByCategory(category: string): Bookmark[] {
-  const db = getDb();
-  const rows = db.prepare('SELECT * FROM bookmarks WHERE category = ? ORDER BY created_at DESC').all(category);
-  db.close();
-  return rows.map(toBookmark);
+  return readAll().filter((b) => b.category === category);
 }
 
 /**
  * 根据ID获取书签
  */
 export function getBookmarkById(id: string): Bookmark | null {
-  const db = getDb();
-  const row = db.prepare('SELECT * FROM bookmarks WHERE id = ?').get(id);
-  db.close();
-  return row ? toBookmark(row as Record<string, unknown>) : null;
+  const bookmarks = readAll();
+  return bookmarks.find((b) => b.id === id) || null;
 }
 
 /**
  * 搜索书签（按标题或描述）
  */
 export function searchBookmarks(keyword: string): Bookmark[] {
-  const db = getDb();
-  const pattern = `%${keyword}%`;
-  const rows = db.prepare(
-    'SELECT * FROM bookmarks WHERE title LIKE ? OR description LIKE ? ORDER BY created_at DESC'
-  ).all(pattern, pattern);
-  db.close();
-  return rows.map(toBookmark);
+  const lowerKeyword = keyword.toLowerCase();
+  return readAll().filter(
+    (b) =>
+      b.title.toLowerCase().includes(lowerKeyword) ||
+      b.description.toLowerCase().includes(lowerKeyword)
+  );
 }
 
 /**
  * 创建书签
  */
 export function createBookmark(input: CreateBookmarkInput): Bookmark {
-  const db = getDb();
+  const bookmarks = readAll();
   const now = new Date().toISOString();
 
   const bookmark: Bookmark = {
@@ -122,21 +98,8 @@ export function createBookmark(input: CreateBookmarkInput): Bookmark {
     updatedAt: now,
   };
 
-  db.prepare(`
-    INSERT INTO bookmarks (id, title, url, category, tags, description, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    bookmark.id,
-    bookmark.title,
-    bookmark.url,
-    bookmark.category,
-    JSON.stringify(bookmark.tags),
-    bookmark.description,
-    bookmark.createdAt,
-    bookmark.updatedAt
-  );
-
-  db.close();
+  bookmarks.push(bookmark);
+  writeAll(bookmarks);
   return bookmark;
 }
 
@@ -144,42 +107,28 @@ export function createBookmark(input: CreateBookmarkInput): Bookmark {
  * 更新书签
  */
 export function updateBookmark(id: string, input: Partial<CreateBookmarkInput>): Bookmark | null {
-  const db = getDb();
-  const existing = db.prepare('SELECT * FROM bookmarks WHERE id = ?').get(id);
+  const bookmarks = readAll();
+  const index = bookmarks.findIndex((b) => b.id === id);
 
-  if (!existing) {
-    db.close();
+  if (index === -1) {
     return null;
   }
 
   const now = new Date().toISOString();
-  const current = toBookmark(existing as Record<string, unknown>);
+  const existing = bookmarks[index];
 
   const updated: Bookmark = {
-    ...current,
-    title: input.title ?? current.title,
-    url: input.url ?? current.url,
-    category: input.category ?? current.category,
-    tags: input.tags ?? current.tags,
-    description: input.description ?? current.description,
+    ...existing,
+    title: input.title ?? existing.title,
+    url: input.url ?? existing.url,
+    category: input.category ?? existing.category,
+    tags: input.tags ?? existing.tags,
+    description: input.description ?? existing.description,
     updatedAt: now,
   };
 
-  db.prepare(`
-    UPDATE bookmarks
-    SET title = ?, url = ?, category = ?, tags = ?, description = ?, updated_at = ?
-    WHERE id = ?
-  `).run(
-    updated.title,
-    updated.url,
-    updated.category,
-    JSON.stringify(updated.tags),
-    updated.description,
-    updated.updatedAt,
-    id
-  );
-
-  db.close();
+  bookmarks[index] = updated;
+  writeAll(bookmarks);
   return updated;
 }
 
@@ -187,35 +136,33 @@ export function updateBookmark(id: string, input: Partial<CreateBookmarkInput>):
  * 删除书签
  */
 export function deleteBookmark(id: string): boolean {
-  const db = getDb();
-  const result = db.prepare('DELETE FROM bookmarks WHERE id = ?').run(id);
-  db.close();
-  return result.changes > 0;
+  const bookmarks = readAll();
+  const index = bookmarks.findIndex((b) => b.id === id);
+
+  if (index === -1) {
+    return false;
+  }
+
+  bookmarks.splice(index, 1);
+  writeAll(bookmarks);
+  return true;
 }
 
 /**
  * 获取所有分类
  */
 export function getAllCategories(): string[] {
-  const db = getDb();
-  const rows = db.prepare('SELECT DISTINCT category FROM bookmarks WHERE category != ""').all();
-  db.close();
-  return rows.map((row) => row.category as string);
+  const bookmarks = readAll();
+  const categories = new Set(bookmarks.map((b) => b.category).filter(Boolean));
+  return Array.from(categories);
 }
 
 /**
  * 获取所有标签
  */
 export function getAllTags(): string[] {
-  const db = getDb();
-  const rows = db.prepare('SELECT tags FROM bookmarks').all();
-  db.close();
-
+  const bookmarks = readAll();
   const tagSet = new Set<string>();
-  rows.forEach((row) => {
-    const tags = JSON.parse((row.tags as string) || '[]');
-    tags.forEach((tag: string) => tagSet.add(tag));
-  });
-
+  bookmarks.forEach((b) => b.tags.forEach((tag) => tagSet.add(tag)));
   return Array.from(tagSet).sort();
 }
