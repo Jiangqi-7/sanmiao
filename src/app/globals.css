@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  /* 简约黑白 */
   --bg-primary: #fafafa;
   --bg-secondary: #ffffff;
   --bg-card: #ffffff;
@@ -8,6 +9,23 @@
   --text-secondary: #666666;
   --text-muted: #999999;
   --border: #e5e5e5;
+  --accent: #1a1a1a;
+  --accent-light: #333333;
+  --accent-glow: rgba(0,0,0,0.08);
+}
+
+[data-theme="colorful"] {
+  /* 高级彩色 - 朱砂红+金+墨 */
+  --bg-primary: #faf8f5;
+  --bg-secondary: #fffdf9;
+  --bg-card: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5c4a3a;
+  --text-muted: #8a7a6a;
+  --border: #e8ddd0;
+  --accent: #c43a3a;
+  --accent-light: #a52a2a;
+  --accent-glow: rgba(196,58,58,0.12);
 }
 
 * {
@@ -46,6 +64,26 @@ a {
 }
 
 ::selection {
-  background: rgba(0,0,0,0.08);
-  color: #000000;
+  background: var(--accent-glow);
+  color: var(--text-primary);
+}
+
+/* 主题切换动画 - 呼吸感 */
+*, *::before, *::after {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease;
+}
+
+/* 呼吸光晕效果 */
+[data-theme="colorful"] .glow-hover:hover {
+  box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(196,58,58,0.06);
+}
+
+/* 装饰性呼吸动画 */
+@keyframes breath {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.02); }
+}
+
+[data-theme="colorful"] .breath {
+  animation: breath 4s ease-in-out infinite;
 }

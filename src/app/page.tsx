@@ -27,18 +27,18 @@ function BaguaCell({ cell }: { cell: typeof BAGUA_GRID[0] }) {
   return (
     <Link
       href={cell.href}
-      className="group block p-6 transition-all duration-300 border border-neutral-200 hover:border-neutral-800"
-      style={{ backgroundColor: "#fafafa" }}
+      className="group block p-6 transition-all duration-300 border glow-hover"
+      style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)" }}
     >
       <div className="mb-4">
-        <span className="text-xs tracking-widest text-neutral-400 uppercase">{subtext}</span>
+        <span className="text-xs tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>{subtext}</span>
       </div>
-      <h3 className="text-2xl font-light mb-2" style={{ color: "#1a1a1a", fontFamily: "serif" }}>
+      <h3 className="text-2xl font-light mb-2" style={{ color: "var(--text-primary)", fontFamily: "serif" }}>
         {label}
       </h3>
       <div className="flex items-center justify-between">
-        <span className="text-sm text-neutral-500">{desc}</span>
-        <span className="text-4xl opacity-20 transition-opacity duration-300 group-hover:opacity-40" style={{ fontFamily: "serif" }}>
+        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{desc}</span>
+        <span className="text-4xl opacity-20 transition-opacity duration-300 group-hover:opacity-40 breath" style={{ fontFamily: "serif", color: "var(--accent)" }}>
           {symbol}
         </span>
       </div>
@@ -54,9 +54,9 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#fafafa" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
       {/* 顶部细线 */}
-      <div className="h-px" style={{ backgroundColor: "#1a1a1a" }} />
+      <div className="h-px" style={{ backgroundColor: "var(--accent)" }} />
 
       {/* 主内容区 */}
       <main className="max-w-[900px] mx-auto px-6 py-20">
@@ -64,25 +64,26 @@ export default function HomePage() {
         <header className="mb-20 text-center">
           <h1
             className={`text-5xl font-light mb-4 tracking-[0.3em] transition-all duration-1000 ${loaded ? "opacity-100" : "opacity-0"}`}
-            style={{ color: "#1a1a1a", fontFamily: "serif" }}
+            style={{ color: "var(--text-primary)", fontFamily: "serif" }}
           >
             道法自然
           </h1>
           <p
-            className={`text-sm tracking-[0.5em] text-neutral-400 transition-all duration-1000 delay-200 ${loaded ? "opacity-100" : "opacity-0"}`}
+            className={`text-sm tracking-[0.5em] transition-all duration-1000 delay-200 ${loaded ? "opacity-100" : "opacity-0"}`}
+            style={{ color: "var(--text-muted)" }}
           >
             AI 为用
           </p>
 
           {/* 细分隔线 */}
           <div className={`flex items-center justify-center gap-8 mt-12 transition-all duration-1000 delay-400 ${loaded ? "opacity-100" : "opacity-0"}`}>
-            <div className="w-16 h-px bg-neutral-300" />
+            <div className="w-16 h-px" style={{ backgroundColor: "var(--border)" }} />
             <div className="flex items-center gap-6">
               {["☰", "☯", "☷"].map((s, i) => (
-                <span key={i} className="text-xl text-neutral-300" style={{ fontFamily: "serif" }}>{s}</span>
+                <span key={i} className="text-xl" style={{ fontFamily: "serif", color: "var(--text-muted)" }}>{s}</span>
               ))}
             </div>
-            <div className="w-16 h-px bg-neutral-300" />
+            <div className="w-16 h-px" style={{ backgroundColor: "var(--border)" }} />
           </div>
         </header>
 
@@ -100,9 +101,9 @@ export default function HomePage() {
         </div>
 
         {/* 底部 */}
-        <footer className="mt-20 pt-8 text-center">
-          <div className="inline-block px-8 py-4 border border-neutral-300">
-            <p className="text-xs tracking-[0.4em] text-neutral-400">
+        <footer className="mt-20 pt-8 text-center border-t" style={{ borderColor: "var(--border)" }}>
+          <div className="inline-block px-8 py-4 border" style={{ borderColor: "var(--border)" }}>
+            <p className="text-xs tracking-[0.4em]" style={{ color: "var(--text-muted)" }}>
               後天八卦 · 九宫格
             </p>
           </div>
@@ -112,8 +113,8 @@ export default function HomePage() {
             {["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"].map((key) => (
               <span
                 key={key}
-                className="text-base text-neutral-300 transition-all duration-300 hover:text-neutral-800 cursor-default"
-                style={{ fontFamily: "serif" }}
+                className="text-base transition-all duration-300 cursor-default"
+                style={{ fontFamily: "serif", color: "var(--text-muted)" }}
               >
                 {BAGUA.positions[key as keyof typeof BAGUA.positions].symbol}
               </span>
@@ -121,12 +122,12 @@ export default function HomePage() {
           </div>
 
           {/* 底部细线 */}
-          <div className="w-full h-px bg-neutral-200 mt-12" />
+          <div className="w-full h-px mt-12" style={{ backgroundColor: "var(--border)" }} />
         </footer>
       </main>
 
       {/* 底部细线 */}
-      <div className="h-px" style={{ backgroundColor: "#1a1a1a" }} />
+      <div className="h-px" style={{ backgroundColor: "var(--accent)" }} />
     </div>
   );
 }
