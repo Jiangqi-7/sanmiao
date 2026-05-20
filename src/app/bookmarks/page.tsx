@@ -31,6 +31,7 @@ export default function BookmarksPage() {
   const [newDesc, setNewDesc] = useState('');
 
   const limit = 10;
+  const totalPages = Math.ceil(total / limit);
 
   // 获取书签列表
   async function fetchBookmarks(pageNum: number = 1) {
@@ -39,11 +40,7 @@ export default function BookmarksPage() {
       const res = await fetch(`/api/bookmarks?page=${pageNum}&limit=${limit}`);
       const data: PaginatedBookmarks = await res.json();
 
-      if (pageNum === 1) {
-        setBookmarks(data.data);
-      } else {
-        setBookmarks((prev) => [...prev, ...data.data]);
-      }
+      setBookmarks(data.data);
       setHasMore(data.hasMore);
       setTotal(data.total);
       setPage(pageNum);
@@ -101,7 +98,7 @@ export default function BookmarksPage() {
     try {
       const res = await fetch(`/api/bookmarks/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        fetchBookmarks(1);
+        fetchBookmarks(page);
       }
     } catch (error) {
       console.error('删除书签失败:', error);
@@ -133,11 +130,6 @@ export default function BookmarksPage() {
     window.open('/api/bookmarks/export', '_blank');
   }
 
-  // 加载更多
-  function loadMore() {
-    fetchBookmarks(page + 1);
-  }
-
   // 筛选
   const filteredBookmarks = bookmarks.filter((b) => {
     const matchCategory = category === 'all' || b.category === category;
@@ -147,6 +139,31 @@ export default function BookmarksPage() {
 
   // 获取所有分类
   const categories = Array.from(new Set(bookmarks.map((b) => b.category).filter(Boolean)));
+
+  // 生成分页页码
+  function getPageNumbers(): (number | '...')[] {
+    const pages: (number | '...')[] = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (page <= 4) {
+        for (let i = 1; i <= 5; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (page >= totalPages - 3) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = page - 1; i <= page + 1; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
@@ -333,19 +350,45 @@ export default function BookmarksPage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
 
-            {/* 加载更多 */}
-            {hasMore && (
-              <div className="text-center mt-8">
+        {/* 分页 */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-8">
+            <button
+              onClick={() => fetchBookmarks(page - 1)}
+              disabled={page <= 1 || loading}
+              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              上一页
+            </button>
+
+            {getPageNumbers().map((p, i) =>
+              p === '...' ? (
+                <span key={`ellipsis-${i}`} className="px-2 text-neutral-400">...</span>
+              ) : (
                 <button
-                  onClick={loadMore}
-                  disabled={loading}
-                  className="px-6 py-2 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50"
+                  key={p}
+                  onClick={() => fetchBookmarks(p as number)}
+                  className={`px-3 py-1 text-sm border ${
+                    page === p
+                      ? 'bg-neutral-900 text-white border-neutral-900'
+                      : 'border-neutral-300 hover:border-neutral-900'
+                  }`}
                 >
-                  {loading ? '加载中...' : '加载更多'}
+                  {p}
                 </button>
-              </div>
+              )
             )}
+
+            <button
+              onClick={() => fetchBookmarks(page + 1)}
+              disabled={page >= totalPages || loading}
+              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              下一页
+            </button>
           </div>
         )}
 
