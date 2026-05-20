@@ -78,20 +78,33 @@ export default function PuzzleDetailPage({ params }: Props) {
             className="whitespace-pre-wrap"
             style={{ color: '#4a4a4a', lineHeight: '1.8' }}
           >
-            {puzzle.content.trim().split('\n').map((paragraph, i) => {
-              if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+            {puzzle.content.trim().split('\n').map((line, i) => {
+              // 处理图片
+              const imageMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+              if (imageMatch) {
+                return (
+                  <img
+                    key={i}
+                    src={imageMatch[2]}
+                    alt={imageMatch[1]}
+                    className="my-4 max-w-full"
+                    style={{ maxHeight: '400px' }}
+                  />
+                );
+              }
+              if (line.startsWith('**') && line.endsWith('**')) {
                 return (
                   <p key={i} className="font-medium mt-6 mb-2 text-lg" style={{ color: '#1a1a1a' }}>
-                    {paragraph.replace(/\*\*/g, '')}
+                    {line.replace(/\*\*/g, '')}
                   </p>
                 );
               }
-              if (paragraph.trim() === '') {
+              if (line.trim() === '') {
                 return <br key={i} />;
               }
               return (
                 <p key={i} className="mb-3">
-                  {paragraph}
+                  {line}
                 </p>
               );
             })}
@@ -133,20 +146,32 @@ export default function PuzzleDetailPage({ params }: Props) {
                 className="whitespace-pre-wrap"
                 style={{ color: '#4a4a4a', lineHeight: '1.8' }}
               >
-                {puzzle.solution.trim().split('\n').map((paragraph, i) => {
-                  if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+                {puzzle.solution.trim().split('\n').map((line, i) => {
+                  const imageMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+                  if (imageMatch) {
+                    return (
+                      <img
+                        key={i}
+                        src={imageMatch[2]}
+                        alt={imageMatch[1]}
+                        className="my-4 max-w-full"
+                        style={{ maxHeight: '400px' }}
+                      />
+                    );
+                  }
+                  if (line.startsWith('**') && line.endsWith('**')) {
                     return (
                       <p key={i} className="font-medium mt-4 mb-2" style={{ color: '#1a1a1a' }}>
-                        {paragraph.replace(/\*\*/g, '')}
+                        {line.replace(/\*\*/g, '')}
                       </p>
                     );
                   }
-                  if (paragraph.trim() === '') {
+                  if (line.trim() === '') {
                     return <br key={i} />;
                   }
                   return (
                     <p key={i} className="mb-3">
-                      {paragraph}
+                      {line}
                     </p>
                   );
                 })}
