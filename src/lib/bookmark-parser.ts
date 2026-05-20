@@ -1,53 +1,78 @@
 /**
  * 解析 Netscape Bookmark HTML 格式
- * 这是浏览器导出书签的标准格式
+ * 浏览器导出书签的标准格式
  */
 import { CreateBookmarkInput, Bookmark } from './db/types';
 
-interface ParseNode {
-  tagName?: string;
-  text: string;
-  getAttribute: (name: string) => string | null;
-  nextSibling?: ParseNode;
-  parentNode?: ParseNode;
-}
-
+/**
+ * 解析 Netscape Bookmark HTML
+ * 结构: <DL><p><DT><H3>分类名</H3><DL><p><DT><A href="...">标题</A><DD>描述
+ */
 function parseNetscapeHtml(html: string): CreateBookmarkInput[] {
   const bookmarks: CreateBookmarkInput[] = [];
 
-  // 简单的正则解析（不用 node-html-parser，避免模块问题）
-  // 匹配 <DT><A href="..." ...>title</A>
+  // 解析所有 H3 分类
+  const h3Regex = /<H3>([^<]*(?:<(?!<\/H3>)[^<]*)*)<\/H3>/gi;
+  // 解析所有链接及其后的 DD
   const linkRegex = /<DT><A\s+href="([^"]+)"[^>]*>([^<]*(?:<(?!<\/A>)[^<]*)*)<\/A>/gi;
-  // 获取描述：DD 跟在 A 后面的
+  // 解析 DD 描述
   const ddRegex = /<DD>([^<\n]+)/gi;
 
-  const links: Array<{ href: string; title: string; description: string }> = [];
+  // 获取所有 H3 分类及其位置
+  const h3Matches: Array<{ name: string; index: number }> = [];
   let match;
+  while ((match = h3Regex.exec(html)) !== null) {
+    h3Matches.push({
+      name: decodeHtmlEntities(match[1].trim()),
+      index: match.index,
+    });
+  }
 
+  // 获取所有链接及其位置
+  const linkMatches: Array<{ href: string; title: string; index: number }> = [];
   while ((match = linkRegex.exec(html)) !== null) {
-    links.push({
+    linkMatches.push({
       href: match[1],
       title: decodeHtmlEntities(match[2].trim()),
-      description: '',
+      index: match.index,
     });
   }
 
   // 获取所有 DD 描述
-  const dds: string[] = [];
+  const ddMatches: Array<{ text: string; index: number }> = [];
   while ((match = ddRegex.exec(html)) !== null) {
-    dds.push(decodeHtmlEntities(match[1].trim()));
+    ddMatches.push({
+      text: decodeHtmlEntities(match[1].trim()),
+      index: match.index,
+    });
   }
 
-  // 简单关联：描述数量通常少于链接，按顺序分配给没有分类的链接
-  let ddIndex = 0;
-  for (const link of links) {
-    // 尝试从周围文本获取更多信息（简化处理）
+  // 为每个链接确定分类：找到包含此链接的最近的上级 H3
+  for (const link of linkMatches) {
+    let category = '';
+    for (const h3 of h3Matches) {
+      if (h3.index < link.index) {
+        category = h3.name;
+      } else {
+        break;
+      }
+    }
+
+    // 找到链接之后的最近 DD
+    let description = '';
+    for (const dd of ddMatches) {
+      if (dd.index > link.index) {
+        description = dd.text;
+        break;
+      }
+    }
+
     bookmarks.push({
       title: link.title,
       url: link.href,
-      category: '',
+      category,
       tags: [],
-      description: link.description,
+      description,
     });
   }
 
