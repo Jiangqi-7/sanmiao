@@ -99,42 +99,42 @@ a {
   animation: thunder-breath 3s ease-in-out infinite;
 }
 
-/* 雷电动画 - 更真实的闪电效果 */
+/* 雷电动画 - 随机乱串闪电 */
 @keyframes lightning-flash {
-  0%, 89%, 100% {
+  0%, 88%, 100% {
     opacity: 0;
-    filter: brightness(1);
+    transform: scaleY(0) translateY(-100%);
   }
   89% {
-    opacity: 1;
-    filter: brightness(2);
+    opacity: 0.9;
+    transform: scaleY(1) translateY(0);
   }
-  89.3% {
-    opacity: 0.4;
-    filter: brightness(1.5);
+  89.2% {
+    opacity: 0.3;
   }
-  89.6% {
+  89.5% {
     opacity: 1;
-    filter: brightness(2.5);
+  }
+  89.8% {
+    opacity: 0.5;
   }
   90% {
     opacity: 0;
-    filter: brightness(1);
+    transform: scaleY(1.1) translateY(50%);
   }
 }
 
 @keyframes screen-flash {
-  0%, 89%, 92%, 100% {
+  0%, 88%, 92%, 100% {
     background: transparent;
   }
   89% {
-    background: rgba(200, 200, 255, 0.12);
+    background: rgba(138, 43, 226, 0.15);
+    box-shadow: inset 0 0 100px rgba(100, 50, 200, 0.1);
   }
   90% {
-    background: rgba(100, 50, 200, 0.08);
-  }
-  91% {
-    background: transparent;
+    background: rgba(200, 200, 255, 0.08);
+    box-shadow: inset 0 0 80px rgba(135, 206, 235, 0.1);
   }
 }
 
@@ -144,45 +144,40 @@ a {
   pointer-events: none;
   z-index: 100;
   overflow: hidden;
-  animation: screen-flash 12s ease-in-out infinite;
+}
+
+[data-theme="colorful"] .lightning-container {
+  animation: screen-flash 15s ease-in-out infinite;
 }
 
 [data-theme="colorful"] .lightning-bolt {
   position: absolute;
-  top: -20px;
-  width: 3px;
-  height: 0;
+  top: -50px;
+  width: 4px;
   opacity: 0;
-  animation: lightning-flash 12s ease-in-out infinite;
+  animation: lightning-flash 15s ease-in-out infinite;
   background: linear-gradient(to bottom,
     transparent 0%,
-    rgba(200, 220, 255, 0.8) 8%,
-    #fff 20%,
-    var(--sky) 45%,
-    var(--thunder) 75%,
+    rgba(255, 255, 255, 0.95) 5%,
+    #fff 15%,
+    var(--sky) 35%,
+    var(--thunder) 65%,
+    var(--peacock) 85%,
     transparent 100%
   );
+  filter: blur(0.3px);
+  border-radius: 2px;
   transform-origin: top center;
 }
 
-[data-theme="colorful"] .lightning-bolt:nth-child(1) {
-  left: 18%;
-  animation-delay: 0s;
-  clip-path: polygon(50% 0%, 35% 15%, 65% 28%, 30% 42%, 60% 55%, 25% 70%, 55% 85%, 45% 100%);
-}
-
-[data-theme="colorful"] .lightning-bolt:nth-child(2) {
-  left: 72%;
-  animation-delay: 5s;
-  clip-path: polygon(50% 0%, 40% 12%, 60% 25%, 35% 38%, 65% 52%, 40% 65%, 58% 78%, 48% 100%);
-}
-
-[data-theme="colorful"] .lightning-bolt:nth-child(3) {
-  left: 42%;
-  animation-delay: 8s;
-  width: 4px;
-  clip-path: polygon(50% 0%, 30% 10%, 70% 22%, 25% 35%, 65% 48%, 30% 62%, 70% 75%, 45% 88%, 55% 100%);
-}
+[data-theme="colorful"] .lightning-bolt:nth-child(1) { left: 10%; animation-delay: 0s; }
+[data-theme="colorful"] .lightning-bolt:nth-child(2) { left: 25%; animation-delay: 3s; }
+[data-theme="colorful"] .lightning-bolt:nth-child(3) { left: 40%; animation-delay: 7s; }
+[data-theme="colorful"] .lightning-bolt:nth-child(4) { left: 55%; animation-delay: 2s; }
+[data-theme="colorful"] .lightning-bolt:nth-child(5) { left: 70%; animation-delay: 9s; }
+[data-theme="colorful"] .lightning-bolt:nth-child(6) { left: 85%; animation-delay: 5s; }
+[data-theme="colorful"] .lightning-bolt:nth-child(7) { left: 5%; animation-delay: 11s; }
+[data-theme="colorful"] .lightning-bolt:nth-child(8) { left: 95%; animation-delay: 13s; }
 
 /* 彩色渐变边框 - 简化只保留渐变线条 */
 [data-theme="colorful"] .gradient-border {

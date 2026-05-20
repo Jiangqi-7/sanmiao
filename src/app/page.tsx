@@ -1,8 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
-import { useState, useEffect } from "react";
 
 const BAGUA_GRID = [
   { key: "xun", name: "巽", direction: "东南", href: "/blog?category=workflow" },
@@ -53,12 +53,40 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
 }
 
 function LightningEffect() {
+  const [bolts, setBolts] = useState<Array<{ id: number; x: number; delay: number; angle: number; length: number }>>([]);
+
+  useEffect(() => {
+    // 生成随机闪电
+    const generateBolts = () => {
+      const newBolts = [];
+      for (let i = 0; i < 8; i++) {
+        newBolts.push({
+          id: i,
+          x: Math.random() * 100,
+          delay: Math.random() * 10,
+          angle: Math.random() * 30 - 15,
+          length: 30 + Math.random() * 50,
+        });
+      }
+      setBolts(newBolts);
+    };
+    generateBolts();
+  }, []);
+
   return (
     <div className="lightning-container">
-      <div className="lightning-glow-overlay" />
-      <div className="lightning-bolt" />
-      <div className="lightning-bolt" />
-      <div className="lightning-bolt" />
+      {bolts.map((bolt) => (
+        <div
+          key={bolt.id}
+          className="lightning-bolt"
+          style={{
+            left: `${bolt.x}%`,
+            animationDelay: `${bolt.delay}s`,
+            transform: `rotate(${bolt.angle}deg)`,
+            height: `${bolt.length}vh`,
+          }}
+        />
+      ))}
     </div>
   );
 }
