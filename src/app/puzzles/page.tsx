@@ -3,10 +3,46 @@
 /**
  * 推理阁 - 谜题列表
  */
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { puzzles } from '@/lib/puzzles';
 
+const PAGE_SIZE = 5;
+
 export default function PuzzleListPage() {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(puzzles.length / PAGE_SIZE));
+  }, []);
+
+  const currentPuzzles = puzzles.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const startIndex = (page - 1) * PAGE_SIZE + 1;
+
+  function getPageNumbers(): (number | '...')[] {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | '...')[] = [];
+    if (page <= 4) {
+      for (let i = 1; i <= 5; i++) pages.push(i);
+      pages.push('...');
+      pages.push(totalPages);
+    } else if (page >= totalPages - 3) {
+      pages.push(1);
+      pages.push('...');
+      for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      pages.push('...');
+      for (let i = page - 1; i <= page + 1; i++) pages.push(i);
+      pages.push('...');
+      pages.push(totalPages);
+    }
+    return pages;
+  }
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
       {/* 顶部细线 */}
@@ -26,8 +62,8 @@ export default function PuzzleListPage() {
         </header>
 
         {/* 谜题列表 */}
-        <div className="space-y-4">
-          {puzzles.map((puzzle, index) => (
+        <div className="space-y-4 mb-8">
+          {currentPuzzles.map((puzzle, index) => (
             <Link
               key={puzzle.id}
               href={`/puzzles/${puzzle.id}`}
@@ -36,7 +72,7 @@ export default function PuzzleListPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <span className="text-xs text-neutral-400 w-8">#{index + 1}</span>
+                  <span className="text-xs text-neutral-400 w-8">#{startIndex + index}</span>
                   <span
                     className="text-lg group-hover:text-neutral-600 transition-colors"
                     style={{ color: '#1a1a1a', fontFamily: 'serif' }}
@@ -52,6 +88,45 @@ export default function PuzzleListPage() {
             </Link>
           ))}
         </div>
+
+        {/* 分页 */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2">
+            <button
+              onClick={() => setPage(page - 1)}
+              disabled={page <= 1}
+              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              上一页
+            </button>
+
+            {getPageNumbers().map((p, i) =>
+              p === '...' ? (
+                <span key={`ellipsis-${i}`} className="px-2 text-neutral-400">...</span>
+              ) : (
+                <button
+                  key={p}
+                  onClick={() => setPage(p as number)}
+                  className={`px-3 py-1 text-sm border ${
+                    page === p
+                      ? 'bg-neutral-900 text-white border-neutral-900'
+                      : 'border-neutral-300 hover:border-neutral-900'
+                  }`}
+                >
+                  {p}
+                </button>
+              )
+            )}
+
+            <button
+              onClick={() => setPage(page + 1)}
+              disabled={page >= totalPages}
+              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              下一页
+            </button>
+          </div>
+        )}
 
         {/* 底部 */}
         <footer className="mt-16 pt-8 border-t" style={{ borderColor: '#e5e5e5' }}>
