@@ -8,6 +8,12 @@ import { createBookmark, getAllBookmarks } from '@/lib/db/bookmarks';
 import { CreateBookmarkInput } from '@/lib/db/types';
 import { parseNetscapeHtml } from '@/lib/bookmark-parser';
 
+const noCacheHeaders = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+  'Pragma': 'no-cache',
+  'Expires': '0',
+};
+
 /**
  * 导入书签（支持浏览器 HTML 格式）
  */
@@ -24,7 +30,7 @@ export async function POST(request: NextRequest) {
       // JSON 格式
       const body = JSON.parse(rawBody);
       if (!Array.isArray(body.bookmarks)) {
-        return NextResponse.json({ error: '请提供 bookmarks 数组' }, { status: 400 });
+        return NextResponse.json({ error: '请提供 bookmarks 数组' }, { status: 400, headers: noCacheHeaders });
       }
       bookmarks = body.bookmarks as CreateBookmarkInput[];
     }
@@ -54,9 +60,9 @@ export async function POST(request: NextRequest) {
       success: true,
       imported,
       skipped: bookmarks.length - imported,
-    });
+    }, { headers: noCacheHeaders });
   } catch (error) {
     console.error('导入书签失败:', error);
-    return NextResponse.json({ error: '导入失败' }, { status: 500 });
+    return NextResponse.json({ error: '导入失败' }, { status: 500, headers: noCacheHeaders });
   }
 }
