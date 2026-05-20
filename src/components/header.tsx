@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/puzzles", label: "推理" },
   { href: "/shan-hai-jing", label: "山海经" },
   { href: "/tools", label: "工具" },
+  { href: "/prompts", label: "提示词" },
   { href: "/about", label: "关于" },
 ];
 
