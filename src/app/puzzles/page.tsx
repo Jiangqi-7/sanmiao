@@ -1,19 +1,12 @@
 "use client";
 
 /**
- * 推理阁 - 谜题收藏
+ * 推理阁 - 谜题列表
  */
-import { useState } from 'react';
 import Link from 'next/link';
 import { puzzles } from '@/lib/puzzles';
 
-export default function PuzzlePage() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  const toggleAnswer = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
+export default function PuzzleListPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
       {/* 顶部细线 */}
@@ -33,103 +26,30 @@ export default function PuzzlePage() {
         </header>
 
         {/* 谜题列表 */}
-        <div className="space-y-8">
+        <div className="space-y-4">
           {puzzles.map((puzzle, index) => (
-            <article
+            <Link
               key={puzzle.id}
-              className="border-b pb-8"
+              href={`/puzzles/${puzzle.id}`}
+              className="block p-6 border transition-all duration-200 hover:border-neutral-800 group"
               style={{ borderColor: '#e5e5e5' }}
             >
-              {/* 标题 */}
-              <div className="mb-4">
-                <span className="text-xs text-neutral-400 mr-3">第 {index + 1} 题</span>
-                <span className="text-lg font-medium" style={{ color: '#1a1a1a', fontFamily: 'serif' }}>
-                  {puzzle.title}
-                </span>
-                <span className="text-xs text-neutral-400 ml-3">—— {puzzle.author}</span>
-              </div>
-
-              {/* 谜题内容 */}
-              <div
-                className="prose prose-sm max-w-none mb-6 whitespace-pre-wrap"
-                style={{ color: '#4a4a4a', lineHeight: '1.8' }}
-              >
-                {puzzle.content.trim().split('\n').map((paragraph, i) => {
-                  if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                    return (
-                      <p key={i} className="font-medium mt-4" style={{ color: '#1a1a1a' }}>
-                        {paragraph.replace(/\*\*/g, '')}
-                      </p>
-                    );
-                  }
-                  if (paragraph.trim() === '') {
-                    return <br key={i} />;
-                  }
-                  return (
-                    <p key={i} className="mb-2">
-                      {paragraph}
-                    </p>
-                  );
-                })}
-              </div>
-
-              {/* 解答区域 */}
-              <div className="mt-6">
-                <button
-                  onClick={() => toggleAnswer(puzzle.id)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm border transition-colors"
-                  style={{
-                    borderColor: expandedId === puzzle.id ? '#1a1a1a' : '#e5e5e5',
-                    backgroundColor: expandedId === puzzle.id ? '#1a1a1a' : '#fff',
-                    color: expandedId === puzzle.id ? '#fff' : '#666',
-                  }}
-                >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <span className="text-xs text-neutral-400 w-8">#{index + 1}</span>
                   <span
-                    className="transition-transform duration-200"
-                    style={{
-                      transform: expandedId === puzzle.id ? 'rotate(90deg)' : 'rotate(0deg)',
-                    }}
+                    className="text-lg group-hover:text-neutral-600 transition-colors"
+                    style={{ color: '#1a1a1a', fontFamily: 'serif' }}
                   >
-                    ▶
+                    {puzzle.title}
                   </span>
-                  {expandedId === puzzle.id ? '收起解答' : '查看解答'}
-                </button>
-
-                {/* 解答内容 */}
-                {expandedId === puzzle.id && (
-                  <div
-                    className="mt-4 p-6 border animate-fadeIn"
-                    style={{
-                      borderColor: '#e5e5e5',
-                      backgroundColor: '#fff',
-                    }}
-                  >
-                    <div
-                      className="prose prose-sm max-w-none whitespace-pre-wrap"
-                      style={{ color: '#4a4a4a', lineHeight: '1.8' }}
-                    >
-                      {puzzle.solution.trim().split('\n').map((paragraph, i) => {
-                        if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                          return (
-                            <p key={i} className="font-medium mt-4 mb-2" style={{ color: '#1a1a1a' }}>
-                              {paragraph.replace(/\*\*/g, '')}
-                            </p>
-                          );
-                        }
-                        if (paragraph.trim() === '') {
-                          return <br key={i} />;
-                        }
-                        return (
-                          <p key={i} className="mb-2">
-                            {paragraph}
-                          </p>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-xs text-neutral-400">{puzzle.author}</span>
+                  <span className="text-neutral-300 group-hover:text-neutral-600 transition-colors">→</span>
+                </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
 
