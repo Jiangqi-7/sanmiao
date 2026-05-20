@@ -11,6 +11,7 @@ const TURSO_AUTH_TOKEN = process.env.TURSO_AUTH_TOKEN || '';
 
 // 数据库客户端（单例）
 let db: Client | null = null;
+let initialized = false;
 
 /**
  * 获取数据库客户端
@@ -29,22 +30,30 @@ function getDb(): Client {
 }
 
 /**
- * 初始化数据库表
+ * 初始化数据库表（幂等操作）
  */
 export async function initDb(): Promise<void> {
-  const client = getDb();
-  await client.execute(`
-    CREATE TABLE IF NOT EXISTS bookmarks (
-      id TEXT PRIMARY KEY,
-      title TEXT NOT NULL,
-      url TEXT NOT NULL,
-      category TEXT DEFAULT '',
-      tags TEXT DEFAULT '[]',
-      description TEXT DEFAULT '',
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    )
-  `);
+  if (initialized) return;
+
+  try {
+    const client = getDb();
+    await client.execute(`
+      CREATE TABLE IF NOT EXISTS bookmarks (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        url TEXT NOT NULL,
+        category TEXT DEFAULT '',
+        tags TEXT DEFAULT '[]',
+        description TEXT DEFAULT '',
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `);
+    initialized = true;
+  } catch (error) {
+    console.error('初始化数据库失败:', error);
+    throw error;
+  }
 }
 
 /**
@@ -74,6 +83,7 @@ function toBookmark(row: Record<string, unknown>): Bookmark {
  * 获取所有书签
  */
 export async function getAllBookmarks(): Promise<Bookmark[]> {
+  await initDb();
   const client = getDb();
   const result = await client.execute(
     'SELECT * FROM bookmarks ORDER BY created_at DESC'
@@ -85,6 +95,7 @@ export async function getAllBookmarks(): Promise<Bookmark[]> {
  * 根据分类获取书签
  */
 export async function getBookmarksByCategory(category: string): Promise<Bookmark[]> {
+  await initDb();
   const client = getDb();
   const result = await client.execute({
     sql: 'SELECT * FROM bookmarks WHERE category = ? ORDER BY created_at DESC',
@@ -97,6 +108,7 @@ export async function getBookmarksByCategory(category: string): Promise<Bookmark
  * 根据ID获取书签
  */
 export async function getBookmarkById(id: string): Promise<Bookmark | null> {
+  await initDb();
   const client = getDb();
   const result = await client.execute({
     sql: 'SELECT * FROM bookmarks WHERE id = ?',
@@ -112,6 +124,7 @@ export async function getBookmarkById(id: string): Promise<Bookmark | null> {
  * 搜索书签（按标题或描述）
  */
 export async function searchBookmarks(keyword: string): Promise<Bookmark[]> {
+  await initDb();
   const client = getDb();
   const pattern = `%${keyword}%`;
   const result = await client.execute({
@@ -125,6 +138,7 @@ export async function searchBookmarks(keyword: string): Promise<Bookmark[]> {
  * 创建书签
  */
 export async function createBookmark(input: CreateBookmarkInput): Promise<Bookmark> {
+  await initDb();
   const client = getDb();
   const now = new Date().toISOString();
 
@@ -163,7 +177,7 @@ export async function createBookmark(input: CreateBookmarkInput): Promise<Bookma
  * 更新书签
  */
 export async function updateBookmark(id: string, input: Partial<CreateBookmarkInput>): Promise<Bookmark | null> {
-  const client = getDb();
+  await initDb();
   const existing = await getBookmarkById(id);
   if (!existing) {
     return null;
@@ -180,6 +194,7 @@ export async function updateBookmark(id: string, input: Partial<CreateBookmarkIn
     updatedAt: now,
   };
 
+  const client = getDb();
   await client.execute({
     sql: `
       UPDATE bookmarks
@@ -204,6 +219,7 @@ export async function updateBookmark(id: string, input: Partial<CreateBookmarkIn
  * 删除书签
  */
 export async function deleteBookmark(id: string): Promise<boolean> {
+  await initDb();
   const client = getDb();
   const result = await client.execute({
     sql: 'DELETE FROM bookmarks WHERE id = ?',
@@ -216,6 +232,7 @@ export async function deleteBookmark(id: string): Promise<boolean> {
  * 获取所有分类
  */
 export async function getAllCategories(): Promise<string[]> {
+  await initDb();
   const client = getDb();
   const result = await client.execute(
     "SELECT DISTINCT category FROM bookmarks WHERE category != ''"
@@ -227,6 +244,7 @@ export async function getAllCategories(): Promise<string[]> {
  * 获取所有标签
  */
 export async function getAllTags(): Promise<string[]> {
+  await initDb();
   const client = getDb();
   const result = await client.execute('SELECT tags FROM bookmarks');
 
