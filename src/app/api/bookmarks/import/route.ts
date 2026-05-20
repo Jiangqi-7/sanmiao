@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
     }
 
     // 获取已存在的书签（用于去重）
-    const existing = await getAllBookmarks();
-    const existingUrls = new Set(existing.map((b) => b.url));
+    const existingResult = await getAllBookmarks();
+    const existingUrls = new Set(existingResult.data.map((b) => b.url));
 
     // 过滤掉已存在的，导入新的
     const toImport = body.bookmarks.filter((b: CreateBookmarkInput) => !existingUrls.has(b.url));
