@@ -12,7 +12,7 @@ import { CreateBookmarkInput } from '@/lib/db/types';
  */
 export async function GET() {
   try {
-    const bookmarks = getAllBookmarks();
+    const bookmarks = await getAllBookmarks();
     return NextResponse.json(bookmarks);
   } catch (error) {
     console.error('获取书签失败:', error);
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       description: body.description || '',
     };
 
-    const bookmark = createBookmark(input);
+    const bookmark = await createBookmark(input);
     return NextResponse.json(bookmark, { status: 201 });
   } catch (error) {
     console.error('创建书签失败:', error);

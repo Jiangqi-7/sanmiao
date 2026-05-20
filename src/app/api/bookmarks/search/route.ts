@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: '请提供搜索关键词' }, { status: 400 });
     }
 
-    const bookmarks = searchBookmarks(keyword);
+    const bookmarks = await searchBookmarks(keyword);
     return NextResponse.json(bookmarks);
   } catch (error) {
     console.error('搜索书签失败:', error);

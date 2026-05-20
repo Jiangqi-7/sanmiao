@@ -14,7 +14,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const bookmark = getBookmarkById(id);
+    const bookmark = await getBookmarkById(id);
 
     if (!bookmark) {
       return NextResponse.json({ error: '书签不存在' }, { status: 404 });
@@ -38,7 +38,7 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const updated = updateBookmark(id, {
+    const updated = await updateBookmark(id, {
       title: body.title,
       url: body.url,
       category: body.category,
@@ -66,7 +66,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const deleted = deleteBookmark(id);
+    const deleted = await deleteBookmark(id);
 
     if (!deleted) {
       return NextResponse.json({ error: '书签不存在' }, { status: 404 });
