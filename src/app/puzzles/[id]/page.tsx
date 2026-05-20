@@ -16,7 +16,8 @@ export default function PuzzleDetailPage({ params }: Props) {
   const [puzzle, setPuzzle] = useState<typeof puzzles[0] | null>(null);
 
   useEffect(() => {
-    const found = puzzles.find((p) => p.id === params.id);
+    const decodedId = decodeURIComponent(params.id);
+    const found = puzzles.find((p) => p.id === decodedId);
     setPuzzle(found || null);
   }, [params.id]);
 
