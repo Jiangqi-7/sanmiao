@@ -66,7 +66,7 @@ export default function PuzzleListPage() {
           {currentPuzzles.map((puzzle, index) => (
             <Link
               key={puzzle.id}
-              href={`/puzzles/${puzzle.id}`}
+              href={`/puzzles/${encodeURIComponent(puzzle.id)}`}
               className="block p-6 border transition-all duration-200 hover:border-neutral-800 group"
               style={{ borderColor: '#e5e5e5' }}
             >

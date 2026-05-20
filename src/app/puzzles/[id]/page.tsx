@@ -3,23 +3,37 @@
 /**
  * 推理阁 - 谜题详情
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { puzzles } from '@/lib/puzzles';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function PuzzleDetailPage({ params }: Props) {
   const [showAnswer, setShowAnswer] = useState(false);
-  const [puzzle, setPuzzle] = useState<typeof puzzles[0] | null>(null);
+  const [puzzleId, setPuzzleId] = useState<string>('');
 
   useEffect(() => {
-    const decodedId = decodeURIComponent(params.id);
-    const found = puzzles.find((p) => p.id === decodedId);
-    setPuzzle(found || null);
-  }, [params.id]);
+    params.then((p) => {
+      const decodedId = decodeURIComponent(p.id);
+      setPuzzleId(decodedId);
+    });
+  }, [params]);
+
+  const puzzle = useMemo(() => {
+    if (!puzzleId) return null;
+    return puzzles.find((p) => p.id === puzzleId) || null;
+  }, [puzzleId]);
+
+  if (!puzzleId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fafafa' }}>
+        <p className="text-neutral-400">加载中...</p>
+      </div>
+    );
+  }
 
   if (!puzzle) {
     return (
@@ -145,7 +159,7 @@ export default function PuzzleDetailPage({ params }: Props) {
         <nav className="flex items-center justify-between pt-8 border-t" style={{ borderColor: '#e5e5e5' }}>
           {prevPuzzle ? (
             <Link
-              href={`/puzzles/${prevPuzzle.id}`}
+              href={`/puzzles/${encodeURIComponent(prevPuzzle.id)}`}
               className="text-sm text-neutral-500 hover:text-neutral-800 transition-colors"
             >
               ← {prevPuzzle.title}
@@ -155,7 +169,7 @@ export default function PuzzleDetailPage({ params }: Props) {
           )}
           {nextPuzzle ? (
             <Link
-              href={`/puzzles/${nextPuzzle.id}`}
+              href={`/puzzles/${encodeURIComponent(nextPuzzle.id)}`}
               className="text-sm text-neutral-500 hover:text-neutral-800 transition-colors"
             >
               {nextPuzzle.title} →
