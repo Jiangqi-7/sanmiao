@@ -30,7 +30,7 @@ export default function BookmarksPage() {
   const [newTags, setNewTags] = useState('');
   const [newDesc, setNewDesc] = useState('');
 
-  const limit = 20;
+  const limit = 10;
 
   // 获取书签列表
   async function fetchBookmarks(pageNum: number = 1) {
