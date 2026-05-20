@@ -12,17 +12,23 @@
   --accent: #1a1a1a;
   --accent-light: #333333;
   --accent-glow: rgba(0,0,0,0.08);
+  /* 额外色彩（彩色模式用） */
+  --vermilion: #c43a3a;
+  --gold: #B8860B;
+  --peacock: #20B2AA;
+  --sky: #87CEEB;
+  --thunder: #8A2BE2;
 }
 
 [data-theme="colorful"] {
-  /* 高级彩色 - 朱砂红+金+墨 */
+  /* 高级彩色 - 朱砂红+金+孔雀蓝+天青+雷电紫 */
   --bg-primary: #faf8f5;
   --bg-secondary: #fffdf9;
   --bg-card: #ffffff;
   --text-primary: #1a1a1a;
-  --text-secondary: #5c4a3a;
-  --text-muted: #8a7a6a;
-  --border: #e8ddd0;
+  --text-secondary: #4a4a5a;
+  --text-muted: #7a7a8a;
+  --border: #d8d0e0;
   --accent: #c43a3a;
   --accent-light: #a52a2a;
   --accent-glow: rgba(196,58,58,0.12);
@@ -68,22 +74,133 @@ a {
   color: var(--text-primary);
 }
 
-/* 主题切换动画 - 呼吸感 */
+/* 主题切换动画 */
 *, *::before, *::after {
-  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease;
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 呼吸光晕效果 */
+/* 彩色模式光晕效果 */
 [data-theme="colorful"] .glow-hover:hover {
-  box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(196,58,58,0.06);
+  box-shadow: 0 0 20px rgba(196,58,58,0.15), 0 0 40px rgba(32,178,170,0.08), 0 0 60px rgba(138,43,226,0.05);
 }
 
-/* 装饰性呼吸动画 */
+/* 雷电呼吸动画 */
+@keyframes thunder-breath {
+  0%, 100% {
+    opacity: 0.6;
+    text-shadow: 0 0 5px var(--thunder), 0 0 10px var(--peacock);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 15px var(--thunder), 0 0 30px var(--peacock), 0 0 45px var(--sky);
+  }
+}
+
+[data-theme="colorful"] .thunder-glow {
+  animation: thunder-breath 3s ease-in-out infinite;
+}
+
+/* 雷电动画 - 闪烁效果 */
+@keyframes lightning {
+  0%, 90%, 100% {
+    opacity: 0;
+    text-shadow: none;
+  }
+  92%, 94%, 96% {
+    opacity: 1;
+    text-shadow: 0 0 10px #fff, 0 0 20px var(--sky), 0 0 30px var(--thunder);
+  }
+  93%, 95%, 97% {
+    opacity: 0.5;
+    text-shadow: 0 0 5px var(--sky), 0 0 15px var(--thunder);
+  }
+}
+
+[data-theme="colorful"] .lightning-flash {
+  animation: lightning 5s ease-in-out infinite;
+}
+
+/* 彩色渐变边框 */
+[data-theme="colorful"] .gradient-border {
+  position: relative;
+}
+
+[data-theme="colorful"] .gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--vermilion), var(--gold), var(--peacock), var(--sky), var(--thunder), var(--vermilion));
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 彩色模式装饰点 */
+[data-theme="colorful"] .color-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+[data-theme="colorful"] .color-dot.vermilion { background: var(--vermilion); animation-delay: 0s; }
+[data-theme="colorful"] .color-dot.gold { background: var(--gold); animation-delay: 0.3s; }
+[data-theme="colorful"] .color-dot.peacock { background: var(--peacock); animation-delay: 0.6s; }
+[data-theme="colorful"] .color-dot.sky { background: var(--sky); animation-delay: 0.9s; }
+[data-theme="colorful"] .color-dot.thunder { background: var(--thunder); animation-delay: 1.2s; }
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+/* 彩色模式卡片 hover 效果 */
+[data-theme="colorful"] .color-card:hover {
+  border-color: var(--peacock);
+  box-shadow: 0 4px 20px rgba(32,178,170,0.15), 0 0 0 1px rgba(32,178,170,0.1);
+}
+
+/* 呼吸动画 */
 @keyframes breath {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.02); }
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(1.03); }
 }
 
 [data-theme="colorful"] .breath {
   animation: breath 4s ease-in-out infinite;
+}
+
+/* 雷电背景效果 */
+[data-theme="colorful"] .thunder-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="colorful"] .thunder-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(138,43,226,0.03) 25%,
+    rgba(135,206,235,0.05) 50%,
+    rgba(32,178,170,0.03) 75%,
+    transparent 100%
+  );
+  animation: thunder-wave 6s ease-in-out infinite;
+}
+
+@keyframes thunder-wave {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
 }

@@ -25,7 +25,7 @@ export function Header() {
       <nav className="max-w-[900px] mx-auto px-6 h-14 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl breath" style={{ color: "var(--accent)" }}>☯</span>
+          <span className="text-xl thunder-glow" style={{ color: "var(--accent)" }}>☯</span>
           <span className="font-medium" style={{ color: "var(--text-primary)" }}>三秒</span>
         </Link>
 
@@ -39,7 +39,7 @@ export function Header() {
                   <Link
                     href={item.href}
                     className="text-sm transition-colors"
-                    style={{ color: isActive ? "var(--text-primary)" : "var(--text-secondary)", fontWeight: isActive ? 500 : 400 }}
+                    style={{ color: isActive ? "var(--accent)" : "var(--text-secondary)", fontWeight: isActive ? 500 : 400 }}
                   >
                     {item.label}
                   </Link>
@@ -51,7 +51,7 @@ export function Header() {
           {/* 主题切换按钮 */}
           <button
             onClick={toggleTheme}
-            className="w-9 h-9 rounded-full border-2 flex items-center justify-center text-base transition-all hover:scale-110"
+            className="w-9 h-9 rounded-full border-2 flex items-center justify-center text-base transition-all hover:scale-110 thunder-glow"
             style={{
               borderColor: "var(--accent)",
               backgroundColor: "var(--bg-secondary)",
@@ -60,7 +60,7 @@ export function Header() {
             }}
             title={theme === "simple" ? "切换彩色模式" : "切换简约模式"}
           >
-            {theme === "simple" ? "🎨" : "⚪"}
+            {theme === "simple" ? "🎨" : "⚡"}
           </button>
         </div>
       </nav>
