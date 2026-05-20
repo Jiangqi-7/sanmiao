@@ -12,7 +12,7 @@ const BAGUA_GRID = [
   { key: "zhen", name: "震", direction: "东", href: "/blog?category=video" },
   { key: "center", name: "中", direction: "宫", href: "/", isCenter: true },
   { key: "dui", name: "兑", direction: "西", href: "/bookmarks", desc: "书签收藏" },
-  { key: "gen", name: "艮", direction: "东北", href: "/blog?category=tools" },
+  { key: "gen", name: "艮", direction: "东北", href: "/puzzles", desc: "推理谜题" },
   { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章" },
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于" },
 ];
