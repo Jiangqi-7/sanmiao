@@ -99,28 +99,42 @@ a {
   animation: thunder-breath 3s ease-in-out infinite;
 }
 
-/* 雷电动画 - 页面闪电效果 */
+/* 雷电动画 - 更真实的闪电效果 */
 @keyframes lightning-flash {
-  0%, 87%, 100% {
+  0%, 89%, 100% {
     opacity: 0;
-  }
-  88% {
-    opacity: 1;
+    filter: brightness(1);
   }
   89% {
-    opacity: 0.3;
+    opacity: 1;
+    filter: brightness(2);
+  }
+  89.3% {
+    opacity: 0.4;
+    filter: brightness(1.5);
+  }
+  89.6% {
+    opacity: 1;
+    filter: brightness(2.5);
   }
   90% {
-    opacity: 1;
+    opacity: 0;
+    filter: brightness(1);
+  }
+}
+
+@keyframes screen-flash {
+  0%, 89%, 92%, 100% {
+    background: transparent;
+  }
+  89% {
+    background: rgba(200, 200, 255, 0.12);
+  }
+  90% {
+    background: rgba(100, 50, 200, 0.08);
   }
   91% {
-    opacity: 0;
-  }
-  93% {
-    opacity: 0.7;
-  }
-  94% {
-    opacity: 0;
+    background: transparent;
   }
 }
 
@@ -130,59 +144,44 @@ a {
   pointer-events: none;
   z-index: 100;
   overflow: hidden;
+  animation: screen-flash 12s ease-in-out infinite;
 }
 
 [data-theme="colorful"] .lightning-bolt {
   position: absolute;
+  top: -20px;
   width: 3px;
-  height: 200px;
-  background: linear-gradient(to bottom, transparent, var(--sky), #fff, var(--thunder), transparent);
-  filter: blur(0.5px);
+  height: 0;
   opacity: 0;
-  animation: lightning-flash 8s ease-in-out infinite;
+  animation: lightning-flash 12s ease-in-out infinite;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(200, 220, 255, 0.8) 8%,
+    #fff 20%,
+    var(--sky) 45%,
+    var(--thunder) 75%,
+    transparent 100%
+  );
+  transform-origin: top center;
 }
 
 [data-theme="colorful"] .lightning-bolt:nth-child(1) {
-  left: 15%;
-  top: -100px;
+  left: 18%;
   animation-delay: 0s;
-  height: 250px;
+  clip-path: polygon(50% 0%, 35% 15%, 65% 28%, 30% 42%, 60% 55%, 25% 70%, 55% 85%, 45% 100%);
 }
 
 [data-theme="colorful"] .lightning-bolt:nth-child(2) {
-  left: 75%;
-  top: -50px;
-  animation-delay: 3s;
-  height: 180px;
+  left: 72%;
+  animation-delay: 5s;
+  clip-path: polygon(50% 0%, 40% 12%, 60% 25%, 35% 38%, 65% 52%, 40% 65%, 58% 78%, 48% 100%);
 }
 
 [data-theme="colorful"] .lightning-bolt:nth-child(3) {
-  left: 45%;
-  top: -80px;
-  animation-delay: 5.5s;
-  height: 300px;
+  left: 42%;
+  animation-delay: 8s;
   width: 4px;
-}
-
-[data-theme="colorful"] .lightning-bolt::before {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 20px;
-  height: 80px;
-  background: linear-gradient(to bottom right, var(--sky), transparent);
-  transform: translateX(-50%);
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-}
-
-[data-theme="colorful"] .lightning-glow-overlay {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(138,43,226,0.08) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 99;
-  animation: lightning-flash 8s ease-in-out infinite;
+  clip-path: polygon(50% 0%, 30% 10%, 70% 22%, 25% 35%, 65% 48%, 30% 62%, 70% 75%, 45% 88%, 55% 100%);
 }
 
 /* 彩色渐变边框 - 简化只保留渐变线条 */
