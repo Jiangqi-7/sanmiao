@@ -23,7 +23,6 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
   const isCenter = cell.isCenter;
   const symbol = isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol;
   const label = isCenter ? "三秒" : cell.name;
-  const subtext = cell.direction;
   const desc = isCenter ? "道法自然" : ("desc" in cell ? cell.desc : cell.direction);
 
   return (
@@ -53,6 +52,17 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
   );
 }
 
+function LightningEffect() {
+  return (
+    <div className="lightning-container">
+      <div className="lightning-glow-overlay" />
+      <div className="lightning-bolt" />
+      <div className="lightning-bolt" />
+      <div className="lightning-bolt" />
+    </div>
+  );
+}
+
 export default function HomePage() {
   const [loaded, setLoaded] = useState(false);
 
@@ -61,7 +71,9 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen thunder-bg" style={{ backgroundColor: "var(--bg-primary)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
+      <LightningEffect />
+
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
 
@@ -69,7 +81,7 @@ export default function HomePage() {
         {/* 标题区 */}
         <header className="mb-20 text-center relative">
           {/* 装饰性彩色点 */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-3">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-3" style={{ top: "-20px" }}>
             {COLORS.map((c, i) => (
               <div key={c} className={`color-dot ${c}`} style={{ animationDelay: `${i * 0.3}s` }} />
             ))}

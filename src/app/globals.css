@@ -21,7 +21,6 @@
 }
 
 [data-theme="colorful"] {
-  /* 高级彩色 - 朱砂红+金+孔雀蓝+天青+雷电紫 */
   --bg-primary: #faf8f5;
   --bg-secondary: #fffdf9;
   --bg-card: #ffffff;
@@ -81,18 +80,18 @@ a {
 
 /* 彩色模式光晕效果 */
 [data-theme="colorful"] .glow-hover:hover {
-  box-shadow: 0 0 20px rgba(196,58,58,0.15), 0 0 40px rgba(32,178,170,0.08), 0 0 60px rgba(138,43,226,0.05);
+  box-shadow: 0 0 20px rgba(196,58,58,0.15), 0 0 40px rgba(32,178,170,0.08);
 }
 
-/* 雷电呼吸动画 */
+/* 雷电呼吸动画 - Logo和符号 */
 @keyframes thunder-breath {
   0%, 100% {
-    opacity: 0.6;
-    text-shadow: 0 0 5px var(--thunder), 0 0 10px var(--peacock);
+    text-shadow: 0 0 8px var(--thunder), 0 0 16px var(--peacock);
+    opacity: 0.7;
   }
   50% {
+    text-shadow: 0 0 20px var(--thunder), 0 0 40px var(--peacock), 0 0 60px var(--sky);
     opacity: 1;
-    text-shadow: 0 0 15px var(--thunder), 0 0 30px var(--peacock), 0 0 45px var(--sky);
   }
 }
 
@@ -100,65 +99,121 @@ a {
   animation: thunder-breath 3s ease-in-out infinite;
 }
 
-/* 雷电动画 - 闪烁效果 */
-@keyframes lightning {
-  0%, 90%, 100% {
+/* 雷电动画 - 页面闪电效果 */
+@keyframes lightning-flash {
+  0%, 87%, 100% {
     opacity: 0;
-    text-shadow: none;
   }
-  92%, 94%, 96% {
+  88% {
     opacity: 1;
-    text-shadow: 0 0 10px #fff, 0 0 20px var(--sky), 0 0 30px var(--thunder);
   }
-  93%, 95%, 97% {
-    opacity: 0.5;
-    text-shadow: 0 0 5px var(--sky), 0 0 15px var(--thunder);
+  89% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 1;
+  }
+  91% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.7;
+  }
+  94% {
+    opacity: 0;
   }
 }
 
-[data-theme="colorful"] .lightning-flash {
-  animation: lightning 5s ease-in-out infinite;
+[data-theme="colorful"] .lightning-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
 }
 
-/* 彩色渐变边框 */
-[data-theme="colorful"] .gradient-border {
-  position: relative;
+[data-theme="colorful"] .lightning-bolt {
+  position: absolute;
+  width: 3px;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent, var(--sky), #fff, var(--thunder), transparent);
+  filter: blur(0.5px);
+  opacity: 0;
+  animation: lightning-flash 8s ease-in-out infinite;
 }
 
-[data-theme="colorful"] .gradient-border::before {
+[data-theme="colorful"] .lightning-bolt:nth-child(1) {
+  left: 15%;
+  top: -100px;
+  animation-delay: 0s;
+  height: 250px;
+}
+
+[data-theme="colorful"] .lightning-bolt:nth-child(2) {
+  left: 75%;
+  top: -50px;
+  animation-delay: 3s;
+  height: 180px;
+}
+
+[data-theme="colorful"] .lightning-bolt:nth-child(3) {
+  left: 45%;
+  top: -80px;
+  animation-delay: 5.5s;
+  height: 300px;
+  width: 4px;
+}
+
+[data-theme="colorful"] .lightning-bolt::before {
   content: '';
   position: absolute;
-  inset: -2px;
-  background: linear-gradient(135deg, var(--vermilion), var(--gold), var(--peacock), var(--sky), var(--thunder), var(--vermilion));
-  background-size: 400% 400%;
-  border-radius: inherit;
-  z-index: -1;
-  animation: gradient-shift 8s ease infinite;
+  top: 100%;
+  left: 50%;
+  width: 20px;
+  height: 80px;
+  background: linear-gradient(to bottom right, var(--sky), transparent);
+  transform: translateX(-50%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
-@keyframes gradient-shift {
+[data-theme="colorful"] .lightning-glow-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(138,43,226,0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 99;
+  animation: lightning-flash 8s ease-in-out infinite;
+}
+
+/* 彩色渐变边框 - 简化只保留渐变线条 */
+[data-theme="colorful"] .gradient-border {
+  background: linear-gradient(90deg, var(--vermilion), var(--gold), var(--peacock), var(--sky), var(--thunder), var(--vermilion));
+  background-size: 200% 100%;
+  animation: gradient-flow 6s linear infinite;
+}
+
+@keyframes gradient-flow {
   0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
 /* 彩色模式装饰点 */
 [data-theme="colorful"] .color-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  animation: pulse-dot 2s ease-in-out infinite;
+  animation: pulse-dot 2.5s ease-in-out infinite;
 }
 
 [data-theme="colorful"] .color-dot.vermilion { background: var(--vermilion); animation-delay: 0s; }
-[data-theme="colorful"] .color-dot.gold { background: var(--gold); animation-delay: 0.3s; }
-[data-theme="colorful"] .color-dot.peacock { background: var(--peacock); animation-delay: 0.6s; }
-[data-theme="colorful"] .color-dot.sky { background: var(--sky); animation-delay: 0.9s; }
-[data-theme="colorful"] .color-dot.thunder { background: var(--thunder); animation-delay: 1.2s; }
+[data-theme="colorful"] .color-dot.gold { background: var(--gold); animation-delay: 0.4s; }
+[data-theme="colorful"] .color-dot.peacock { background: var(--peacock); animation-delay: 0.8s; }
+[data-theme="colorful"] .color-dot.sky { background: var(--sky); animation-delay: 1.2s; }
+[data-theme="colorful"] .color-dot.thunder { background: var(--thunder); animation-delay: 1.6s; }
 
 @keyframes pulse-dot {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.5); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.8); opacity: 1; }
 }
 
 /* 彩色模式卡片 hover 效果 */
@@ -167,40 +222,12 @@ a {
   box-shadow: 0 4px 20px rgba(32,178,170,0.15), 0 0 0 1px rgba(32,178,170,0.1);
 }
 
-/* 呼吸动画 */
+/* 呼吸动画 - 卡片符号 */
 @keyframes breath {
-  0%, 100% { opacity: 0.25; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(1.03); }
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.05); }
 }
 
 [data-theme="colorful"] .breath {
   animation: breath 4s ease-in-out infinite;
-}
-
-/* 雷电背景效果 */
-[data-theme="colorful"] .thunder-bg {
-  position: relative;
-  overflow: hidden;
-}
-
-[data-theme="colorful"] .thunder-bg::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(138,43,226,0.03) 25%,
-    rgba(135,206,235,0.05) 50%,
-    rgba(32,178,170,0.03) 75%,
-    transparent 100%
-  );
-  animation: thunder-wave 6s ease-in-out infinite;
-}
-
-@keyframes thunder-wave {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(50%); }
 }
