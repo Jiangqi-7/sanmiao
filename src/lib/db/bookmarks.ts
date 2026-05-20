@@ -112,7 +112,7 @@ export async function getAllBookmarks(options?: PaginationOptions): Promise<Pagi
   // 获取分页数据
   const result = await client.execute({
     sql: 'SELECT * FROM bookmarks ORDER BY created_at DESC LIMIT ? OFFSET ?',
-    args: [limit, offset + limit],
+    args: [limit, offset],
   });
 
   const data = result.rows.map((row) => toBookmark(row as Record<string, unknown>));
