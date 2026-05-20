@@ -56,21 +56,17 @@ function LightningEffect() {
   const [bolts, setBolts] = useState<Array<{ id: number; x: number; delay: number; angle: number; length: number }>>([]);
 
   useEffect(() => {
-    // 生成随机闪电
-    const generateBolts = () => {
-      const newBolts = [];
-      for (let i = 0; i < 8; i++) {
-        newBolts.push({
-          id: i,
-          x: Math.random() * 100,
-          delay: Math.random() * 10,
-          angle: Math.random() * 30 - 15,
-          length: 30 + Math.random() * 50,
-        });
-      }
-      setBolts(newBolts);
-    };
-    generateBolts();
+    const newBolts = [];
+    for (let i = 0; i < 8; i++) {
+      newBolts.push({
+        id: i,
+        x: 5 + Math.random() * 90,
+        delay: Math.random() * 15,
+        angle: Math.random() * 20 - 10,
+        length: 30 + Math.random() * 50,
+      });
+    }
+    setBolts(newBolts);
   }, []);
 
   return (
@@ -87,6 +83,9 @@ function LightningEffect() {
           }}
         />
       ))}
+      {/* 分叉闪电 */}
+      <div className="lightning-fork" />
+      <div className="lightning-fork" />
     </div>
   );
 }

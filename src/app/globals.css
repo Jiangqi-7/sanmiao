@@ -99,42 +99,40 @@ a {
   animation: thunder-breath 3s ease-in-out infinite;
 }
 
-/* 雷电动画 - 随机乱串闪电 */
+/* 雷电动画 - 真实分叉闪电 */
 @keyframes lightning-flash {
   0%, 88%, 100% {
     opacity: 0;
-    transform: scaleY(0) translateY(-100%);
   }
   89% {
-    opacity: 0.9;
-    transform: scaleY(1) translateY(0);
-  }
-  89.2% {
-    opacity: 0.3;
-  }
-  89.5% {
     opacity: 1;
   }
+  89.2% {
+    opacity: 0.4;
+  }
+  89.5% {
+    opacity: 0.9;
+  }
   89.8% {
-    opacity: 0.5;
+    opacity: 0.3;
   }
   90% {
     opacity: 0;
-    transform: scaleY(1.1) translateY(50%);
   }
 }
 
 @keyframes screen-flash {
   0%, 88%, 92%, 100% {
     background: transparent;
+    box-shadow: none;
   }
   89% {
-    background: rgba(138, 43, 226, 0.15);
-    box-shadow: inset 0 0 100px rgba(100, 50, 200, 0.1);
+    background: rgba(138, 43, 226, 0.12);
+    box-shadow: inset 0 0 150px rgba(100, 50, 200, 0.15);
   }
   90% {
-    background: rgba(200, 200, 255, 0.08);
-    box-shadow: inset 0 0 80px rgba(135, 206, 235, 0.1);
+    background: rgba(200, 200, 255, 0.05);
+    box-shadow: inset 0 0 100px rgba(135, 206, 235, 0.08);
   }
 }
 
@@ -144,40 +142,162 @@ a {
   pointer-events: none;
   z-index: 100;
   overflow: hidden;
-}
-
-[data-theme="colorful"] .lightning-container {
   animation: screen-flash 15s ease-in-out infinite;
 }
 
+/* 主闪电 - 带锯齿和分叉 */
 [data-theme="colorful"] .lightning-bolt {
   position: absolute;
   top: -50px;
-  width: 4px;
+  width: 3px;
+  height: 60vh;
   opacity: 0;
   animation: lightning-flash 15s ease-in-out infinite;
   background: linear-gradient(to bottom,
     transparent 0%,
-    rgba(255, 255, 255, 0.95) 5%,
-    #fff 15%,
-    var(--sky) 35%,
-    var(--thunder) 65%,
-    var(--peacock) 85%,
+    rgba(255, 255, 255, 0.9) 3%,
+    #fff 8%,
+    #e0e8ff 12%,
+    var(--sky) 25%,
+    var(--thunder) 50%,
+    var(--peacock) 75%,
     transparent 100%
   );
-  filter: blur(0.3px);
-  border-radius: 2px;
+  clip-path: polygon(
+    50% 0%,
+    45% 8%, 55% 10%,
+    40% 18%, 60% 20%,
+    35% 28%, 65% 30%,
+    45% 38%, 55% 40%,
+    30% 48%, 70% 50%,
+    40% 58%, 60% 60%,
+    35% 68%, 65% 70%,
+    45% 78%, 55% 80%,
+    40% 88%, 60% 90%,
+    50% 100%
+  );
+}
+
+/* 闪电分支 - 向两侧分叉 */
+[data-theme="colorful"] .lightning-branch {
+  position: absolute;
+  width: 2px;
+  opacity: 0;
+  animation: lightning-flash 15s ease-in-out infinite;
+  background: linear-gradient(to right, var(--sky), var(--thunder), transparent);
   transform-origin: top center;
 }
 
-[data-theme="colorful"] .lightning-bolt:nth-child(1) { left: 10%; animation-delay: 0s; }
-[data-theme="colorful"] .lightning-bolt:nth-child(2) { left: 25%; animation-delay: 3s; }
-[data-theme="colorful"] .lightning-bolt:nth-child(3) { left: 40%; animation-delay: 7s; }
-[data-theme="colorful"] .lightning-bolt:nth-child(4) { left: 55%; animation-delay: 2s; }
-[data-theme="colorful"] .lightning-bolt:nth-child(5) { left: 70%; animation-delay: 9s; }
-[data-theme="colorful"] .lightning-bolt:nth-child(6) { left: 85%; animation-delay: 5s; }
-[data-theme="colorful"] .lightning-bolt:nth-child(7) { left: 5%; animation-delay: 11s; }
-[data-theme="colorful"] .lightning-bolt:nth-child(8) { left: 95%; animation-delay: 13s; }
+/* 闪电1 - 左侧分支 */
+[data-theme="colorful"] .lightning-bolt:nth-child(1) {
+  left: 15%;
+  animation-delay: 0s;
+}
+
+/* 闪电2 - 右侧分支 */
+[data-theme="colorful"] .lightning-bolt:nth-child(2) {
+  left: 30%;
+  animation-delay: 4s;
+  clip-path: polygon(
+    50% 0%,
+    55% 8%, 45% 10%,
+    60% 18%, 40% 20%,
+    55% 28%, 65% 30%,
+    50% 38%, 60% 40%,
+    55% 48%, 45% 50%,
+    60% 58%, 40% 60%,
+    55% 68%, 65% 70%,
+    50% 80%, 60% 85%,
+    50% 100%
+  );
+}
+
+/* 闪电3 - 中心 */
+[data-theme="colorful"] .lightning-bolt:nth-child(3) {
+  left: 50%;
+  animation-delay: 8s;
+}
+
+/* 闪电4 - 偏右 */
+[data-theme="colorful"] .lightning-bolt:nth-child(4) {
+  left: 68%;
+  animation-delay: 2s;
+  width: 4px;
+}
+
+/* 闪电5 - 最右 */
+[data-theme="colorful"] .lightning-bolt:nth-child(5) {
+  left: 85%;
+  animation-delay: 6s;
+}
+
+/* 闪电6 - 左上 */
+[data-theme="colorful"] .lightning-bolt:nth-child(6) {
+  left: 8%;
+  animation-delay: 10s;
+  width: 2px;
+}
+
+/* 闪电7 - 右侧 */
+[data-theme="colorful"] .lightning-bolt:nth-child(7) {
+  left: 92%;
+  animation-delay: 13s;
+}
+
+/* 闪电8 - 中偏左 */
+[data-theme="colorful"] .lightning-bolt:nth-child(8) {
+  left: 40%;
+  animation-delay: 11s;
+  width: 5px;
+}
+
+/* 分叉闪电效果 */
+[data-theme="colorful"] .lightning-fork {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+[data-theme="colorful"] .lightning-fork::before,
+[data-theme="colorful"] .lightning-fork::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 200px;
+  background: linear-gradient(to bottom, #fff, var(--sky), var(--thunder), transparent);
+  opacity: 0;
+  animation: lightning-flash 15s ease-in-out infinite;
+}
+
+[data-theme="colorful"] .lightning-fork:nth-child(1)::before {
+  top: 15vh;
+  left: 25%;
+  transform: rotate(25deg);
+  animation-delay: 1s;
+}
+
+[data-theme="colorful"] .lightning-fork:nth-child(1)::after {
+  top: 25vh;
+  left: 60%;
+  transform: rotate(-30deg);
+  animation-delay: 7s;
+}
+
+[data-theme="colorful"] .lightning-fork:nth-child(2)::before {
+  top: 10vh;
+  left: 75%;
+  transform: rotate(-20deg);
+  animation-delay: 4s;
+}
+
+[data-theme="colorful"] .lightning-fork:nth-child(2)::after {
+  top: 35vh;
+  left: 35%;
+  transform: rotate(35deg);
+  animation-delay: 9s;
+}
 
 /* 彩色渐变边框 - 简化只保留渐变线条 */
 [data-theme="colorful"] .gradient-border {
