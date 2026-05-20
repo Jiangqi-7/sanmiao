@@ -107,7 +107,7 @@ export async function getAllBookmarks(options?: PaginationOptions): Promise<Pagi
 
   // 获取总数
   const countResult = await client.execute('SELECT COUNT(*) as count FROM bookmarks');
-  const total = (countResult.rows[0] as { count: number }).count;
+  const total = (countResult.rows[0] as unknown as { count: number }).count;
 
   // 获取分页数据
   const result = await client.execute({
