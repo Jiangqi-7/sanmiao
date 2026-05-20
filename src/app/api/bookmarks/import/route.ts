@@ -1,29 +1,40 @@
 /**
  * 书签导入 API
  * POST /api/bookmarks/import
- * 从请求体导入书签数组
+ * 支持浏览器导出的 Netscape Bookmark HTML 格式
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { createBookmark, getAllBookmarks } from '@/lib/db/bookmarks';
 import { CreateBookmarkInput } from '@/lib/db/types';
+import { parseNetscapeHtml } from '@/lib/bookmark-parser';
 
 /**
- * 导入书签
+ * 导入书签（支持浏览器 HTML 格式）
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const contentType = request.headers.get('content-type') || '';
+    const rawBody = await request.text();
 
-    if (!Array.isArray(body.bookmarks)) {
-      return NextResponse.json({ error: '请提供 bookmarks 数组' }, { status: 400 });
+    let bookmarks: CreateBookmarkInput[];
+    if (contentType.includes('text/html') || rawBody.includes('<DT><A')) {
+      // 浏览器 HTML 格式
+      bookmarks = parseNetscapeHtml(rawBody);
+    } else {
+      // JSON 格式
+      const body = JSON.parse(rawBody);
+      if (!Array.isArray(body.bookmarks)) {
+        return NextResponse.json({ error: '请提供 bookmarks 数组' }, { status: 400 });
+      }
+      bookmarks = body.bookmarks as CreateBookmarkInput[];
     }
 
     // 获取已存在的书签（用于去重）
-    const existingResult = await getAllBookmarks();
+    const existingResult = await getAllBookmarks({ limit: 100000 });
     const existingUrls = new Set(existingResult.data.map((b) => b.url));
 
     // 过滤掉已存在的，导入新的
-    const toImport = body.bookmarks.filter((b: CreateBookmarkInput) => !existingUrls.has(b.url));
+    const toImport = bookmarks.filter((b: CreateBookmarkInput) => !existingUrls.has(b.url));
 
     let imported = 0;
     for (const bookmark of toImport) {
@@ -42,7 +53,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       imported,
-      skipped: body.bookmarks.length - imported,
+      skipped: bookmarks.length - imported,
     });
   } catch (error) {
     console.error('导入书签失败:', error);

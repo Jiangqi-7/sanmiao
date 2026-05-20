@@ -108,6 +108,31 @@ export default function BookmarksPage() {
     }
   }
 
+  // 导入书签
+  async function handleImport(file: File) {
+    try {
+      const text = await file.text();
+      const res = await fetch('/api/bookmarks/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/html' },
+        body: text,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        alert(`导入成功：新增 ${data.imported} 个，跳过 ${data.skipped} 个`);
+        fetchBookmarks(1);
+      }
+    } catch (error) {
+      console.error('导入书签失败:', error);
+    }
+  }
+
+  // 导出书签
+  function handleExport() {
+    window.open('/api/bookmarks/export', '_blank');
+  }
+
   // 加载更多
   function loadMore() {
     fetchBookmarks(page + 1);
@@ -173,12 +198,32 @@ export default function BookmarksPage() {
           </div>
 
           {/* 添加按钮 */}
-          <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="px-4 py-2 text-sm border border-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors"
-          >
-            {showAddForm ? '取消' : '+ 添加'}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="px-4 py-2 text-sm border border-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors"
+            >
+              {showAddForm ? '取消' : '+ 添加'}
+            </button>
+            <button
+              onClick={handleExport}
+              className="px-4 py-2 text-sm border border-neutral-300 hover:border-neutral-900 transition-colors"
+            >
+              导出
+            </button>
+            <label className="px-4 py-2 text-sm border border-neutral-300 hover:border-neutral-900 transition-colors cursor-pointer">
+              导入
+              <input
+                type="file"
+                accept=".html"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImport(file);
+                }}
+                className="hidden"
+              />
+            </label>
+          </div>
         </div>
 
         {/* 添加表单 */}
