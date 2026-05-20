@@ -7,12 +7,21 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Bookmark } from '@/lib/db/types';
 
+interface PaginatedBookmarks {
+  data: Bookmark[];
+  total: number;
+  hasMore: boolean;
+}
+
 export default function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<string>('all');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [total, setTotal] = useState(0);
 
   // 新书签表单
   const [newTitle, setNewTitle] = useState('');
@@ -21,22 +30,33 @@ export default function BookmarksPage() {
   const [newTags, setNewTags] = useState('');
   const [newDesc, setNewDesc] = useState('');
 
-  // 获取书签列表
-  useEffect(() => {
-    fetchBookmarks();
-  }, []);
+  const limit = 20;
 
-  async function fetchBookmarks() {
+  // 获取书签列表
+  async function fetchBookmarks(pageNum: number = 1) {
     try {
-      const res = await fetch('/api/bookmarks');
-      const data = await res.json();
-      setBookmarks(data);
+      setLoading(true);
+      const res = await fetch(`/api/bookmarks?page=${pageNum}&limit=${limit}`);
+      const data: PaginatedBookmarks = await res.json();
+
+      if (pageNum === 1) {
+        setBookmarks(data.data);
+      } else {
+        setBookmarks((prev) => [...prev, ...data.data]);
+      }
+      setHasMore(data.hasMore);
+      setTotal(data.total);
+      setPage(pageNum);
     } catch (error) {
       console.error('获取书签失败:', error);
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    fetchBookmarks(1);
+  }, []);
 
   // 创建书签
   async function handleCreateBookmark(e: React.FormEvent) {
@@ -67,7 +87,7 @@ export default function BookmarksPage() {
         setNewCategory('');
         setNewTags('');
         setNewDesc('');
-        fetchBookmarks();
+        fetchBookmarks(1);
       }
     } catch (error) {
       console.error('创建书签失败:', error);
@@ -81,11 +101,16 @@ export default function BookmarksPage() {
     try {
       const res = await fetch(`/api/bookmarks/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        fetchBookmarks();
+        fetchBookmarks(1);
       }
     } catch (error) {
       console.error('删除书签失败:', error);
     }
+  }
+
+  // 加载更多
+  function loadMore() {
+    fetchBookmarks(page + 1);
   }
 
   // 筛选
@@ -212,7 +237,7 @@ export default function BookmarksPage() {
         )}
 
         {/* 书签列表 */}
-        {loading ? (
+        {loading && bookmarks.length === 0 ? (
           <p className="text-center text-neutral-400 py-12">加载中...</p>
         ) : filteredBookmarks.length === 0 ? (
           <p className="text-center text-neutral-400 py-12">
@@ -263,13 +288,26 @@ export default function BookmarksPage() {
                 </div>
               </div>
             ))}
+
+            {/* 加载更多 */}
+            {hasMore && (
+              <div className="text-center mt-8">
+                <button
+                  onClick={loadMore}
+                  disabled={loading}
+                  className="px-6 py-2 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50"
+                >
+                  {loading ? '加载中...' : '加载更多'}
+                </button>
+              </div>
+            )}
           </div>
         )}
 
         {/* 底部 */}
         <footer className="mt-16 pt-8 border-t" style={{ borderColor: '#e5e5e5' }}>
           <p className="text-xs text-neutral-400 text-center">
-            共 {bookmarks.length} 个书签
+            共 {total} 个书签
           </p>
         </footer>
       </main>

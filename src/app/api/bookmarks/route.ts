@@ -1,6 +1,6 @@
 /**
  * 书签列表 API
- * GET /api/bookmarks - 获取所有书签
+ * GET /api/bookmarks - 获取所有书签（支持分页）
  * POST /api/bookmarks - 创建新书签
  */
 import { NextRequest, NextResponse } from 'next/server';
@@ -8,12 +8,19 @@ import { getAllBookmarks, createBookmark } from '@/lib/db/bookmarks';
 import { CreateBookmarkInput } from '@/lib/db/types';
 
 /**
- * 获取所有书签
+ * 获取所有书签（支持分页）
+ * GET /api/bookmarks?page=1&limit=20
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const bookmarks = await getAllBookmarks();
-    return NextResponse.json(bookmarks);
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '20');
+
+    const offset = (page - 1) * limit;
+    const result = await getAllBookmarks({ offset, limit });
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error('获取书签失败:', error);
     return NextResponse.json({ error: '获取失败' }, { status: 500 });

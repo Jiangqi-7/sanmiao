@@ -80,15 +80,45 @@ function toBookmark(row: Record<string, unknown>): Bookmark {
 }
 
 /**
- * 获取所有书签
+ * 分页配置
  */
-export async function getAllBookmarks(): Promise<Bookmark[]> {
+export interface PaginationOptions {
+  offset?: number;
+  limit?: number;
+}
+
+/**
+ * 分页结果
+ */
+export interface PaginatedBookmarks {
+  data: Bookmark[];
+  total: number;
+  hasMore: boolean;
+}
+
+/**
+ * 获取所有书签（支持分页）
+ */
+export async function getAllBookmarks(options?: PaginationOptions): Promise<PaginatedBookmarks> {
   await initDb();
   const client = getDb();
-  const result = await client.execute(
-    'SELECT * FROM bookmarks ORDER BY created_at DESC'
-  );
-  return result.rows.map((row) => toBookmark(row as Record<string, unknown>));
+  const limit = options?.limit || 20;
+  const offset = options?.offset || 0;
+
+  // 获取总数
+  const countResult = await client.execute('SELECT COUNT(*) as count FROM bookmarks');
+  const total = (countResult.rows[0] as { count: number }).count;
+
+  // 获取分页数据
+  const result = await client.execute({
+    sql: 'SELECT * FROM bookmarks ORDER BY created_at DESC LIMIT ? OFFSET ?',
+    args: [limit, offset + limit],
+  });
+
+  const data = result.rows.map((row) => toBookmark(row as Record<string, unknown>));
+  const hasMore = offset + limit < total;
+
+  return { data, total, hasMore };
 }
 
 /**
