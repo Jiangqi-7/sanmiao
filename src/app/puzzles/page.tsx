@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { puzzles } from '@/lib/puzzles';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 7;
 
 export default function PuzzleListPage() {
   const [page, setPage] = useState(1);

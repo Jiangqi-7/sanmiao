@@ -3,34 +3,34 @@
 /**
  * 推理阁 - 谜题详情
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { puzzles } from '@/lib/puzzles';
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default function PuzzleDetailPage({ params }: Props) {
   const [showAnswer, setShowAnswer] = useState(false);
-  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
+  const [puzzle, setPuzzle] = useState<typeof puzzles[0] | null>(null);
 
-  // Resolve params on client side
-  params.then((p) => setResolvedParams(p));
-
-  if (!resolvedParams) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fafafa' }}>
-        <p className="text-neutral-400">加载中...</p>
-      </div>
-    );
-  }
-
-  const puzzle = puzzles.find((p) => p.id === resolvedParams.id);
+  useEffect(() => {
+    const found = puzzles.find((p) => p.id === params.id);
+    setPuzzle(found || null);
+  }, [params.id]);
 
   if (!puzzle) {
-    notFound();
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fafafa' }}>
+        <div className="text-center">
+          <p className="text-neutral-400 mb-4">谜题不存在</p>
+          <Link href="/puzzles" className="text-sm text-neutral-600 hover:text-neutral-800">
+            返回列表
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   const currentIndex = puzzles.findIndex((p) => p.id === puzzle.id);
