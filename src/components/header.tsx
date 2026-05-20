@@ -51,11 +51,12 @@ export function Header() {
           {/* 主题切换按钮 */}
           <button
             onClick={toggleTheme}
-            className="w-8 h-8 rounded-full border flex items-center justify-center text-sm transition-all hover:scale-110"
+            className="w-9 h-9 rounded-full border-2 flex items-center justify-center text-base transition-all hover:scale-110"
             style={{
-              borderColor: "var(--border)",
+              borderColor: "var(--accent)",
               backgroundColor: "var(--bg-secondary)",
               color: "var(--accent)",
+              flexShrink: 0,
             }}
             title={theme === "simple" ? "切换彩色模式" : "切换简约模式"}
           >
