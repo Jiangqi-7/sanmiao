@@ -2,7 +2,7 @@
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { BAGUA } from "@/lib/design-system";
 import { CopyButton } from "@/components/copy-button";
@@ -41,133 +41,162 @@ const IMAGE_MAP: Record<string, string> = {
   "kua-fu": "/shan-hai-jing/夸父逐日.jpeg",
 };
 
-// 灯箱组件
+// 灯箱组件 - 支持鼠标滚轮缩放
 function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  const [scale, setScale] = useState(1);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      setScale((prev) => Math.min(Math.max(prev + (e.deltaY > 0 ? -0.1 : 0.1), 0.5), 4));
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  useEffect(() => {
+    setScale(1);
+  }, [src]);
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-8"
-      style={{ backgroundColor: "rgba(0,0,0,0.9)" }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-8 overflow-auto"
+      style={{ backgroundColor: "rgba(0,0,0,0.95)" }}
       onClick={onClose}
     >
       <button
-        className="absolute top-4 right-4 text-white text-3xl hover:opacity-70"
+        className="absolute top-4 right-4 text-white text-3xl hover:opacity-70 z-10"
         onClick={onClose}
       >
         ×
       </button>
       <img
+        ref={imgRef}
         src={src}
         alt={alt}
-        className="max-w-full max-h-full object-contain rounded-lg"
+        className="max-w-full max-h-full object-contain transition-transform duration-200"
+        style={{ transform: `scale(${scale})` }}
         onClick={(e) => e.stopPropagation()}
       />
+      <div className="absolute bottom-4 text-white text-sm opacity-70">
+        滚轮缩放 · 点击关闭
+      </div>
     </div>
   );
 }
 
-function CreatureCard({ creature }: { creature: typeof CREATURES_BY_CATEGORY["南山经"][0] }) {
+// 图片展示区域组件
+function ImageSection({ src, name }: { src: string; name: string }) {
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const imageSrc = IMAGE_MAP[creature.id];
 
   return (
     <>
-      <article
-        className="group rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-xl"
-        style={{
-          backgroundColor: "var(--bg-card)",
-          borderColor: "var(--border)",
-        }}
+      <div
+        className="relative aspect-video overflow-hidden cursor-pointer"
+        onClick={() => setLightbox(src)}
       >
-        {imageSrc && (
-          <div
-            className="relative aspect-video overflow-hidden cursor-pointer"
-            onClick={() => setLightbox(imageSrc)}
-          >
-            <img
-              src={imageSrc}
-              alt={creature.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
-              <span className="text-white text-sm">点击放大</span>
-            </div>
-          </div>
-        )}
-
-        <div className="p-4 border-b" style={{ borderColor: "var(--border)" }}>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-2xl">{BAGUA.positions[creature.bagua as keyof typeof BAGUA.positions]?.symbol || "☯"}</span>
-            <div>
-              <h3 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>{creature.name}</h3>
-              <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}>
-                {creature.source}
-              </span>
-            </div>
-          </div>
-          <p className="text-sm italic leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            {creature.rawText}
-          </p>
+        <img
+          src={src}
+          alt={name}
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+        />
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/30">
+          <span className="text-white text-sm">点击放大</span>
         </div>
-
-        <div className="px-4 pt-3 flex flex-wrap gap-2">
-          {creature.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-2 py-1 rounded"
-              style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <details className="group/prompt">
-          <summary
-            className="flex items-center justify-between px-4 py-3 cursor-pointer list-none text-sm font-medium"
-            style={{ color: "var(--text-primary)" }}
-          >
-            <span className="flex items-center gap-2">
-              <span style={{ opacity: 0.5 }}>{BAGUA.positions.li.symbol}</span>
-              提示词
-            </span>
-            <span className="text-xs opacity-50 group-open/prompt:hidden block">点击展开</span>
-            <span className="text-xs opacity-50 group-open/prompt:block hidden">点击收起</span>
-          </summary>
-
-          <div className="px-4 pb-4 space-y-3">
-            <div>
-              <p className="text-xs font-medium mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-                中文提示词
-                <CopyButton text={creature.promptZh} lang="zh" />
-              </p>
-              <p
-                className="text-sm p-3 rounded-md leading-relaxed"
-                style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
-              >
-                {creature.promptZh}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs font-medium mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
-                English Prompt
-                <CopyButton text={creature.promptEn} lang="en" />
-              </p>
-              <p
-                className="text-xs p-3 rounded-md font-mono leading-relaxed"
-                style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-secondary)" }}
-              >
-                {creature.promptEn}
-              </p>
-            </div>
-          </div>
-        </details>
-      </article>
-
+      </div>
       {lightbox && (
-        <Lightbox src={lightbox} alt={creature.name} onClose={() => setLightbox(null)} />
+        <Lightbox src={lightbox} alt={name} onClose={() => setLightbox(null)} />
       )}
     </>
+  );
+}
+
+function CreatureCard({ creature }: { creature: typeof CREATURES_BY_CATEGORY["南山经"][0] }) {
+  const imageSrc = IMAGE_MAP[creature.id];
+
+  return (
+    <article
+      className="group rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-xl"
+      style={{
+        backgroundColor: "var(--bg-card)",
+        borderColor: "var(--border)",
+      }}
+    >
+      {imageSrc && (
+        <ImageSection src={imageSrc} name={creature.name} />
+      )}
+
+      <div className="p-4 border-b" style={{ borderColor: "var(--border)" }}>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-2xl">{BAGUA.positions[creature.bagua as keyof typeof BAGUA.positions]?.symbol || "☯"}</span>
+          <div>
+            <h3 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>{creature.name}</h3>
+            <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}>
+              {creature.source}
+            </span>
+          </div>
+        </div>
+        <p className="text-sm italic leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          {creature.rawText}
+        </p>
+      </div>
+
+      <div className="px-4 pt-3 flex flex-wrap gap-2">
+        {creature.tags.map((tag) => (
+          <span
+            key={tag}
+            className="text-xs px-2 py-1 rounded"
+            style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <details className="group/prompt">
+        <summary
+          className="flex items-center justify-between px-4 py-3 cursor-pointer list-none text-sm font-medium"
+          style={{ color: "var(--text-primary)" }}
+        >
+          <span className="flex items-center gap-2">
+            <span style={{ opacity: 0.5 }}>{BAGUA.positions.li.symbol}</span>
+            提示词
+          </span>
+          <span className="text-xs opacity-50 group-open/prompt:hidden block">点击展开</span>
+          <span className="text-xs opacity-50 group-open/prompt:block hidden">点击收起</span>
+        </summary>
+
+        <div className="px-4 pb-4 space-y-3">
+          <div>
+            <p className="text-xs font-medium mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
+              中文提示词
+              <CopyButton text={creature.promptZh} lang="zh" />
+            </p>
+            <p
+              className="text-sm p-3 rounded-md leading-relaxed"
+              style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-primary)" }}
+            >
+              {creature.promptZh}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-medium mb-2 flex items-center gap-2" style={{ color: "var(--text-muted)" }}>
+              English Prompt
+              <CopyButton text={creature.promptEn} lang="en" />
+            </p>
+            <p
+              className="text-xs p-3 rounded-md font-mono leading-relaxed"
+              style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-secondary)" }}
+            >
+              {creature.promptEn}
+            </p>
+          </div>
+        </div>
+      </details>
+    </article>
   );
 }
 
