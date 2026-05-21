@@ -31,8 +31,9 @@ const BAGUA_SYMBOLS = ["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"];
 const COLORS = ["vermilion", "gold", "peacock", "sky", "thunder"];
 
 // 打字机效果组件
-function TypewriterText({ text, onComplete }: { text: string; onComplete?: () => void }) {
+function TypewriterText({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     let i = 0;
@@ -42,86 +43,19 @@ function TypewriterText({ text, onComplete }: { text: string; onComplete?: () =>
         i++;
       } else {
         clearInterval(timer);
-        onComplete?.();
       }
     }, 120);
     return () => clearInterval(timer);
-  }, [text, onComplete]);
-
-  return <span>{displayed}</span>;
-}
-
-// 不规则闪电组件
-function Lightning({ x, y }: { x: number; y: number }) {
-  const [paths, setPaths] = useState<string[]>([]);
+  }, [text]);
 
   useEffect(() => {
-    // 生成多条不规则闪电路径
-    const generateZigzag = (startX: number, startY: number, angle: number, length: number) => {
-      let d = `M ${startX} ${startY}`;
-      let cx = startX;
-      let cy = startY;
-      const steps = 8 + Math.floor(Math.random() * 5);
-      const stepLength = length / steps;
-
-      for (let i = 0; i < steps; i++) {
-        const jitter = (Math.random() - 0.5) * 30;
-        const nextAngle = angle + jitter;
-        cx += Math.sin(nextAngle * Math.PI / 180) * stepLength;
-        cy -= Math.cos(nextAngle * Math.PI / 180) * stepLength;
-        d += ` L ${cx} ${cy}`;
-      }
-      return d;
-    };
-
-    const newPaths: string[] = [];
-
-    // 主干闪电 - 向下
-    newPaths.push(generateZigzag(x, y, 90, 200));
-
-    // 分叉1 - 向左
-    newPaths.push(generateZigzag(x, y + 50, 150, 100));
-    newPaths.push(generateZigzag(x, y + 80, 120, 80));
-
-    // 分叉2 - 向右
-    newPaths.push(generateZigzag(x, y + 60, 30, 120));
-    newPaths.push(generateZigzag(x, y + 90, 60, 90));
-
-    // 分叉3 - 向左上
-    newPaths.push(generateZigzag(x - 20, y + 40, 160, 80));
-
-    setPaths(newPaths);
-
-    // 1秒后清除
-    const timer = setTimeout(() => setPaths([]), 1000);
-    return () => clearTimeout(timer);
-  }, [x, y]);
+    setStarted(true);
+  }, []);
 
   return (
-    <svg
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 9999,
-      }}
-    >
-      {paths.map((d, i) => (
-        <path
-          key={i}
-          d={d}
-          stroke={i === 0 ? "#fff" : ["#87CEEB", "#8A2BE2"][i % 2]}
-          strokeWidth={i === 0 ? 3 : 2}
-          fill="none"
-          style={{
-            filter: "drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #87CEEB)",
-          }}
-        />
-      ))}
-    </svg>
+    <span style={{ opacity: displayed ? 1 : 0 }}>
+      {displayed}
+    </span>
   );
 }
 
@@ -159,18 +93,8 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
 }
 
 export default function HomePage() {
-  const [loaded, setLoaded] = useState(false);
-  const [titleShown, setTitleShown] = useState(false);
-  const [lightning, setLightning] = useState<{ x: number; y: number } | null>(null);
-
-  const handleClick = (e: React.MouseEvent) => {
-    setLightning({ x: e.clientX, y: e.clientY });
-  };
-
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }} onClick={handleClick}>
-      {lightning && <Lightning x={lightning.x} y={lightning.y} />}
-
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
 
@@ -211,15 +135,10 @@ export default function HomePage() {
             className="text-5xl font-light mb-4 tracking-[0.3em] thunder-glow"
             style={{ color: "var(--text-primary)", fontFamily: "serif" }}
           >
-            {titleShown ? "道法自然" : <TypewriterText text="道法自然" onComplete={() => setTitleShown(true)} />}
+            <TypewriterText text="道法自然" />
           </h1>
           <p className="text-sm tracking-[0.5em]" style={{ color: "var(--text-muted)" }}>
-            {titleShown ? "AI 为用" : <TypewriterText text="AI 为用" />}
-          </p>
-
-          {/* 点击提示 */}
-          <p className="text-xs mt-4" style={{ color: "var(--text-muted)" }}>
-            点击任意位置触发闪电
+            <TypewriterText text="AI 为用" />
           </p>
 
           {/* 细分隔线 */}
