@@ -114,6 +114,7 @@ export default function HomePage() {
           loop
           muted
           playsInline
+          preload="auto"
         />
       </div>
 

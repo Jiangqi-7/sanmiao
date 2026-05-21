@@ -57,6 +57,7 @@ export default function PuzzleListPage() {
           loop
           muted
           playsInline
+          preload="auto"
         />
       </div>
 
