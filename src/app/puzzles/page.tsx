@@ -66,15 +66,7 @@ export default function PuzzleListPage() {
             playsInline
             preload="auto"
           />
-          {/* 半透明边框融合效果 */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              border: "1px solid rgba(255,255,255,0)",
-              borderRadius: "24px",
-            }}
-          />
-        </div>
+          </div>
       </div>
 
       {/* 主内容 */}
