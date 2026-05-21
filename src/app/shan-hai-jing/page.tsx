@@ -129,7 +129,7 @@ function CategoryNavGrid() {
         return (
           <a
             key={cat}
-            href={`#${cat}`}
+            href={`/shan-hai-jing/${cat}`}
             className="group flex items-center gap-3 p-3 rounded-lg border transition-all duration-300 hover:shadow-md"
             style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)" }}
           >
