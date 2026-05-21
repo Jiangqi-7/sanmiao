@@ -44,9 +44,21 @@ export default function PuzzleListPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
-      {/* 顶部细线 */}
-      <div className="h-px" style={{ backgroundColor: '#1a1a1a' }} />
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
+      <div className="h-px gradient-border" />
+
+      {/* 视频播放器 - 右上角 */}
+      <div className="fixed top-20 right-6 w-48 z-50">
+        <video
+          className="w-full rounded-lg shadow-lg border"
+          style={{ borderColor: "var(--border)" }}
+          src="/thinking-light.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      </div>
 
       {/* 主内容 */}
       <main className="max-w-[900px] mx-auto px-6 py-16">
@@ -55,7 +67,7 @@ export default function PuzzleListPage() {
           <Link href="/" className="text-sm text-neutral-400 hover:text-neutral-600 mb-4 block">
             ← 返回
           </Link>
-          <h1 className="text-4xl font-light tracking-wider" style={{ color: '#1a1a1a', fontFamily: 'serif' }}>
+          <h1 className="text-4xl font-light tracking-wider" style={{ color: "var(--text-primary)", fontFamily: "serif" }}>
             推理阁
           </h1>
           <p className="text-sm text-neutral-400 mt-2">烧脑谜题，静待智者拆解</p>
@@ -68,14 +80,14 @@ export default function PuzzleListPage() {
               key={puzzle.id}
               href={`/puzzles/${encodeURIComponent(puzzle.id)}`}
               className="block p-6 border transition-all duration-200 hover:border-neutral-800 group"
-              style={{ borderColor: '#e5e5e5' }}
+              style={{ borderColor: "var(--border)" }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-neutral-400 w-8">#{startIndex + index}</span>
                   <span
                     className="text-lg group-hover:text-neutral-600 transition-colors"
-                    style={{ color: '#1a1a1a', fontFamily: 'serif' }}
+                    style={{ color: "var(--text-primary)", fontFamily: "serif" }}
                   >
                     {puzzle.title}
                   </span>
@@ -129,7 +141,7 @@ export default function PuzzleListPage() {
         )}
 
         {/* 底部 */}
-        <footer className="mt-16 pt-8 border-t" style={{ borderColor: '#e5e5e5' }}>
+        <footer className="mt-16 pt-8 border-t" style={{ borderColor: "var(--border)" }}>
           <p className="text-xs text-neutral-400 text-center">
             共 {puzzles.length} 道谜题
           </p>
