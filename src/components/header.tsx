@@ -23,7 +23,7 @@ export function Header() {
   return (
     <header
       className="sticky top-0 z-50 border-b glow-hover"
-      style={{ backgroundColor: "rgba(255,255,255,0.95)", borderColor: "var(--border)", backdropFilter: "blur(10px)" }}
+      style={{ backgroundColor: "var(--bg-secondary)", borderColor: "var(--border)", backdropFilter: "blur(10px)" }}
     >
       <nav className="max-w-[900px] mx-auto px-6 h-14 flex items-center justify-between">
         {/* Logo */}

@@ -72,13 +72,13 @@ export default function PuzzleListPage() {
       <main className="max-w-[900px] mx-auto px-6 py-16">
         {/* 页面标题 */}
         <header className="mb-12">
-          <Link href="/" className="text-sm text-neutral-400 hover:text-neutral-600 mb-4 block">
+          <Link href="/" style={{ color: "var(--text-muted)" }} className="text-sm hover:opacity-70 mb-4 block">
             ← 返回
           </Link>
           <h1 className="text-4xl font-light tracking-wider" style={{ color: "var(--text-primary)", fontFamily: "serif" }}>
             推理阁
           </h1>
-          <p className="text-sm text-neutral-400 mt-2">烧脑谜题，静待智者拆解</p>
+          <p className="text-sm mt-2" style={{ color: "var(--text-muted)" }}>烧脑谜题，静待智者拆解</p>
         </header>
 
         {/* 谜题列表 */}
@@ -88,21 +88,21 @@ export default function PuzzleListPage() {
               key={puzzle.id}
               href={`/puzzles/${encodeURIComponent(puzzle.id)}`}
               className="block p-6 border transition-all duration-200 hover:border-neutral-800 group"
-              style={{ borderColor: "var(--border)" }}
+              style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)" }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <span className="text-xs text-neutral-400 w-8">#{startIndex + index}</span>
+                  <span className="text-xs w-8" style={{ color: "var(--text-muted)" }}>#{startIndex + index}</span>
                   <span
-                    className="text-lg group-hover:text-neutral-600 transition-colors"
+                    className="text-lg transition-colors"
                     style={{ color: "var(--text-primary)", fontFamily: "serif" }}
                   >
                     {puzzle.title}
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-xs text-neutral-400">{puzzle.author}</span>
-                  <span className="text-neutral-300 group-hover:text-neutral-600 transition-colors">→</span>
+                  <span className="text-xs" style={{ color: "var(--text-muted)" }}>{puzzle.author}</span>
+                  <span style={{ color: "var(--text-muted)" }}>→</span>
                 </div>
               </div>
             </Link>
@@ -115,23 +115,25 @@ export default function PuzzleListPage() {
             <button
               onClick={() => setPage(page - 1)}
               disabled={page <= 1}
-              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm border transition-colors hover:border-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ borderColor: "var(--border)", color: "var(--text-secondary)", backgroundColor: "var(--bg-card)" }}
             >
               上一页
             </button>
 
             {getPageNumbers().map((p, i) =>
               p === '...' ? (
-                <span key={`ellipsis-${i}`} className="px-2 text-neutral-400">...</span>
+                <span key={`ellipsis-${i}`} className="px-2" style={{ color: "var(--text-muted)" }}>...</span>
               ) : (
                 <button
                   key={p}
                   onClick={() => setPage(p as number)}
-                  className={`px-3 py-1 text-sm border ${
-                    page === p
-                      ? 'bg-neutral-900 text-white border-neutral-900'
-                      : 'border-neutral-300 hover:border-neutral-900'
-                  }`}
+                  className="px-3 py-1 text-sm border transition-colors hover:border-neutral-800"
+                  style={{
+                    borderColor: page === p ? "var(--accent)" : "var(--border)",
+                    backgroundColor: page === p ? "var(--accent)" : "var(--bg-card)",
+                    color: page === p ? "var(--bg-primary)" : "var(--text-secondary)",
+                  }}
                 >
                   {p}
                 </button>
@@ -141,7 +143,8 @@ export default function PuzzleListPage() {
             <button
               onClick={() => setPage(page + 1)}
               disabled={page >= totalPages}
-              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm border transition-colors hover:border-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ borderColor: "var(--border)", color: "var(--text-secondary)", backgroundColor: "var(--bg-card)" }}
             >
               下一页
             </button>
@@ -150,14 +153,14 @@ export default function PuzzleListPage() {
 
         {/* 底部 */}
         <footer className="mt-16 pt-8 border-t" style={{ borderColor: "var(--border)" }}>
-          <p className="text-xs text-neutral-400 text-center">
+          <p className="text-xs text-center" style={{ color: "var(--text-muted)" }}>
             共 {puzzles.length} 道谜题
           </p>
         </footer>
       </main>
 
       {/* 底部细线 */}
-      <div className="h-px" style={{ backgroundColor: '#1a1a1a' }} />
+      <div className="h-px gradient-border" />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   // 后续从 MDX 文件读取内容
   return (
-    <div className="py-16 md:py-24">
+    <div className="py-16 md:py-24" style={{ backgroundColor: "var(--bg-primary)" }}>
       <div className="max-w-[800px] mx-auto px-6">
         <Link
           href="/blog"

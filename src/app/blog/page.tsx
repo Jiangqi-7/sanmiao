@@ -40,26 +40,30 @@ const ALL_POSTS = [
 
 export default function BlogPage() {
   return (
-    <div className="py-16 md:py-24">
+    <div className="py-16 md:py-24" style={{ backgroundColor: "var(--bg-primary)" }}>
       <div className="max-w-[1200px] mx-auto px-6">
-        <h1 className="text-3xl font-semibold tracking-tight text-[#171717] mb-8">博客</h1>
+        <h1 className="text-3xl font-semibold tracking-tight mb-8" style={{ color: "var(--text-primary)" }}>博客</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {ALL_POSTS.map((post) => (
             <article
               key={post.slug}
-              className="group p-6 bg-[#ffffff] rounded-lg border border-[#ebebeb] hover:border-[#171717] transition-all"
+              className="group p-6 border rounded-lg transition-all"
+              style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)" }}
             >
               <div className="mb-3">
-                <span className="inline-block px-2 py-1 text-xs font-medium text-[#0068d6] bg-[#ebf5ff] rounded">
+                <span
+                  className="inline-block px-2 py-1 text-xs font-medium border rounded"
+                  style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
+                >
                   {post.category}
                 </span>
               </div>
-              <h2 className="text-lg font-medium text-[#171717] mb-2 group-hover:text-[#0072f5] transition-colors">
+              <h2 className="text-lg font-medium mb-2 group-hover:text-[var(--accent)] transition-colors" style={{ color: "var(--text-primary)" }}>
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h2>
-              <p className="text-sm text-[#666666] leading-relaxed mb-4">{post.description}</p>
-              <time className="text-xs text-[#808080]">{post.date}</time>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>{post.description}</p>
+              <time className="text-xs" style={{ color: "var(--text-muted)" }}>{post.date}</time>
             </article>
           ))}
         </div>

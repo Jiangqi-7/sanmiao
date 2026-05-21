@@ -126,7 +126,7 @@ export default function CategoryPage() {
   const icon = CATEGORY_ICONS[category] || "◉";
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
       <header className="py-12 border-b" style={{ borderColor: "var(--border)" }}>
         <div className="max-w-[1000px] mx-auto px-6 text-center">
           <Link href="/shan-hai-jing" className="text-sm mb-6 inline-flex items-center gap-2" style={{ color: "var(--text-muted)" }}>

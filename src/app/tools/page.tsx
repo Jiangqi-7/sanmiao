@@ -447,9 +447,9 @@ export default function ToolsPage() {
 
       <main className="max-w-[900px] mx-auto px-6 py-16">
         <header className="mb-12">
-          <Link href="/" className="text-sm text-neutral-400 hover:text-neutral-600 mb-4 block">← 返回</Link>
+          <Link href="/" style={{ color: "var(--text-muted)" }} className="text-sm hover:opacity-70 mb-4 block">← 返回</Link>
           <h1 className="text-4xl font-light tracking-wider" style={{ color: "var(--text-primary)", fontFamily: "serif" }}>工具箱</h1>
-          <p className="text-sm text-neutral-400 mt-2">实用小工具集合</p>
+          <p className="text-sm mt-2" style={{ color: "var(--text-muted)" }}>实用小工具集合</p>
         </header>
 
         <div className="flex gap-2 mb-8 border-b overflow-x-auto" style={{ borderColor: "var(--border)" }}>

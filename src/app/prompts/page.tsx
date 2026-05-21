@@ -488,11 +488,11 @@ export default function PromptsPage() {
 
       <main className="max-w-[900px] mx-auto px-6 py-16">
         <header className="mb-12">
-          <Link href="/" className="text-sm text-neutral-400 hover:text-neutral-600 mb-4 block">← 返回</Link>
+          <Link href="/" style={{ color: "var(--text-muted)" }} className="text-sm hover:opacity-70 mb-4 block">← 返回</Link>
           <div className="flex items-baseline justify-between">
             <div>
               <h1 className="text-4xl font-light tracking-wider" style={{ color: "var(--text-primary)", fontFamily: "serif" }}>提示词</h1>
-              <p className="text-sm text-neutral-400 mt-2">模板管理 · 变量填充 · 一键复制</p>
+              <p className="text-sm mt-2" style={{ color: "var(--text-muted)" }}>模板管理 · 变量填充 · 一键复制</p>
             </div>
             <button
               onClick={() => setShowForm(true)}

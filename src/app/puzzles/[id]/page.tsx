@@ -29,18 +29,18 @@ export default function PuzzleDetailPage({ params }: Props) {
 
   if (!puzzleId) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fafafa' }}>
-        <p className="text-neutral-400">加载中...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
+        <p style={{ color: 'var(--text-muted)' }}>加载中...</p>
       </div>
     );
   }
 
   if (!puzzle) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fafafa' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
         <div className="text-center">
-          <p className="text-neutral-400 mb-4">谜题不存在</p>
-          <Link href="/puzzles" className="text-sm text-neutral-600 hover:text-neutral-800">
+          <p style={{ color: 'var(--text-muted)' }} mb-4>谜题不存在</p>
+          <Link href="/puzzles" style={{ color: 'var(--text-secondary)' }} className="text-sm hover:opacity-70">
             返回列表
           </Link>
         </div>
@@ -53,22 +53,22 @@ export default function PuzzleDetailPage({ params }: Props) {
   const nextPuzzle = currentIndex < puzzles.length - 1 ? puzzles[currentIndex + 1] : null;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
       {/* 顶部细线 */}
-      <div className="h-px" style={{ backgroundColor: '#1a1a1a' }} />
+      <div className="h-px" style={{ backgroundColor: 'var(--border)' }} />
 
       {/* 主内容 */}
       <main className="max-w-[900px] mx-auto px-6 py-16">
         {/* 页面标题 */}
         <header className="mb-12">
-          <Link href="/puzzles" className="text-sm text-neutral-400 hover:text-neutral-600 mb-4 block">
+          <Link href="/puzzles" style={{ color: 'var(--text-muted)' }} className="text-sm hover:opacity-70 mb-4 block">
             ← 返回列表
           </Link>
           <div className="flex items-baseline gap-3">
-            <h1 className="text-4xl font-light tracking-wider" style={{ color: '#1a1a1a', fontFamily: 'serif' }}>
+            <h1 className="text-4xl font-light tracking-wider" style={{ color: 'var(--text-primary)', fontFamily: 'serif' }}>
               {puzzle.title}
             </h1>
-            <span className="text-sm text-neutral-400">—— {puzzle.author}</span>
+            <span className="text-sm" style={{ color: 'var(--text-muted)' }}>—— {puzzle.author}</span>
           </div>
         </header>
 
@@ -76,7 +76,7 @@ export default function PuzzleDetailPage({ params }: Props) {
         <article className="mb-12">
           <div
             className="whitespace-pre-wrap"
-            style={{ color: '#4a4a4a', lineHeight: '1.8' }}
+            style={{ color: 'var(--text-secondary)', lineHeight: '1.8' }}
           >
             {puzzle.content.trim().split('\n').map((line, i) => {
               // 处理图片
@@ -94,7 +94,7 @@ export default function PuzzleDetailPage({ params }: Props) {
               }
               if (line.startsWith('**') && line.endsWith('**')) {
                 return (
-                  <p key={i} className="font-medium mt-6 mb-2 text-lg" style={{ color: '#1a1a1a' }}>
+                  <p key={i} className="font-medium mt-6 mb-2 text-lg" style={{ color: 'var(--text-primary)' }}>
                     {line.replace(/\*\*/g, '')}
                   </p>
                 );
@@ -117,9 +117,9 @@ export default function PuzzleDetailPage({ params }: Props) {
             onClick={() => setShowAnswer(!showAnswer)}
             className="flex items-center gap-2 px-6 py-3 text-sm border transition-colors"
             style={{
-              borderColor: showAnswer ? '#1a1a1a' : '#e5e5e5',
-              backgroundColor: showAnswer ? '#1a1a1a' : '#fff',
-              color: showAnswer ? '#fff' : '#666',
+              borderColor: 'var(--border)',
+              backgroundColor: 'var(--bg-card)',
+              color: 'var(--text-primary)',
             }}
           >
             <span
@@ -138,13 +138,13 @@ export default function PuzzleDetailPage({ params }: Props) {
             <div
               className="mt-6 p-8 border"
               style={{
-                borderColor: '#e5e5e5',
-                backgroundColor: '#fff',
+                borderColor: 'var(--border)',
+                backgroundColor: 'var(--bg-card)',
               }}
             >
               <div
                 className="whitespace-pre-wrap"
-                style={{ color: '#4a4a4a', lineHeight: '1.8' }}
+                style={{ color: 'var(--text-secondary)', lineHeight: '1.8' }}
               >
                 {puzzle.solution.trim().split('\n').map((line, i) => {
                   const imageMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
@@ -161,7 +161,7 @@ export default function PuzzleDetailPage({ params }: Props) {
                   }
                   if (line.startsWith('**') && line.endsWith('**')) {
                     return (
-                      <p key={i} className="font-medium mt-4 mb-2" style={{ color: '#1a1a1a' }}>
+                      <p key={i} className="font-medium mt-4 mb-2" style={{ color: 'var(--text-primary)' }}>
                         {line.replace(/\*\*/g, '')}
                       </p>
                     );
@@ -181,11 +181,12 @@ export default function PuzzleDetailPage({ params }: Props) {
         </div>
 
         {/* 上下篇导航 */}
-        <nav className="flex items-center justify-between pt-8 border-t" style={{ borderColor: '#e5e5e5' }}>
+        <nav className="flex items-center justify-between pt-8 border-t" style={{ borderColor: 'var(--border)' }}>
           {prevPuzzle ? (
             <Link
               href={`/puzzles/${encodeURIComponent(prevPuzzle.id)}`}
-              className="text-sm text-neutral-500 hover:text-neutral-800 transition-colors"
+              className="text-sm transition-colors"
+              style={{ color: 'var(--text-secondary)' }}
             >
               ← {prevPuzzle.title}
             </Link>
@@ -195,7 +196,8 @@ export default function PuzzleDetailPage({ params }: Props) {
           {nextPuzzle ? (
             <Link
               href={`/puzzles/${encodeURIComponent(nextPuzzle.id)}`}
-              className="text-sm text-neutral-500 hover:text-neutral-800 transition-colors"
+              className="text-sm transition-colors"
+              style={{ color: 'var(--text-secondary)' }}
             >
               {nextPuzzle.title} →
             </Link>
@@ -206,7 +208,7 @@ export default function PuzzleDetailPage({ params }: Props) {
       </main>
 
       {/* 底部细线 */}
-      <div className="h-px" style={{ backgroundColor: '#1a1a1a' }} />
+      <div className="h-px" style={{ backgroundColor: 'var(--border)' }} />
     </div>
   );
 }
