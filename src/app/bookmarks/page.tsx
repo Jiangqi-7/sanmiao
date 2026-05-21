@@ -52,7 +52,7 @@ function LightningEffect() {
 }
 
 export default function BookmarksPage() {
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [allBookmarks, setAllBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<string>('all');
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -74,29 +74,52 @@ export default function BookmarksPage() {
   const [editTags, setEditTags] = useState('');
   const [editDesc, setEditDesc] = useState('');
 
-  const limit = 12;
-  const totalPages = Math.ceil(total / limit);
+  const limit = 50; // Get more items for client-side filtering
 
   useEffect(() => {
-    fetchBookmarks(1);
+    fetchAllBookmarks();
     setLoaded(true);
   }, []);
 
-  async function fetchBookmarks(pageNum: number = 1) {
+  async function fetchAllBookmarks() {
     try {
       setLoading(true);
-      const res = await fetch(`/api/bookmarks?page=${pageNum}&limit=${limit}`);
+      // Fetch all bookmarks (no pagination for client-side filtering)
+      const res = await fetch(`/api/bookmarks?page=1&limit=1000`);
       const data: PaginatedBookmarks = await res.json();
 
-      setBookmarks(data.data);
+      setAllBookmarks(data.data);
       setTotal(data.total);
-      setPage(pageNum);
     } catch (error) {
       console.error('获取书签失败:', error);
     } finally {
       setLoading(false);
     }
   }
+
+  // Filter and sort bookmarks
+  const filteredBookmarks = allBookmarks
+    .filter((b) => {
+      const matchCategory = category === 'all' || b.category === category;
+      const matchSearch = b.title.includes(searchKeyword) || (b.description && b.description.includes(searchKeyword));
+      return matchCategory && matchSearch;
+    })
+    .sort((a, b) => {
+      // Sort by category first, then by title
+      if (a.category !== b.category) {
+        if (!a.category) return 1;
+        if (!b.category) return -1;
+        return a.category.localeCompare(b.category);
+      }
+      return a.title.localeCompare(b.title);
+    });
+
+  // Pagination
+  const paginatedBookmarks = filteredBookmarks.slice((page - 1) * limit, page * limit);
+  const totalPages = Math.ceil(filteredBookmarks.length / limit);
+
+  // Get all unique categories from all bookmarks
+  const categories = Array.from(new Set(allBookmarks.map((b) => b.category).filter(Boolean))).sort();
 
   async function handleCreateBookmark(e: React.FormEvent) {
     e.preventDefault();
@@ -126,7 +149,8 @@ export default function BookmarksPage() {
         setNewCategory('');
         setNewTags('');
         setNewDesc('');
-        fetchBookmarks(1);
+        fetchAllBookmarks();
+        setPage(1);
       }
     } catch (error) {
       console.error('创建书签失败:', error);
@@ -156,7 +180,7 @@ export default function BookmarksPage() {
 
       if (res.ok) {
         setEditingId(null);
-        fetchBookmarks(page);
+        fetchAllBookmarks();
       }
     } catch (error) {
       console.error('更新书签失败:', error);
@@ -182,7 +206,10 @@ export default function BookmarksPage() {
     try {
       const res = await fetch(`/api/bookmarks/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        fetchBookmarks(page);
+        fetchAllBookmarks();
+        if (paginatedBookmarks.length <= 1 && page > 1) {
+          setPage(page - 1);
+        }
       }
     } catch (error) {
       console.error('删除书签失败:', error);
@@ -201,7 +228,8 @@ export default function BookmarksPage() {
       if (res.ok) {
         const data = await res.json();
         alert(`导入成功：新增 ${data.imported} 个，跳过 ${data.skipped} 个`);
-        fetchBookmarks(1);
+        fetchAllBookmarks();
+        setPage(1);
       }
     } catch (error) {
       console.error('导入书签失败:', error);
@@ -212,13 +240,10 @@ export default function BookmarksPage() {
     window.open('/api/bookmarks/export', '_blank');
   }
 
-  const filteredBookmarks = bookmarks.filter((b) => {
-    const matchCategory = category === 'all' || b.category === category;
-    const matchSearch = b.title.includes(searchKeyword) || b.description.includes(searchKeyword);
-    return matchCategory && matchSearch;
-  });
-
-  const categories = Array.from(new Set(bookmarks.map((b) => b.category).filter(Boolean)));
+  function handleCategoryChange(cat: string) {
+    setCategory(cat);
+    setPage(1);
+  }
 
   function getPageNumbers(): (number | '...')[] {
     const pages: (number | '...')[] = [];
@@ -288,14 +313,14 @@ export default function BookmarksPage() {
             type="text"
             placeholder="搜索书签..."
             value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
+            onChange={(e) => { setSearchKeyword(e.target.value); setPage(1); }}
             className="px-4 py-2 text-sm border w-48"
             style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)", color: "var(--text-primary)" }}
           />
 
           <div className="flex items-center gap-2 flex-wrap">
             <button
-              onClick={() => setCategory('all')}
+              onClick={() => handleCategoryChange('all')}
               className={`px-3 py-1.5 text-xs ${category === 'all' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'}`}
             >
               全部
@@ -303,7 +328,7 @@ export default function BookmarksPage() {
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setCategory(cat)}
+                onClick={() => handleCategoryChange(cat)}
                 className={`px-3 py-1.5 text-xs ${category === cat ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'}`}
               >
                 {cat}
@@ -397,15 +422,15 @@ export default function BookmarksPage() {
         )}
 
         {/* 书签列表 */}
-        {loading && bookmarks.length === 0 ? (
+        {loading && allBookmarks.length === 0 ? (
           <p className="text-center py-12" style={{ color: "var(--text-muted)" }}>加载中...</p>
-        ) : filteredBookmarks.length === 0 ? (
+        ) : paginatedBookmarks.length === 0 ? (
           <p className="text-center py-12" style={{ color: "var(--text-muted)" }}>
-            {bookmarks.length === 0 ? '暂无书签' : '没有找到匹配的书签'}
+            {allBookmarks.length === 0 ? '暂无书签' : '没有找到匹配的书签'}
           </p>
         ) : (
           <div className="space-y-4">
-            {filteredBookmarks.map((bookmark) => (
+            {paginatedBookmarks.map((bookmark) => (
               <div
                 key={bookmark.id}
                 className="p-5 border hover:shadow-md transition-all"
@@ -543,7 +568,7 @@ export default function BookmarksPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-8">
             <button
-              onClick={() => fetchBookmarks(page - 1)}
+              onClick={() => setPage(page - 1)}
               disabled={page <= 1 || loading}
               className="px-3 py-1 text-sm border hover:bg-[var(--bg-secondary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
@@ -557,7 +582,7 @@ export default function BookmarksPage() {
               ) : (
                 <button
                   key={p}
-                  onClick={() => fetchBookmarks(p as number)}
+                  onClick={() => setPage(p as number)}
                   className={`px-3 py-1 text-sm border ${
                     page === p ? 'bg-[var(--accent)] text-white border-[var(--accent)]' : 'hover:bg-[var(--bg-secondary)]'
                   }`}
@@ -569,7 +594,7 @@ export default function BookmarksPage() {
             )}
 
             <button
-              onClick={() => fetchBookmarks(page + 1)}
+              onClick={() => setPage(page + 1)}
               disabled={page >= totalPages || loading}
               className="px-3 py-1 text-sm border hover:bg-[var(--bg-secondary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
@@ -582,7 +607,7 @@ export default function BookmarksPage() {
         {/* 底部 */}
         <footer className="mt-20 pt-8 text-center border-t" style={{ borderColor: "var(--border)" }}>
           <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-            共 {total} 个书签
+            共 {filteredBookmarks.length} 个书签{category !== 'all' ? `（${category}）` : ''}
           </p>
         </footer>
       </main>
