@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useMemo } from "react";
 
-type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "uuid" | "baseconvert" | "morse" | "daletou" | "shuangseqiu" | "hash" | "jwt" | "rmb";
+type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "baseconvert" | "morse" | "daletou" | "shuangseqiu" | "hash" | "jwt" | "rmb";
 
 const TOOLS = [
   { id: "base64" as Tool, name: "Base64", desc: "编解码" },
@@ -16,7 +16,6 @@ const TOOLS = [
   { id: "json" as Tool, name: "JSON", desc: "格式化" },
   { id: "regex" as Tool, name: "正则", desc: "测试" },
   { id: "password" as Tool, name: "密码", desc: "生成" },
-  { id: "uuid" as Tool, name: "UUID", desc: "生成" },
   { id: "baseconvert" as Tool, name: "进制转换", desc: "2/8/10/16" },
   { id: "morse" as Tool, name: "摩斯电码", desc: "互转" },
   { id: "daletou" as Tool, name: "大乐透", desc: "随机" },
@@ -446,40 +445,6 @@ function PasswordTool() {
   );
 }
 
-// UUID Tool
-function UUIDTool() {
-  const [uuids, setUuids] = useState<string[]>([]);
-
-  const generate = (count: number = 1) => {
-    const newUuids = [];
-    for (let i = 0; i < count; i++) {
-      newUuids.push(crypto.randomUUID());
-    }
-    setUuids(newUuids);
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex gap-4">
-        <button onClick={() => generate(1)} className="px-4 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
-          生成1个
-        </button>
-        <button onClick={() => generate(5)} className="px-4 py-2 text-sm border" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
-          生成5个
-        </button>
-      </div>
-      {uuids.map((uuid, i) => (
-        <div key={i} className="p-3 border font-mono text-sm" style={{ borderColor: "var(--border)" }}>
-          {uuid}
-          <button onClick={() => navigator.clipboard.writeText(uuid)} className="ml-4 text-xs opacity-50 hover:opacity-100">
-            复制
-          </button>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 // Base Convert Tool
 function BaseConvertTool() {
   const [input, setInput] = useState("");
@@ -819,7 +784,6 @@ export default function ToolsPage() {
           {activeTool === "json" && <JSONTool />}
           {activeTool === "regex" && <RegexTool />}
           {activeTool === "password" && <PasswordTool />}
-          {activeTool === "uuid" && <UUIDTool />}
           {activeTool === "baseconvert" && <BaseConvertTool />}
           {activeTool === "morse" && <MorseTool />}
           {activeTool === "daletou" && <DaletouTool />}
