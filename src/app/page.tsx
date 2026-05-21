@@ -95,6 +95,12 @@ export default function HomePage() {
 
   useEffect(() => {
     setLoaded(true);
+
+    // Preload video early
+    const video = document.getElementById('home-video') as HTMLVideoElement;
+    if (video) {
+      video.preload = "auto";
+    }
   }, []);
 
   return (
@@ -107,6 +113,7 @@ export default function HomePage() {
       {/* 视频播放器 - 左上角 */}
       <div className="fixed top-20 left-6 w-48 z-50">
         <video
+          id="home-video"
           className="w-full rounded-lg shadow-lg border"
           style={{ borderColor: "var(--border)" }}
           src="/dance-light.mp4"

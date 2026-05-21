@@ -15,6 +15,12 @@ export default function PuzzleListPage() {
 
   useEffect(() => {
     setTotalPages(Math.ceil(puzzles.length / PAGE_SIZE));
+
+    // Preload video early
+    const video = document.getElementById('puzzle-video') as HTMLVideoElement;
+    if (video) {
+      video.preload = "auto";
+    }
   }, []);
 
   const currentPuzzles = puzzles.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -50,6 +56,7 @@ export default function PuzzleListPage() {
       {/* 视频播放器 - 右上角 */}
       <div className="fixed top-20 right-6 w-48 z-50">
         <video
+          id="puzzle-video"
           className="w-full rounded-lg shadow-lg border"
           style={{ borderColor: "var(--border)" }}
           src="/thinking-light.mp4"
