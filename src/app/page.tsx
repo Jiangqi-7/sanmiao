@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
+import { MatrixRain } from "@/components/matrix-rain";
 
 const BAGUA_GRID = [
   { key: "xun", name: "巽", direction: "东南", href: "/tools" },
@@ -95,6 +96,7 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
 export default function HomePage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
+      <MatrixRain />
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
 
