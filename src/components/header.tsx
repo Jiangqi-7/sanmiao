@@ -18,7 +18,7 @@ const NAV_ITEMS = [
 
 export function Header() {
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, cycleTheme } = useTheme();
 
   return (
     <header
@@ -53,7 +53,7 @@ export function Header() {
 
           {/* 主题切换按钮 */}
           <button
-            onClick={toggleTheme}
+            onClick={cycleTheme}
             className="w-9 h-9 rounded-full border-2 flex items-center justify-center text-base transition-all hover:scale-110 thunder-glow"
             style={{
               borderColor: "var(--accent)",
