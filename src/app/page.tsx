@@ -101,7 +101,7 @@ export default function HomePage() {
       {/* 视频播放器 - 左上角 */}
       <div className="fixed top-20 left-6 w-48 z-40">
         <div
-          className="relative rounded-2xl overflow-hidden"
+          className="relative rounded-3xl overflow-hidden"
           style={{
             boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
             backdropFilter: "blur(10px)",
@@ -122,7 +122,7 @@ export default function HomePage() {
             className="absolute inset-0 pointer-events-none"
             style={{
               border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: "16px",
+              borderRadius: "24px",
             }}
           />
         </div>
