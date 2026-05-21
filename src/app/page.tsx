@@ -94,7 +94,7 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#ffffff" }}>
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
 
