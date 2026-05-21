@@ -44,7 +44,7 @@ function TypewriterText({ text }: { text: string }) {
       } else {
         clearInterval(timer);
       }
-    }, 120);
+    }, 250);
     return () => clearInterval(timer);
   }, [text]);
 
