@@ -335,7 +335,7 @@ export default function BookmarksPage() {
             </div>
             <div className="flex flex-col items-end gap-2">
               <a
-                href="javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.top/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=600,height=500');})();"
+                href="javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.vercel.app/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=600,height=500');})();"
                 className="px-4 py-2 text-sm border shrink-0 transition-colors cursor-move"
                 style={{ borderColor: "var(--accent)", color: "var(--accent)", backgroundColor: "var(--bg-card)" }}
                 title="拖到书签栏"
@@ -346,7 +346,7 @@ export default function BookmarksPage() {
               </a>
               <button
                 onClick={() => {
-                  const code = "javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.top/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=600,height=500');})();";
+                  const code = "javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.vercel.app/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=600,height=500');})();";
                   navigator.clipboard.writeText(code);
                   alert('书签代码已复制！手动拖到书签栏或创建新书签粘贴');
                 }}
