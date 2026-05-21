@@ -326,18 +326,36 @@ export default function BookmarksPage() {
         {/* 书签收集器说明 */}
         <div className="mb-8 p-4 border" style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)" }}>
           <div className="flex items-center justify-between gap-4">
-            <div>
+            <div className="flex-1">
               <h3 className="text-sm font-medium mb-1" style={{ color: "var(--text-primary)" }}>书签收集器</h3>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>拖下面的按钮到书签栏，在任意页面点击即可快速保存</p>
+              <p className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>使用：右键保存链接/拖动链接到书签栏</p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+                然后在任意页面点击该书签即可快速保存当前页面
+              </p>
             </div>
-            <a
-              href="javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.top/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=500,height=400');})();"
-              className="px-4 py-2 text-sm border shrink-0 transition-colors"
-              style={{ borderColor: "var(--accent)", color: "var(--accent)", backgroundColor: "var(--bg-card)" }}
-              title="拖到书签栏"
-            >
-              ☑ 保存到三秒
-            </a>
+            <div className="flex flex-col items-end gap-2">
+              <a
+                href="javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.top/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=600,height=500');})();"
+                className="px-4 py-2 text-sm border shrink-0 transition-colors cursor-move"
+                style={{ borderColor: "var(--accent)", color: "var(--accent)", backgroundColor: "var(--bg-card)" }}
+                title="拖到书签栏"
+                draggable
+                onClick={(e) => e.preventDefault()}
+              >
+                ☑ 保存到三秒
+              </a>
+              <button
+                onClick={() => {
+                  const code = "javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.top/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=600,height=500');})();";
+                  navigator.clipboard.writeText(code);
+                  alert('书签代码已复制！手动拖到书签栏或创建新书签粘贴');
+                }}
+                className="text-xs px-2 py-1"
+                style={{ color: "var(--text-muted)" }}
+              >
+                复制代码
+              </button>
+            </div>
           </div>
         </div>
 
