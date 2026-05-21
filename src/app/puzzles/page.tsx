@@ -48,18 +48,33 @@ export default function PuzzleListPage() {
       <div className="h-px gradient-border" />
 
       {/* 视频播放器 - 右上角 */}
-      <div className="fixed top-20 right-6 w-48 z-50">
-        <video
-          id="puzzle-video"
-          className="w-full rounded-lg shadow-lg border"
-          style={{ borderColor: "var(--border)" }}
-          src="/thinking-light.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-        />
+      <div className="fixed top-20 right-6 w-48 z-40">
+        <div
+          className="relative rounded-2xl overflow-hidden"
+          style={{
+            boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <video
+            id="puzzle-video"
+            className="w-full block"
+            src="/thinking-light.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+          />
+          {/* 半透明边框融合效果 */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              border: "1px solid rgba(255,255,255,0.2)",
+              borderRadius: "16px",
+            }}
+          />
+        </div>
       </div>
 
       {/* 主内容 */}
