@@ -74,7 +74,7 @@ export default function BookmarksPage() {
   const [editTags, setEditTags] = useState('');
   const [editDesc, setEditDesc] = useState('');
 
-  const limit = 200; // Get more items for client-side filtering
+  const limit = 7; // Pagination size
 
   useEffect(() => {
     fetchAllBookmarks();
@@ -84,7 +84,7 @@ export default function BookmarksPage() {
   async function fetchAllBookmarks() {
     try {
       setLoading(true);
-      // Fetch all bookmarks (no pagination for client-side filtering)
+      // Fetch all bookmarks for client-side filtering
       const res = await fetch(`/api/bookmarks?page=1&limit=1000`);
       const data: PaginatedBookmarks = await res.json();
 
@@ -96,6 +96,8 @@ export default function BookmarksPage() {
       setLoading(false);
     }
   }
+
+  const pageSize = 7; // Items per page
 
   // Filter and sort bookmarks
   const filteredBookmarks = allBookmarks
@@ -115,8 +117,8 @@ export default function BookmarksPage() {
     });
 
   // Pagination
-  const paginatedBookmarks = filteredBookmarks.slice((page - 1) * limit, page * limit);
-  const totalPages = Math.ceil(filteredBookmarks.length / limit);
+  const paginatedBookmarks = filteredBookmarks.slice((page - 1) * pageSize, page * pageSize);
+  const totalPages = Math.ceil(filteredBookmarks.length / pageSize);
 
   // Get all unique categories from all bookmarks
   const categories = Array.from(new Set(allBookmarks.map((b) => b.category).filter(Boolean))).sort();
