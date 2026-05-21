@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useMemo } from "react";
 
-type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "baseconvert" | "morse" | "daletou" | "shuangseqiu" | "hash" | "jwt" | "rmb";
+type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "baseconvert" | "morse" | "daletou" | "shuangseqiu" | "hash" | "jwt" | "rmb" | "matrix" | "typewriter";
 
 const TOOLS = [
   { id: "base64" as Tool, name: "Base64", desc: "编解码" },
@@ -23,6 +23,8 @@ const TOOLS = [
   { id: "hash" as Tool, name: "哈希", desc: "MD5/SHA" },
   { id: "jwt" as Tool, name: "JWT", desc: "解码" },
   { id: "rmb" as Tool, name: "人民币", desc: "大写" },
+  { id: "matrix" as Tool, name: "数字雨", desc: "黑客帝国" },
+  { id: "typewriter" as Tool, name: "打字机", desc: "动画预览" },
 ];
 
 // Base64 Tool
@@ -750,6 +752,101 @@ function RMBTool() {
   );
 }
 
+// 数字雨 Tool
+function MatrixTool() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [running, setRunning] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = canvas.offsetWidth;
+    canvas.height = 400;
+
+    const chars = "三秒道法自然AI工具博客山海经异兽推理阁密码哈希JWT人民币大写0123456789";
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops: number[] = Array(columns).fill(1);
+
+    let interval: ReturnType<typeof setInterval>;
+    if (running) {
+      interval = setInterval(() => {
+        ctx.fillStyle = "rgba(0,0,0,0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00ff00";
+        ctx.font = `${fontSize}px monospace`;
+        for (let i = 0; i < drops.length; i++) {
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }, 50);
+    }
+
+    return () => clearInterval(interval);
+  }, [running]);
+
+  return (
+    <div className="space-y-4">
+      <button onClick={() => setRunning(!running)}
+        className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+        {running ? "停止" : "开始"}
+      </button>
+      <canvas ref={canvasRef} className="w-full border" style={{ height: "400px", borderColor: "var(--border)", backgroundColor: "#000" }} />
+    </div>
+  );
+}
+
+// 打字机 Tool
+function TypewriterTool() {
+  const [text, setText] = useState("道法自然");
+  const [displayed, setDisplayed] = useState("");
+  const [speed, setSpeed] = useState(250);
+  const [running, setRunning] = useState(false);
+
+  useEffect(() => {
+    if (!running) return;
+    let i = 0;
+    setDisplayed("");
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed(text.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(timer);
+        setRunning(false);
+      }
+    }, speed);
+    return () => clearInterval(timer);
+  }, [text, speed, running]);
+
+  return (
+    <div className="space-y-4">
+      <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="输入文字..."
+        className="w-full h-20 p-3 text-sm border resize-none" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
+      <div className="flex items-center gap-4">
+        <label className="text-sm" style={{ color: "var(--text-muted)" }}>速度 (ms)</label>
+        <input type="range" min={50} max={500} step={50} value={speed} onChange={(e) => setSpeed(Number(e.target.value))}
+          className="flex-1" />
+        <span className="text-sm w-12" style={{ color: "var(--text-muted)" }}>{speed}ms</span>
+      </div>
+      <button onClick={() => setRunning(true)} disabled={running}
+        className="px-6 py-2 text-sm border" style={{ borderColor: running ? "var(--border)" : "var(--accent)", color: running ? "var(--text-muted)" : "var(--accent)" }}>
+        播放
+      </button>
+      <div className="p-6 border" style={{ borderColor: "var(--border)", minHeight: "80px" }}>
+        <span style={{ opacity: displayed ? 1 : 0, color: "var(--accent)", fontFamily: "serif" }}>{displayed}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<Tool>("base64");
 
@@ -791,6 +888,8 @@ export default function ToolsPage() {
           {activeTool === "hash" && <HashTool />}
           {activeTool === "jwt" && <JWTTool />}
           {activeTool === "rmb" && <RMBTool />}
+          {activeTool === "matrix" && <MatrixTool />}
+          {activeTool === "typewriter" && <TypewriterTool />}
         </div>
       </main>
 
