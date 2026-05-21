@@ -104,19 +104,20 @@ export default function HomePage() {
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
 
-      <main className="relative max-w-[900px] mx-auto px-6 py-20">
-        {/* 视频背景 */}
-        <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
-          <video
-            className="w-full h-full object-cover"
-            src="/dance-light.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        </div>
+      {/* 视频播放器 - 左上角 */}
+      <div className="fixed top-20 left-6 w-48 z-50">
+        <video
+          className="w-full rounded-lg shadow-lg border"
+          style={{ borderColor: "var(--border)" }}
+          src="/dance-light.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      </div>
 
+      <main className="relative max-w-[900px] mx-auto px-6 py-20">
         {/* 标题区 */}
         <header className="mb-20 text-center relative">
           {/* 装饰性彩色点 */}
