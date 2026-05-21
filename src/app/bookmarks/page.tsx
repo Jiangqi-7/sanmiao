@@ -4,7 +4,6 @@
  * 书签收藏页面
  */
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { BAGUA } from '@/lib/design-system';
 import { Bookmark } from '@/lib/db/types';
 
@@ -58,8 +57,8 @@ export default function BookmarksPage() {
   const [category, setCategory] = useState<string>('all');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
@@ -68,6 +67,12 @@ export default function BookmarksPage() {
   const [newCategory, setNewCategory] = useState('');
   const [newTags, setNewTags] = useState('');
   const [newDesc, setNewDesc] = useState('');
+
+  const [editTitle, setEditTitle] = useState('');
+  const [editUrl, setEditUrl] = useState('');
+  const [editCategory, setEditCategory] = useState('');
+  const [editTags, setEditTags] = useState('');
+  const [editDesc, setEditDesc] = useState('');
 
   const limit = 12;
   const totalPages = Math.ceil(total / limit);
@@ -84,7 +89,6 @@ export default function BookmarksPage() {
       const data: PaginatedBookmarks = await res.json();
 
       setBookmarks(data.data);
-      setHasMore(data.hasMore);
       setTotal(data.total);
       setPage(pageNum);
     } catch (error) {
@@ -127,6 +131,49 @@ export default function BookmarksPage() {
     } catch (error) {
       console.error('创建书签失败:', error);
     }
+  }
+
+  async function handleUpdateBookmark(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (!editTitle || !editUrl || !editingId) {
+      alert('标题和链接不能为空');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/bookmarks/${editingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: editTitle,
+          url: editUrl,
+          category: editCategory,
+          tags: editTags.split(',').map((t) => t.trim()).filter(Boolean),
+          description: editDesc,
+        }),
+      });
+
+      if (res.ok) {
+        setEditingId(null);
+        fetchBookmarks(page);
+      }
+    } catch (error) {
+      console.error('更新书签失败:', error);
+    }
+  }
+
+  function startEdit(bookmark: Bookmark) {
+    setEditingId(bookmark.id);
+    setEditTitle(bookmark.title);
+    setEditUrl(bookmark.url);
+    setEditCategory(bookmark.category || '');
+    setEditTags(bookmark.tags.join(', '));
+    setEditDesc(bookmark.description || '');
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
   }
 
   async function handleDelete(id: string) {
@@ -364,61 +411,129 @@ export default function BookmarksPage() {
                 className="p-5 border hover:shadow-md transition-all"
                 style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)" }}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <a
-                      href={bookmark.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-lg font-medium hover:text-[var(--accent)] transition-colors block truncate"
-                      style={{ color: "var(--text-primary)" }}
-                    >
-                      {bookmark.title}
-                    </a>
-                    <a
-                      href={bookmark.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm hover:text-[var(--accent)] block truncate mt-1"
-                      style={{ color: "var(--text-muted)" }}
-                    >
-                      {bookmark.url}
-                    </a>
-                    {bookmark.description && (
-                      <p className="text-sm mt-2" style={{ color: "var(--text-secondary)" }}>{bookmark.description}</p>
-                    )}
-                    <div className="flex items-center gap-3 mt-3 flex-wrap">
-                      {bookmark.category && (
-                        <span className="text-xs px-2 py-1" style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}>
-                          {bookmark.category}
-                        </span>
+                {editingId === bookmark.id ? (
+                  /* 编辑模式 */
+                  <form onSubmit={handleUpdateBookmark} className="space-y-3">
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="标题"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="px-4 py-2 text-sm border"
+                        style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
+                        required
+                      />
+                      <input
+                        type="url"
+                        placeholder="链接"
+                        value={editUrl}
+                        onChange={(e) => setEditUrl(e.target.value)}
+                        className="px-4 py-2 text-sm border"
+                        style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="分类"
+                        value={editCategory}
+                        onChange={(e) => setEditCategory(e.target.value)}
+                        className="px-4 py-2 text-sm border"
+                        style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
+                      />
+                      <input
+                        type="text"
+                        placeholder="标签（逗号分隔）"
+                        value={editTags}
+                        onChange={(e) => setEditTags(e.target.value)}
+                        className="px-4 py-2 text-sm border"
+                        style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
+                      />
+                    </div>
+                    <textarea
+                      placeholder="描述（可选）"
+                      value={editDesc}
+                      onChange={(e) => setEditDesc(e.target.value)}
+                      className="w-full px-4 py-2 text-sm border"
+                      style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
+                      rows={2}
+                    />
+                    <div className="flex items-center gap-2">
+                      <button type="submit" className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:text-white" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+                        保存
+                      </button>
+                      <button type="button" onClick={cancelEdit} className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--bg-secondary)]" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+                        取消
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  /* 显示模式 */
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <a
+                        href={bookmark.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-lg font-medium hover:text-[var(--accent)] transition-colors block truncate"
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {bookmark.title}
+                      </a>
+                      <a
+                        href={bookmark.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm hover:text-[var(--accent)] block truncate mt-1"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        {bookmark.url}
+                      </a>
+                      {bookmark.description && (
+                        <p className="text-sm mt-2" style={{ color: "var(--text-secondary)" }}>{bookmark.description}</p>
                       )}
-                      {bookmark.tags.map((tag) => (
-                        <span key={tag} className="text-xs" style={{ color: "var(--text-muted)" }}>
-                          #{tag}
-                        </span>
-                      ))}
+                      <div className="flex items-center gap-3 mt-3 flex-wrap">
+                        {bookmark.category && (
+                          <span className="text-xs px-2 py-1" style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}>
+                            {bookmark.category}
+                          </span>
+                        )}
+                        {bookmark.tags.map((tag) => (
+                          <span key={tag} className="text-xs" style={{ color: "var(--text-muted)" }}>
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 ml-4">
+                      <a
+                        href={bookmark.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs px-3 py-1 border hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-colors"
+                        style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                      >
+                        访问
+                      </a>
+                      <button
+                        onClick={() => startEdit(bookmark)}
+                        className="text-xs px-3 py-1 border hover:bg-[var(--bg-secondary)] transition-colors"
+                        style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                      >
+                        编辑
+                      </button>
+                      <button
+                        onClick={() => handleDelete(bookmark.id)}
+                        className="text-xs px-3 py-1 border hover:border-red-500 hover:text-red-500 transition-colors"
+                        style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}
+                      >
+                        删除
+                      </button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 ml-4">
-                    <a
-                      href={bookmark.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs px-3 py-1 border hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-colors"
-                      style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
-                    >
-                      访问
-                    </a>
-                    <button
-                      onClick={() => handleDelete(bookmark.id)}
-                      className="text-xs px-3 py-1 border hover:border-red-500 hover:text-red-500 transition-colors"
-                      style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}
-                    >
-                      删除
-                    </button>
-                  </div>
-                </div>
+                )}
               </div>
             ))}
           </div>

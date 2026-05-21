@@ -1,43 +1,43 @@
 export default function AboutPage() {
   return (
-    <div className="py-16 md:py-24">
-      <div className="max-w-[800px] mx-auto px-6">
-        <h1 className="text-3xl font-semibold tracking-tight text-[#171717] mb-8">关于</h1>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
+      <div className="h-px gradient-border" />
 
-        <div className="prose prose-neutral text-[#666666] leading-relaxed space-y-6">
+      <main className="max-w-[800px] mx-auto px-6 py-20">
+        <header className="mb-12 text-center">
+          <h1 className="text-4xl font-light tracking-widest mb-8" style={{ color: "var(--text-primary)", fontFamily: "serif" }}>
+            关于
+          </h1>
+          <div className="w-16 h-px mx-auto" style={{ backgroundColor: "var(--border)" }} />
+        </header>
+
+        <div className="prose space-y-6" style={{ color: "var(--text-secondary)" }}>
           <p>
-            你好！我是三秒，专注于 AI 工具和工作流学习。
+            我是三秒，爱好广泛，正在学习 AI 领域相关知识与内容。
+          </p>
+          <p>
+            这个网站用来记录些想记录的东西希望大家一起学习交流。
           </p>
 
-          <p>
-            这个博客记录我在使用 OpenClaw、扣子、GPT 等 AI 工具过程中的一些学习心得和踩坑经验。
-          </p>
-
-          <h2 className="text-xl font-medium text-[#171717] mt-8 mb-4">擅长领域</h2>
-          <ul className="list-disc list-inside space-y-2">
-            <li>OpenClaw / 龙虾 部署和配置</li>
-            <li>扣子 / Coze 工作流搭建</li>
-            <li>AI 视频生成（Seedance、可灵等）</li>
-            <li>AI 图片生成（GPT Image、MJ 等）</li>
-            <li>大模型部署和推理优化</li>
-          </ul>
-
-          <h2 className="text-xl font-medium text-[#171717] mt-8 mb-4">联系方式</h2>
-          <ul className="space-y-2">
-            <li>
-              GitHub:{" "}
+          <div className="mt-12 pt-8 border-t" style={{ borderColor: "var(--border)" }}>
+            <h2 className="text-sm font-medium mb-4" style={{ color: "var(--text-muted)" }}>视频来源</h2>
+            <p className="text-sm">
+              网站中引用的视频来自{" "}
               <a
-                href="https://github.com/Jiangqi-7"
+                href="https://github.com/EKKOLearnAI/hermes-web-ui/tree/main"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0072f5] hover:underline"
+                className="hover:text-[var(--accent)] transition-colors"
+                style={{ color: "var(--accent)" }}
               >
-                Jiangqi-7
+                EKKOLearnAI/hermes-web-ui
               </a>
-            </li>
-          </ul>
+            </p>
+          </div>
         </div>
-      </div>
+      </main>
+
+      <div className="h-px gradient-border" />
     </div>
   );
 }
