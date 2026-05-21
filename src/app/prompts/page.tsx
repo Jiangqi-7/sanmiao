@@ -328,7 +328,7 @@ const DEFAULT_PROMPTS: Prompt[] = [
 
 const STORAGE_KEY = "sanmiao-prompts";
 const STORAGE_VERSION_KEY = "sanmiao-prompts-version";
-const CURRENT_VERSION = "2";
+const CURRENT_VERSION = "3";
 
 function loadPrompts(): Prompt[] {
   if (typeof window === "undefined") return DEFAULT_PROMPTS;
@@ -345,11 +345,12 @@ function loadPrompts(): Prompt[] {
   try {
     const parsed = JSON.parse(saved);
 
-    // 版本号低于当前版本，合并新默认提示词
+    // 版本号低于当前版本，合并并更新默认提示词
     if (storedVersion !== CURRENT_VERSION) {
-      const existingIds = new Set(parsed.map((p: Prompt) => p.id));
-      const newDefaults = DEFAULT_PROMPTS.filter((p) => !existingIds.has(p.id));
-      const merged = [...parsed, ...newDefaults];
+      const existingMap = new Map(parsed.map((p: Prompt) => [p.id, p]));
+      const merged = DEFAULT_PROMPTS.map((defaultP) => {
+        return existingMap.get(defaultP.id) || defaultP;
+      });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
       localStorage.setItem(STORAGE_VERSION_KEY, CURRENT_VERSION);
       return merged;
