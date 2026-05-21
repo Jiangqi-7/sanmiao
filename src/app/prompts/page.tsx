@@ -350,13 +350,13 @@ function loadPrompts(): Prompt[] {
 
     // 版本号低于当前版本，合并默认提示词
     if (storedVersion !== CURRENT_VERSION) {
-      const existingMap = new Map(parsed.map((p: Prompt) => [p.id, p]));
-      const merged = DEFAULT_PROMPTS.map((defaultP) => {
+      const existingMap = new Map<string, Prompt>(parsed.map((p: Prompt) => [p.id, p]));
+      const merged: Prompt[] = DEFAULT_PROMPTS.map((defaultP) => {
         // 强制更新的ID或者本地没有的都使用默认
         if (FORCE_UPDATE_IDS.includes(defaultP.id) || !existingMap.has(defaultP.id)) {
           return defaultP;
         }
-        return existingMap.get(defaultP.id);
+        return existingMap.get(defaultP.id)!;
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
       localStorage.setItem(STORAGE_VERSION_KEY, CURRENT_VERSION);
