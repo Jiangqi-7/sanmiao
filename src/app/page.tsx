@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 
@@ -31,118 +31,97 @@ const BAGUA_SYMBOLS = ["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"];
 const COLORS = ["vermilion", "gold", "peacock", "sky", "thunder"];
 
 // 打字机效果组件
-function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
+function TypewriterText({ text, onComplete }: { text: string; onComplete?: () => void }) {
   const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      let current = "";
-      const interval = setInterval(() => {
-        current = text.slice(0, current.length + 1);
-        setDisplayed(current);
-        if (current === text) {
-          clearInterval(interval);
-        }
-      }, 150);
-      return () => clearInterval(interval);
-    }, delay);
-    return () => clearTimeout(timeout);
-  }, [text, delay]);
+    let i = 0;
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed(text.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(timer);
+        onComplete?.();
+      }
+    }, 120);
+    return () => clearInterval(timer);
+  }, [text, onComplete]);
 
   return <span>{displayed}</span>;
 }
 
-// 闪电效果组件
-interface LightningBranch {
-  id: number;
-  x: number;
-  y: number;
-  angle: number;
-  length: number;
-  opacity: number;
-}
-
-function LightningEffect({ trigger }: { trigger: number }) {
-  const [branches, setBranches] = useState<LightningBranch[]>([]);
-  const [flash, setFlash] = useState(false);
+// 不规则闪电组件
+function Lightning({ x, y }: { x: number; y: number }) {
+  const [paths, setPaths] = useState<string[]>([]);
 
   useEffect(() => {
-    if (trigger === 0) return;
+    // 生成多条不规则闪电路径
+    const generateZigzag = (startX: number, startY: number, angle: number, length: number) => {
+      let d = `M ${startX} ${startY}`;
+      let cx = startX;
+      let cy = startY;
+      const steps = 8 + Math.floor(Math.random() * 5);
+      const stepLength = length / steps;
 
-    // 生成随机闪电
-    const x = 20 + Math.random() * 60; // 20-80% 横向位置
-    const y = 10 + Math.random() * 30; // 10-40% 纵向位置
-    const newBranches: LightningBranch[] = [];
+      for (let i = 0; i < steps; i++) {
+        const jitter = (Math.random() - 0.5) * 30;
+        const nextAngle = angle + jitter;
+        cx += Math.sin(nextAngle * Math.PI / 180) * stepLength;
+        cy -= Math.cos(nextAngle * Math.PI / 180) * stepLength;
+        d += ` L ${cx} ${cy}`;
+      }
+      return d;
+    };
 
-    // 主干闪电
-    newBranches.push({
-      id: Date.now(),
-      x,
-      y,
-      angle: 90 + (Math.random() - 0.5) * 20,
-      length: 50 + Math.random() * 30,
-      opacity: 1,
-    });
+    const newPaths: string[] = [];
 
-    // 分叉闪电 (2-4个分支向不同方向)
-    const numBranches = 2 + Math.floor(Math.random() * 3);
-    for (let i = 0; i < numBranches; i++) {
-      const angle = -30 + Math.random() * 60; // 散开角度
-      newBranches.push({
-        id: Date.now() + i + 1,
-        x: x + (Math.random() - 0.5) * 10,
-        y: y + Math.random() * 30,
-        angle,
-        length: 20 + Math.random() * 40,
-        opacity: 0.6 + Math.random() * 0.4,
-      });
-    }
+    // 主干闪电 - 向下
+    newPaths.push(generateZigzag(x, y, 90, 200));
 
-    setBranches(newBranches);
-    setFlash(true);
+    // 分叉1 - 向左
+    newPaths.push(generateZigzag(x, y + 50, 150, 100));
+    newPaths.push(generateZigzag(x, y + 80, 120, 80));
 
-    // 屏幕闪烁
-    setTimeout(() => setFlash(false), 100);
+    // 分叉2 - 向右
+    newPaths.push(generateZigzag(x, y + 60, 30, 120));
+    newPaths.push(generateZigzag(x, y + 90, 60, 90));
 
-    // 清除闪电
-    setTimeout(() => setBranches([]), 500);
-  }, [trigger]);
+    // 分叉3 - 向左上
+    newPaths.push(generateZigzag(x - 20, y + 40, 160, 80));
+
+    setPaths(newPaths);
+
+    // 1秒后清除
+    const timer = setTimeout(() => setPaths([]), 1000);
+    return () => clearTimeout(timer);
+  }, [x, y]);
 
   return (
-    <>
-      {/* 屏幕闪白 */}
-      {flash && (
-        <div
+    <svg
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 9999,
+      }}
+    >
+      {paths.map((d, i) => (
+        <path
+          key={i}
+          d={d}
+          stroke={i === 0 ? "#fff" : ["#87CEEB", "#8A2BE2"][i % 2]}
+          strokeWidth={i === 0 ? 3 : 2}
+          fill="none"
           style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(255,255,255,0.3)",
-            zIndex: 1000,
-            pointerEvents: "none",
-          }}
-        />
-      )}
-      {/* 闪电分支 */}
-      {branches.map((branch) => (
-        <div
-          key={branch.id}
-          style={{
-            position: "fixed",
-            left: `${branch.x}%`,
-            top: `${branch.y}%`,
-            width: "3px",
-            height: `${branch.length}vh`,
-            background: "linear-gradient(to bottom, #fff, #87CEEB, #8A2BE2, transparent)",
-            transform: `rotate(${branch.angle}deg)`,
-            transformOrigin: "top center",
-            opacity: branch.opacity,
-            boxShadow: "0 0 10px #fff, 0 0 20px #87CEEB, 0 0 40px #8A2BE2",
-            pointerEvents: "none",
-            zIndex: 1001,
+            filter: "drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #87CEEB)",
           }}
         />
       ))}
-    </>
+    </svg>
   );
 }
 
@@ -181,21 +160,22 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
 
 export default function HomePage() {
   const [loaded, setLoaded] = useState(false);
-  const [lightningTrigger, setLightningTrigger] = useState(0);
+  const [titleShown, setTitleShown] = useState(false);
+  const [lightning, setLightning] = useState<{ x: number; y: number } | null>(null);
 
-  const handleClick = () => {
-    setLightningTrigger(Date.now());
+  const handleClick = (e: React.MouseEvent) => {
+    setLightning({ x: e.clientX, y: e.clientY });
   };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }} onClick={handleClick}>
-      <LightningEffect trigger={lightningTrigger} />
+      {lightning && <Lightning x={lightning.x} y={lightning.y} />}
 
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
 
       {/* 视频播放器 - 左上角 */}
-      <div className="fixed top-20 left-6 w-48 z-50">
+      <div className="fixed top-20 left-6 w-48 z-40">
         <video
           id="home-video"
           className="w-full rounded-lg shadow-lg border"
@@ -228,28 +208,22 @@ export default function HomePage() {
           </div>
 
           <h1
-            className={`text-5xl font-light mb-4 tracking-[0.3em] transition-all thunder-glow ${loaded ? "opacity-100" : "opacity-0"}`}
+            className="text-5xl font-light mb-4 tracking-[0.3em] thunder-glow"
             style={{ color: "var(--text-primary)", fontFamily: "serif" }}
           >
-            <TypewriterText text="道法自然" delay={500} />
+            {titleShown ? "道法自然" : <TypewriterText text="道法自然" onComplete={() => setTitleShown(true)} />}
           </h1>
-          <p
-            className={`text-sm tracking-[0.5em] transition-all duration-1000 delay-200 ${loaded ? "opacity-100" : "opacity-0"}`}
-            style={{ color: "var(--text-muted)" }}
-          >
-            <TypewriterText text="AI 为用" delay={1200} />
+          <p className="text-sm tracking-[0.5em]" style={{ color: "var(--text-muted)" }}>
+            {titleShown ? "AI 为用" : <TypewriterText text="AI 为用" />}
           </p>
 
           {/* 点击提示 */}
-          <p
-            className={`text-xs mt-4 transition-all duration-1000 delay-1000 ${loaded ? "opacity-100" : "opacity-0"}`}
-            style={{ color: "var(--text-muted)" }}
-          >
-            点击屏幕触发闪电
+          <p className="text-xs mt-4" style={{ color: "var(--text-muted)" }}>
+            点击任意位置触发闪电
           </p>
 
           {/* 细分隔线 */}
-          <div className={`flex items-center justify-center gap-8 mt-12 transition-all duration-1000 delay-1600 ${loaded ? "opacity-100" : "opacity-0"}`}>
+          <div className="flex items-center justify-center gap-8 mt-12">
             <div className="w-16 h-px" style={{ backgroundColor: "var(--border)" }} />
             <div className="flex items-center gap-6">
               {["☰", "☯", "☷"].map((s, i) => (
@@ -263,11 +237,7 @@ export default function HomePage() {
         {/* 九宫格 */}
         <div className="grid grid-cols-3 gap-4">
           {BAGUA_GRID.map((cell, index) => (
-            <div
-              key={cell.key}
-              className={`transition-all duration-700 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-              style={{ transitionDelay: `${index * 80 + 1800}ms` }}
-            >
+            <div key={cell.key}>
               <BaguaCell cell={cell} index={index} />
             </div>
           ))}
