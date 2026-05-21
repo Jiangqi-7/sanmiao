@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 
@@ -29,6 +29,122 @@ const BAGUA_DESCS: Record<string, string> = {
 
 const BAGUA_SYMBOLS = ["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"];
 const COLORS = ["vermilion", "gold", "peacock", "sky", "thunder"];
+
+// 打字机效果组件
+function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      let current = "";
+      const interval = setInterval(() => {
+        current = text.slice(0, current.length + 1);
+        setDisplayed(current);
+        if (current === text) {
+          clearInterval(interval);
+        }
+      }, 150);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [text, delay]);
+
+  return <span>{displayed}</span>;
+}
+
+// 闪电效果组件
+interface LightningBranch {
+  id: number;
+  x: number;
+  y: number;
+  angle: number;
+  length: number;
+  opacity: number;
+}
+
+function LightningEffect({ trigger }: { trigger: number }) {
+  const [branches, setBranches] = useState<LightningBranch[]>([]);
+  const [flash, setFlash] = useState(false);
+
+  useEffect(() => {
+    if (trigger === 0) return;
+
+    // 生成随机闪电
+    const x = 20 + Math.random() * 60; // 20-80% 横向位置
+    const y = 10 + Math.random() * 30; // 10-40% 纵向位置
+    const newBranches: LightningBranch[] = [];
+
+    // 主干闪电
+    newBranches.push({
+      id: Date.now(),
+      x,
+      y,
+      angle: 90 + (Math.random() - 0.5) * 20,
+      length: 50 + Math.random() * 30,
+      opacity: 1,
+    });
+
+    // 分叉闪电 (2-4个分支向不同方向)
+    const numBranches = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < numBranches; i++) {
+      const angle = -30 + Math.random() * 60; // 散开角度
+      newBranches.push({
+        id: Date.now() + i + 1,
+        x: x + (Math.random() - 0.5) * 10,
+        y: y + Math.random() * 30,
+        angle,
+        length: 20 + Math.random() * 40,
+        opacity: 0.6 + Math.random() * 0.4,
+      });
+    }
+
+    setBranches(newBranches);
+    setFlash(true);
+
+    // 屏幕闪烁
+    setTimeout(() => setFlash(false), 100);
+
+    // 清除闪电
+    setTimeout(() => setBranches([]), 500);
+  }, [trigger]);
+
+  return (
+    <>
+      {/* 屏幕闪白 */}
+      {flash && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(255,255,255,0.3)",
+            zIndex: 1000,
+            pointerEvents: "none",
+          }}
+        />
+      )}
+      {/* 闪电分支 */}
+      {branches.map((branch) => (
+        <div
+          key={branch.id}
+          style={{
+            position: "fixed",
+            left: `${branch.x}%`,
+            top: `${branch.y}%`,
+            width: "3px",
+            height: `${branch.length}vh`,
+            background: "linear-gradient(to bottom, #fff, #87CEEB, #8A2BE2, transparent)",
+            transform: `rotate(${branch.angle}deg)`,
+            transformOrigin: "top center",
+            opacity: branch.opacity,
+            boxShadow: "0 0 10px #fff, 0 0 20px #87CEEB, 0 0 40px #8A2BE2",
+            pointerEvents: "none",
+            zIndex: 1001,
+          }}
+        />
+      ))}
+    </>
+  );
+}
 
 function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number }) {
   const isCenter = cell.isCenter;
@@ -63,54 +179,17 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
   );
 }
 
-function LightningEffect() {
-  const [bolts, setBolts] = useState<Array<{ id: number; x: number; delay: number; angle: number; length: number }>>([]);
-
-  useEffect(() => {
-    const newBolts = [];
-    for (let i = 0; i < 8; i++) {
-      newBolts.push({
-        id: i,
-        x: 5 + Math.random() * 90,
-        delay: Math.random() * 15,
-        angle: Math.random() * 20 - 10,
-        length: 30 + Math.random() * 50,
-      });
-    }
-    setBolts(newBolts);
-  }, []);
-
-  return (
-    <div className="lightning-container">
-      {bolts.map((bolt) => (
-        <div
-          key={bolt.id}
-          className="lightning-bolt"
-          style={{
-            left: `${bolt.x}%`,
-            animationDelay: `${bolt.delay}s`,
-            transform: `rotate(${bolt.angle}deg)`,
-            height: `${bolt.length}vh`,
-          }}
-        />
-      ))}
-      {/* 分叉闪电 */}
-      <div className="lightning-fork" />
-      <div className="lightning-fork" />
-    </div>
-  );
-}
-
 export default function HomePage() {
   const [loaded, setLoaded] = useState(false);
+  const [lightningTrigger, setLightningTrigger] = useState(0);
 
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
+  const handleClick = () => {
+    setLightningTrigger(Date.now());
+  };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
-      <LightningEffect />
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }} onClick={handleClick}>
+      <LightningEffect trigger={lightningTrigger} />
 
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
@@ -149,20 +228,28 @@ export default function HomePage() {
           </div>
 
           <h1
-            className={`text-5xl font-light mb-4 tracking-[0.3em] transition-all duration-1000 thunder-glow ${loaded ? "opacity-100" : "opacity-0"}`}
+            className={`text-5xl font-light mb-4 tracking-[0.3em] transition-all thunder-glow ${loaded ? "opacity-100" : "opacity-0"}`}
             style={{ color: "var(--text-primary)", fontFamily: "serif" }}
           >
-            道法自然
+            <TypewriterText text="道法自然" delay={500} />
           </h1>
           <p
             className={`text-sm tracking-[0.5em] transition-all duration-1000 delay-200 ${loaded ? "opacity-100" : "opacity-0"}`}
             style={{ color: "var(--text-muted)" }}
           >
-            AI 为用
+            <TypewriterText text="AI 为用" delay={1200} />
+          </p>
+
+          {/* 点击提示 */}
+          <p
+            className={`text-xs mt-4 transition-all duration-1000 delay-1000 ${loaded ? "opacity-100" : "opacity-0"}`}
+            style={{ color: "var(--text-muted)" }}
+          >
+            点击屏幕触发闪电
           </p>
 
           {/* 细分隔线 */}
-          <div className={`flex items-center justify-center gap-8 mt-12 transition-all duration-1000 delay-400 ${loaded ? "opacity-100" : "opacity-0"}`}>
+          <div className={`flex items-center justify-center gap-8 mt-12 transition-all duration-1000 delay-1600 ${loaded ? "opacity-100" : "opacity-0"}`}>
             <div className="w-16 h-px" style={{ backgroundColor: "var(--border)" }} />
             <div className="flex items-center gap-6">
               {["☰", "☯", "☷"].map((s, i) => (
@@ -179,7 +266,7 @@ export default function HomePage() {
             <div
               key={cell.key}
               className={`transition-all duration-700 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-              style={{ transitionDelay: `${index * 80 + 300}ms` }}
+              style={{ transitionDelay: `${index * 80 + 1800}ms` }}
             >
               <BaguaCell cell={cell} index={index} />
             </div>
