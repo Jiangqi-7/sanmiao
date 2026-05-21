@@ -5,12 +5,51 @@
  */
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { BAGUA } from '@/lib/design-system';
 import { Bookmark } from '@/lib/db/types';
 
 interface PaginatedBookmarks {
   data: Bookmark[];
   total: number;
   hasMore: boolean;
+}
+
+const COLORS = ["vermilion", "gold", "peacock", "sky", "thunder"];
+
+function LightningEffect() {
+  const [bolts, setBolts] = useState<Array<{ id: number; x: number; delay: number; angle: number; length: number }>>([]);
+
+  useEffect(() => {
+    const newBolts = [];
+    for (let i = 0; i < 5; i++) {
+      newBolts.push({
+        id: i,
+        x: 5 + Math.random() * 90,
+        delay: Math.random() * 15,
+        angle: Math.random() * 20 - 10,
+        length: 30 + Math.random() * 50,
+      });
+    }
+    setBolts(newBolts);
+  }, []);
+
+  return (
+    <div className="lightning-container">
+      {bolts.map((bolt) => (
+        <div
+          key={bolt.id}
+          className="lightning-bolt"
+          style={{
+            left: `${bolt.x}%`,
+            animationDelay: `${bolt.delay}s`,
+            transform: `rotate(${bolt.angle}deg)`,
+            height: `${bolt.length}vh`,
+          }}
+        />
+      ))}
+      <div className="lightning-fork" />
+    </div>
+  );
 }
 
 export default function BookmarksPage() {
@@ -22,18 +61,22 @@ export default function BookmarksPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
-  // 新书签表单
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
   const [newCategory, setNewCategory] = useState('');
   const [newTags, setNewTags] = useState('');
   const [newDesc, setNewDesc] = useState('');
 
-  const limit = 10;
+  const limit = 12;
   const totalPages = Math.ceil(total / limit);
 
-  // 获取书签列表
+  useEffect(() => {
+    fetchBookmarks(1);
+    setLoaded(true);
+  }, []);
+
   async function fetchBookmarks(pageNum: number = 1) {
     try {
       setLoading(true);
@@ -51,11 +94,6 @@ export default function BookmarksPage() {
     }
   }
 
-  useEffect(() => {
-    fetchBookmarks(1);
-  }, []);
-
-  // 创建书签
   async function handleCreateBookmark(e: React.FormEvent) {
     e.preventDefault();
 
@@ -91,7 +129,6 @@ export default function BookmarksPage() {
     }
   }
 
-  // 删除书签
   async function handleDelete(id: string) {
     if (!confirm('确定删除这个书签？')) return;
 
@@ -105,7 +142,6 @@ export default function BookmarksPage() {
     }
   }
 
-  // 导入书签
   async function handleImport(file: File) {
     try {
       const text = await file.text();
@@ -125,22 +161,18 @@ export default function BookmarksPage() {
     }
   }
 
-  // 导出书签
   function handleExport() {
     window.open('/api/bookmarks/export', '_blank');
   }
 
-  // 筛选
   const filteredBookmarks = bookmarks.filter((b) => {
     const matchCategory = category === 'all' || b.category === category;
     const matchSearch = b.title.includes(searchKeyword) || b.description.includes(searchKeyword);
     return matchCategory && matchSearch;
   });
 
-  // 获取所有分类
   const categories = Array.from(new Set(bookmarks.map((b) => b.category).filter(Boolean)));
 
-  // 生成分页页码
   function getPageNumbers(): (number | '...')[] {
     const pages: (number | '...')[] = [];
     if (totalPages <= 7) {
@@ -166,40 +198,58 @@ export default function BookmarksPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fafafa' }}>
-      {/* 顶部细线 */}
-      <div className="h-px" style={{ backgroundColor: '#1a1a1a' }} />
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
+      <LightningEffect />
+      <div className="h-px gradient-border" />
 
-      {/* 主内容 */}
-      <main className="max-w-[900px] mx-auto px-6 py-16">
+      <main className="max-w-[900px] mx-auto px-6 py-20">
         {/* 页面标题 */}
-        <header className="mb-12">
-          <Link href="/" className="text-sm text-neutral-400 hover:text-neutral-600 mb-4 block">
-            ← 返回
-          </Link>
-          <h1 className="text-4xl font-light tracking-wider" style={{ color: '#1a1a1a', fontFamily: 'serif' }}>
+        <header className="mb-16 text-center relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center gap-3" style={{ top: "-20px" }}>
+            {COLORS.map((c, i) => (
+              <div key={c} className={`color-dot ${c}`} style={{ animationDelay: `${i * 0.3}s` }} />
+            ))}
+          </div>
+
+          <h1
+            className={`text-5xl font-light mb-4 tracking-[0.3em] transition-all duration-1000 thunder-glow ${loaded ? "opacity-100" : "opacity-0"}`}
+            style={{ color: "var(--text-primary)", fontFamily: "serif" }}
+          >
             书签收藏
           </h1>
-          <p className="text-sm text-neutral-400 mt-2">记录有用的链接和资源</p>
+          <p
+            className={`text-sm tracking-[0.5em] transition-all duration-1000 delay-200 ${loaded ? "opacity-100" : "opacity-0"}`}
+            style={{ color: "var(--text-muted)" }}
+          >
+            记录有用的链接和资源
+          </p>
+
+          <div className={`flex items-center justify-center gap-8 mt-12 transition-all duration-1000 delay-400 ${loaded ? "opacity-100" : "opacity-0"}`}>
+            <div className="w-16 h-px" style={{ backgroundColor: "var(--border)" }} />
+            <div className="flex items-center gap-6">
+              {["☰", "☯", "☷"].map((s, i) => (
+                <span key={i} className={`text-xl ${i === 1 ? 'thunder-glow' : ''}`} style={{ fontFamily: "serif", color: "var(--text-muted)" }}>{s}</span>
+              ))}
+            </div>
+            <div className="w-16 h-px" style={{ backgroundColor: "var(--border)" }} />
+          </div>
         </header>
 
         {/* 工具栏 */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b" style={{ borderColor: '#e5e5e5' }}>
-          {/* 搜索 */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b" style={{ borderColor: "var(--border)" }}>
           <input
             type="text"
             placeholder="搜索书签..."
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            className="px-4 py-2 text-sm border w-64"
-            style={{ borderColor: '#e5e5e5', backgroundColor: '#fff' }}
+            className="px-4 py-2 text-sm border w-48"
+            style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)", color: "var(--text-primary)" }}
           />
 
-          {/* 分类筛选 */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => setCategory('all')}
-              className={`px-3 py-1 text-xs ${category === 'all' ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:text-neutral-700'}`}
+              className={`px-3 py-1.5 text-xs ${category === 'all' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'}`}
             >
               全部
             </button>
@@ -207,28 +257,29 @@ export default function BookmarksPage() {
               <button
                 key={cat}
                 onClick={() => setCategory(cat)}
-                className={`px-3 py-1 text-xs ${category === cat ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:text-neutral-700'}`}
+                className={`px-3 py-1.5 text-xs ${category === cat ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'}`}
               >
                 {cat}
               </button>
             ))}
           </div>
 
-          {/* 添加按钮 */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="px-4 py-2 text-sm border border-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors"
+              className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)]"
+              style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
             >
               {showAddForm ? '取消' : '+ 添加'}
             </button>
             <button
               onClick={handleExport}
-              className="px-4 py-2 text-sm border border-neutral-300 hover:border-neutral-900 transition-colors"
+              className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--bg-secondary)]"
+              style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
             >
               导出
             </button>
-            <label className="px-4 py-2 text-sm border border-neutral-300 hover:border-neutral-900 transition-colors cursor-pointer">
+            <label className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--bg-secondary)] cursor-pointer" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
               导入
               <input
                 type="file"
@@ -245,7 +296,7 @@ export default function BookmarksPage() {
 
         {/* 添加表单 */}
         {showAddForm && (
-          <form onSubmit={handleCreateBookmark} className="mb-8 p-6 border" style={{ borderColor: '#e5e5e5' }}>
+          <form onSubmit={handleCreateBookmark} className="mb-8 p-6 border" style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)" }}>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <input
                 type="text"
@@ -253,7 +304,7 @@ export default function BookmarksPage() {
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 className="px-4 py-2 text-sm border"
-                style={{ borderColor: '#e5e5e5' }}
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
                 required
               />
               <input
@@ -262,7 +313,7 @@ export default function BookmarksPage() {
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
                 className="px-4 py-2 text-sm border"
-                style={{ borderColor: '#e5e5e5' }}
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
                 required
               />
             </div>
@@ -273,7 +324,7 @@ export default function BookmarksPage() {
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
                 className="px-4 py-2 text-sm border"
-                style={{ borderColor: '#e5e5e5' }}
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
               />
               <input
                 type="text"
@@ -281,7 +332,7 @@ export default function BookmarksPage() {
                 value={newTags}
                 onChange={(e) => setNewTags(e.target.value)}
                 className="px-4 py-2 text-sm border"
-                style={{ borderColor: '#e5e5e5' }}
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
               />
             </div>
             <textarea
@@ -289,10 +340,10 @@ export default function BookmarksPage() {
               value={newDesc}
               onChange={(e) => setNewDesc(e.target.value)}
               className="w-full px-4 py-2 text-sm border mb-4"
-              style={{ borderColor: '#e5e5e5' }}
+              style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
               rows={2}
             />
-            <button type="submit" className="px-6 py-2 text-sm bg-neutral-900 text-white hover:bg-neutral-800">
+            <button type="submit" className="px-6 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:text-white" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
               保存书签
             </button>
           </form>
@@ -300,9 +351,9 @@ export default function BookmarksPage() {
 
         {/* 书签列表 */}
         {loading && bookmarks.length === 0 ? (
-          <p className="text-center text-neutral-400 py-12">加载中...</p>
+          <p className="text-center py-12" style={{ color: "var(--text-muted)" }}>加载中...</p>
         ) : filteredBookmarks.length === 0 ? (
-          <p className="text-center text-neutral-400 py-12">
+          <p className="text-center py-12" style={{ color: "var(--text-muted)" }}>
             {bookmarks.length === 0 ? '暂无书签' : '没有找到匹配的书签'}
           </p>
         ) : (
@@ -310,43 +361,63 @@ export default function BookmarksPage() {
             {filteredBookmarks.map((bookmark) => (
               <div
                 key={bookmark.id}
-                className="p-5 border hover:border-neutral-400 transition-colors"
-                style={{ borderColor: '#e5e5e5' }}
+                className="p-5 border hover:shadow-md transition-all"
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)" }}
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <a
                       href={bookmark.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-lg hover:text-neutral-600"
-                      style={{ color: '#1a1a1a' }}
+                      className="text-lg font-medium hover:text-[var(--accent)] transition-colors block truncate"
+                      style={{ color: "var(--text-primary)" }}
                     >
                       {bookmark.title}
                     </a>
-                    <p className="text-sm text-neutral-500 mt-1">{bookmark.url}</p>
+                    <a
+                      href={bookmark.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm hover:text-[var(--accent)] block truncate mt-1"
+                      style={{ color: "var(--text-muted)" }}
+                    >
+                      {bookmark.url}
+                    </a>
                     {bookmark.description && (
-                      <p className="text-sm text-neutral-400 mt-2">{bookmark.description}</p>
+                      <p className="text-sm mt-2" style={{ color: "var(--text-secondary)" }}>{bookmark.description}</p>
                     )}
-                    <div className="flex items-center gap-3 mt-3">
+                    <div className="flex items-center gap-3 mt-3 flex-wrap">
                       {bookmark.category && (
-                        <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-600">
+                        <span className="text-xs px-2 py-1" style={{ backgroundColor: "var(--bg-secondary)", color: "var(--text-muted)" }}>
                           {bookmark.category}
                         </span>
                       )}
                       {bookmark.tags.map((tag) => (
-                        <span key={tag} className="text-xs text-neutral-400">
+                        <span key={tag} className="text-xs" style={{ color: "var(--text-muted)" }}>
                           #{tag}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleDelete(bookmark.id)}
-                    className="text-xs text-neutral-400 hover:text-red-500 ml-4"
-                  >
-                    删除
-                  </button>
+                  <div className="flex items-center gap-2 ml-4">
+                    <a
+                      href={bookmark.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs px-3 py-1 border hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-colors"
+                      style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                    >
+                      访问
+                    </a>
+                    <button
+                      onClick={() => handleDelete(bookmark.id)}
+                      className="text-xs px-3 py-1 border hover:border-red-500 hover:text-red-500 transition-colors"
+                      style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}
+                    >
+                      删除
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -359,23 +430,23 @@ export default function BookmarksPage() {
             <button
               onClick={() => fetchBookmarks(page - 1)}
               disabled={page <= 1 || loading}
-              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm border hover:bg-[var(--bg-secondary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
             >
               上一页
             </button>
 
             {getPageNumbers().map((p, i) =>
               p === '...' ? (
-                <span key={`ellipsis-${i}`} className="px-2 text-neutral-400">...</span>
+                <span key={`ellipsis-${i}`} className="px-2" style={{ color: "var(--text-muted)" }}>...</span>
               ) : (
                 <button
                   key={p}
                   onClick={() => fetchBookmarks(p as number)}
                   className={`px-3 py-1 text-sm border ${
-                    page === p
-                      ? 'bg-neutral-900 text-white border-neutral-900'
-                      : 'border-neutral-300 hover:border-neutral-900'
+                    page === p ? 'bg-[var(--accent)] text-white border-[var(--accent)]' : 'hover:bg-[var(--bg-secondary)]'
                   }`}
+                  style={{ borderColor: "var(--border)", color: page === p ? "white" : "var(--text-secondary)" }}
                 >
                   {p}
                 </button>
@@ -385,7 +456,8 @@ export default function BookmarksPage() {
             <button
               onClick={() => fetchBookmarks(page + 1)}
               disabled={page >= totalPages || loading}
-              className="px-3 py-1 text-sm border border-neutral-300 hover:border-neutral-900 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm border hover:bg-[var(--bg-secondary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
             >
               下一页
             </button>
@@ -393,15 +465,14 @@ export default function BookmarksPage() {
         )}
 
         {/* 底部 */}
-        <footer className="mt-16 pt-8 border-t" style={{ borderColor: '#e5e5e5' }}>
-          <p className="text-xs text-neutral-400 text-center">
+        <footer className="mt-20 pt-8 text-center border-t" style={{ borderColor: "var(--border)" }}>
+          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
             共 {total} 个书签
           </p>
         </footer>
       </main>
 
-      {/* 底部细线 */}
-      <div className="h-px" style={{ backgroundColor: '#1a1a1a' }} />
+      <div className="h-px gradient-border" />
     </div>
   );
 }
