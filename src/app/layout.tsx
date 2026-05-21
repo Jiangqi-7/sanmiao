@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import { ClientComponents } from "@/components/client-components";
+import { BackToTop } from "@/components/back-to-top";
 
 export const metadata: Metadata = {
   title: "三秒 | AI 工具学习博客",
@@ -28,6 +29,7 @@ export default function RootLayout({
           <ClientComponents />
           <Header />
           {children}
+          <BackToTop />
         </ThemeProvider>
       </body>
     </html>

@@ -61,9 +61,9 @@ export function Header() {
               color: "var(--accent)",
               flexShrink: 0,
             }}
-            title={theme === "simple" ? "切换彩色模式" : "切换简约模式"}
+            title={theme === "simple" ? "切换彩色模式" : theme === "colorful" ? "切换深色模式" : "切换简约模式"}
           >
-            {theme === "simple" ? "🎨" : "⚡"}
+            {theme === "simple" ? "🎨" : theme === "colorful" ? "⚡" : "🌙"}
           </button>
         </div>
       </nav>
