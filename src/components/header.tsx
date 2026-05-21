@@ -7,11 +7,11 @@ import { useTheme } from "./theme-provider";
 const NAV_ITEMS = [
   { href: "/", label: "首页" },
   { href: "/blog", label: "博客" },
-  { href: "/bookmarks", label: "书签" },
+  { href: "/bookmarks", label: "书签收藏" },
   { href: "/puzzles", label: "推理阁" },
   { href: "/shan-hai-jing", label: "山海经" },
-  { href: "/tools", label: "工具" },
-  { href: "/prompts", label: "提示词" },
+  { href: "/tools", label: "工具箱" },
+  { href: "/prompts", label: "提示词工程" },
   { href: "/about", label: "关于" },
 ];
 
