@@ -74,11 +74,25 @@ export default function BookmarksPage() {
   const [editTags, setEditTags] = useState('');
   const [editDesc, setEditDesc] = useState('');
 
+  // Bookmarklet mode - when opened from external page with ?add=...&url=...
+  const [bookmarkletMode, setBookmarkletMode] = useState(false);
+
   const limit = 7; // Pagination size
 
   useEffect(() => {
     fetchAllBookmarks();
     setLoaded(true);
+
+    // Check for bookmarklet params
+    const params = new URLSearchParams(window.location.search);
+    const addTitle = params.get('add');
+    const addUrl = params.get('url');
+    if (addTitle && addUrl) {
+      setNewTitle(decodeURIComponent(addTitle));
+      setNewUrl(decodeURIComponent(addUrl));
+      setShowAddForm(true);
+      setBookmarkletMode(true);
+    }
   }, []);
 
   async function fetchAllBookmarks() {
@@ -309,6 +323,24 @@ export default function BookmarksPage() {
           </div>
         </header>
 
+        {/* 书签收集器说明 */}
+        <div className="mb-8 p-4 border" style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)" }}>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h3 className="text-sm font-medium mb-1" style={{ color: "var(--text-primary)" }}>书签收集器</h3>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>拖下面的按钮到书签栏，在任意页面点击即可快速保存</p>
+            </div>
+            <a
+              href="javascript:(function(){var t=document.title,u=location.href,w=window.open('https://sanmiao.top/bookmarks?add='+encodeURIComponent(t)+'&url='+encodeURIComponent(u),'_blank','width=500,height=400');})();"
+              className="px-4 py-2 text-sm border shrink-0 transition-colors"
+              style={{ borderColor: "var(--accent)", color: "var(--accent)", backgroundColor: "var(--bg-card)" }}
+              title="拖到书签栏"
+            >
+              ☑ 保存到三秒
+            </a>
+          </div>
+        </div>
+
         {/* 工具栏 */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b" style={{ borderColor: "var(--border)" }}>
           <input
@@ -350,11 +382,19 @@ export default function BookmarksPage() {
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setShowAddForm(!showAddForm)}
+              onClick={() => {
+                if (bookmarkletMode && showAddForm) {
+                  setShowAddForm(false);
+                  setBookmarkletMode(false);
+                  window.history.replaceState({}, '', '/bookmarks');
+                } else {
+                  setShowAddForm(!showAddForm);
+                }
+              }}
               className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:border-[var(--accent)]"
               style={{ borderColor: "var(--border)", color: "var(--text-secondary)", backgroundColor: "var(--bg-card)" }}
             >
-              {showAddForm ? '取消' : '+ 添加'}
+              {showAddForm ? (bookmarkletMode ? '完成' : '取消') : '+ 添加'}
             </button>
             <button
               onClick={handleExport}
