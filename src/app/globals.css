@@ -73,30 +73,13 @@ a {
   color: var(--text-primary);
 }
 
-/* 主题切换动画 */
+/* 主题切换动画 - 默认黑白模式不使用 */
 *, *::before, *::after {
   transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 彩色模式光晕效果 */
-[data-theme="colorful"] .glow-hover:hover {
-  box-shadow: 0 0 20px rgba(196,58,58,0.15), 0 0 40px rgba(32,178,170,0.08);
-}
-
-/* 雷电呼吸动画 - Logo和符号 */
-@keyframes thunder-breath {
-  0%, 100% {
-    text-shadow: 0 0 8px var(--thunder), 0 0 16px var(--peacock);
-    opacity: 0.7;
-  }
-  50% {
-    text-shadow: 0 0 20px var(--thunder), 0 0 40px var(--peacock), 0 0 60px var(--sky);
-    opacity: 1;
-  }
-}
-
-[data-theme="colorful"] .thunder-glow {
-  animation: thunder-breath 3s ease-in-out infinite;
+[data-theme="colorful"] *, [data-theme="colorful"] *::before, [data-theme="colorful"] *::after {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* 雷电动画 - 真实分叉闪电 */
@@ -136,7 +119,34 @@ a {
   }
 }
 
+/* 彩色模式光晕效果 */
+[data-theme="colorful"] .glow-hover:hover {
+  box-shadow: 0 0 20px rgba(196,58,58,0.15), 0 0 40px rgba(32,178,170,0.08);
+}
+
+/* 雷电呼吸动画 - Logo和符号 */
+@keyframes thunder-breath {
+  0%, 100% {
+    text-shadow: 0 0 8px var(--thunder), 0 0 16px var(--peacock);
+    opacity: 0.7;
+  }
+  50% {
+    text-shadow: 0 0 20px var(--thunder), 0 0 40px var(--peacock), 0 0 60px var(--sky);
+    opacity: 1;
+  }
+}
+
+[data-theme="colorful"] .thunder-glow {
+  animation: thunder-breath 3s ease-in-out infinite;
+}
+
+/* 雷电效果 - 默认隐藏，彩色模式显示 */
+.lightning-container {
+  display: none;
+}
+
 [data-theme="colorful"] .lightning-container {
+  display: block;
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -145,7 +155,6 @@ a {
   animation: screen-flash 15s ease-in-out infinite;
 }
 
-/* 主闪电 - 带锯齿和分叉 */
 [data-theme="colorful"] .lightning-bolt {
   position: absolute;
   top: -50px;
@@ -300,6 +309,10 @@ a {
 }
 
 /* 彩色渐变边框 - 简化只保留渐变线条 */
+.gradient-border {
+  background: var(--border);
+}
+
 [data-theme="colorful"] .gradient-border {
   background: linear-gradient(90deg, var(--vermilion), var(--gold), var(--peacock), var(--sky), var(--thunder), var(--vermilion));
   background-size: 200% 100%;
@@ -311,19 +324,19 @@ a {
   100% { background-position: 200% 50%; }
 }
 
-/* 彩色模式装饰点 */
-[data-theme="colorful"] .color-dot {
+/* 彩色模式装饰点 - 默认灰色 */
+.color-dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  animation: pulse-dot 2.5s ease-in-out infinite;
+  background: var(--border);
 }
 
-[data-theme="colorful"] .color-dot.vermilion { background: var(--vermilion); animation-delay: 0s; }
-[data-theme="colorful"] .color-dot.gold { background: var(--gold); animation-delay: 0.4s; }
-[data-theme="colorful"] .color-dot.peacock { background: var(--peacock); animation-delay: 0.8s; }
-[data-theme="colorful"] .color-dot.sky { background: var(--sky); animation-delay: 1.2s; }
-[data-theme="colorful"] .color-dot.thunder { background: var(--thunder); animation-delay: 1.6s; }
+[data-theme="colorful"] .color-dot.vermilion { background: var(--vermilion); animation: pulse-dot 2.5s ease-in-out infinite; animation-delay: 0s; }
+[data-theme="colorful"] .color-dot.gold { background: var(--gold); animation: pulse-dot 2.5s ease-in-out infinite; animation-delay: 0.4s; }
+[data-theme="colorful"] .color-dot.peacock { background: var(--peacock); animation: pulse-dot 2.5s ease-in-out infinite; animation-delay: 0.8s; }
+[data-theme="colorful"] .color-dot.sky { background: var(--sky); animation: pulse-dot 2.5s ease-in-out infinite; animation-delay: 1.2s; }
+[data-theme="colorful"] .color-dot.thunder { background: var(--thunder); animation: pulse-dot 2.5s ease-in-out infinite; animation-delay: 1.6s; }
 
 @keyframes pulse-dot {
   0%, 100% { transform: scale(1); opacity: 0.5; }
