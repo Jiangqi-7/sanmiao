@@ -232,7 +232,7 @@ export default function CategoryPage() {
       </header>
 
       <main className="max-w-[1400px] mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           {creatures.map((creature) => (
             <CreatureCard key={creature.id} creature={creature} />
           ))}
