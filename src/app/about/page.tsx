@@ -1,3 +1,7 @@
+"use client";
+
+import { Comments } from "@/components/comments";
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
@@ -35,6 +39,8 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
+
+        <Comments path="/about" />
       </main>
 
       <div className="h-px gradient-border" />

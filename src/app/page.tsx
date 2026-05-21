@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 
@@ -63,6 +63,55 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
   );
 }
 
+function LazyVideo({ id, src, className, style }: { id: string; src: string; className?: string; style?: React.CSSProperties }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={containerRef} className={className} style={style}>
+      {isVisible ? (
+        <video
+          ref={videoRef}
+          id={id}
+          className="w-full rounded-lg shadow-lg border"
+          style={{ borderColor: "var(--border)" }}
+          src={src}
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      ) : (
+        <div
+          className="w-full rounded-lg border flex items-center justify-center"
+          style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)", aspectRatio: "16/9" }}
+        >
+          <span style={{ color: "var(--text-muted)" }}>加载中...</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LightningEffect() {
   const [bolts, setBolts] = useState<Array<{ id: number; x: number; delay: number; angle: number; length: number }>>([]);
 
@@ -106,16 +155,6 @@ export default function HomePage() {
 
   useEffect(() => {
     setLoaded(true);
-
-    // Preload both videos early
-    const homeVideo = document.getElementById('home-video') as HTMLVideoElement;
-    if (homeVideo) {
-      homeVideo.preload = "auto";
-    }
-    const puzzleVideo = document.getElementById('puzzle-video') as HTMLVideoElement;
-    if (puzzleVideo) {
-      puzzleVideo.preload = "auto";
-    }
   }, []);
 
   return (
@@ -127,26 +166,18 @@ export default function HomePage() {
 
       {/* 视频播放器 - 左上角 */}
       <div className="fixed top-20 left-6 w-48 z-50">
-        <video
+        <LazyVideo
           id="home-video"
+          src="/dance-light.mp4"
           className="w-full rounded-lg shadow-lg border"
           style={{ borderColor: "var(--border)" }}
-          src="/dance-light.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
         />
       </div>
 
-      {/* 推理阁视频预加载 - 隐藏 */}
-      <video
-        id="puzzle-video"
-        className="fixed top-0 left-0 w-0 h-0 opacity-0 pointer-events-none"
-        src="/thinking-light.mp4"
-        preload="auto"
-      />
+      {/* 推理阁视频预加载 - 懒加载隐藏 */}
+      <div className="fixed top-0 left-0 w-0 h-0 opacity-0 pointer-events-none">
+        <LazyVideo id="puzzle-video" src="/thinking-light.mp4" />
+      </div>
 
       <main className="relative max-w-[900px] mx-auto px-6 py-20">
         {/* 标题区 */}
