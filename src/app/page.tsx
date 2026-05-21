@@ -25,6 +25,7 @@ const BAGUA_DESCS: Record<string, string> = {
   "gen": "工具箱",
   "kan": "关于",
   "qian": "推理阁",
+  "center": "道法自然",
 };
 
 const BAGUA_SYMBOLS = ["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"];
@@ -90,7 +91,7 @@ export default function HomePage() {
 
       {/* 视频背景 */}
       <video
-        className="fixed top-4 left-4 w-[120px] aspect-[9/16] object-contain rounded-lg shadow-lg border pointer-events-none z-10"
+        className="fixed top-4 left-4 w-48 aspect-[9/16] object-contain rounded-lg shadow-lg border pointer-events-none z-10"
         style={{ borderColor: "var(--border)" }}
         src="/dance-light.mp4"
         autoPlay
