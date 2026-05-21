@@ -74,7 +74,7 @@ export default function BookmarksPage() {
   const [editTags, setEditTags] = useState('');
   const [editDesc, setEditDesc] = useState('');
 
-  const limit = 50; // Get more items for client-side filtering
+  const limit = 200; // Get more items for client-side filtering
 
   useEffect(() => {
     fetchAllBookmarks();
