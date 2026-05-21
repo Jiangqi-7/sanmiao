@@ -551,7 +551,7 @@ function DaletouTool() {
   const generate = () => {
     const front = Array.from({ length: 35 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 5);
     const back = Array.from({ length: 12 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 2);
-    setNumbers([...front.sort((a, b) => a - b), ...back.sort((a, b) => a - b)]);
+    setNumbers([...front.sort((a, b) => a - b).map(String), ...back.sort((a, b) => a - b).map(String)]);
   };
 
   return (
@@ -590,7 +590,7 @@ function ShuangseqiuTool() {
   const generate = () => {
     const red = Array.from({ length: 33 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 6);
     const blue = Array.from({ length: 16 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 1);
-    setNumbers([...red.sort((a, b) => a - b), ...blue]);
+    setNumbers([...red.sort((a, b) => a - b).map(String), ...blue.map(String)]);
   };
 
   return (
