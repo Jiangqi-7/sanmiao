@@ -22,7 +22,7 @@ export default function AboutPage() {
           <div className="mt-12 pt-8 border-t" style={{ borderColor: "var(--border)" }}>
             <h2 className="text-sm font-medium mb-4" style={{ color: "var(--text-muted)" }}>视频来源</h2>
             <p className="text-sm">
-              网站中引用的视频来自{" "}
+              网站中引用的视频来自：{" "}
               <a
                 href="https://github.com/EKKOLearnAI/hermes-web-ui/tree/main"
                 target="_blank"
