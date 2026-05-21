@@ -5,14 +5,14 @@ import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 
 const BAGUA_GRID = [
-  { key: "xun", name: "巽", direction: "东南", href: "/blog?category=workflow" },
+  { key: "xun", name: "巽", direction: "东南", href: "/tools", desc: "工具箱" },
   { key: "li", name: "离", direction: "南", href: "/shan-hai-jing" },
   { key: "kun", name: "坤", direction: "西南", href: "/about" },
   { key: "zhen", name: "震", direction: "东", href: "/blog?category=video" },
   { key: "center", name: "中", direction: "宫", href: "/", isCenter: true },
   { key: "dui", name: "兑", direction: "西", href: "/bookmarks", desc: "书签收藏" },
-  { key: "gen", name: "艮", direction: "东北", href: "/puzzles", desc: "推理谜题" },
-  { key: "kan", name: "坎", direction: "北", href: "/blog", desc: "博客文章" },
+  { key: "gen", name: "艮", direction: "东北", href: "/puzzles", desc: "推理阁" },
+  { key: "kan", name: "坎", direction: "北", href: "/prompts", desc: "提示词工程" },
   { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于" },
 ];
 
