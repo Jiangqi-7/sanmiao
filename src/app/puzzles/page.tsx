@@ -3,60 +3,11 @@
 /**
  * 推理阁 - 谜题列表
  */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { puzzles } from '@/lib/puzzles';
 
 const PAGE_SIZE = 7;
-
-function LazyVideo({ id, src, className, style }: { id: string; src: string; className?: string; style?: React.CSSProperties }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={containerRef} className={className} style={style}>
-      {isVisible ? (
-        <video
-          ref={videoRef}
-          id={id}
-          className="w-full rounded-lg shadow-lg border"
-          style={{ borderColor: "var(--border)" }}
-          src={src}
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-      ) : (
-        <div
-          className="w-full rounded-lg border flex items-center justify-center"
-          style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-card)", aspectRatio: "16/9" }}
-        >
-          <span style={{ color: "var(--text-muted)" }}>加载中...</span>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function PuzzleListPage() {
   const [page, setPage] = useState(1);
@@ -98,11 +49,16 @@ export default function PuzzleListPage() {
 
       {/* 视频播放器 - 右上角 */}
       <div className="fixed top-20 right-6 w-48 z-50">
-        <LazyVideo
+        <video
           id="puzzle-video"
-          src="/thinking-light.mp4"
           className="w-full rounded-lg shadow-lg border"
           style={{ borderColor: "var(--border)" }}
+          src="/thinking-light.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
         />
       </div>
 
