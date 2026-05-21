@@ -33,7 +33,6 @@ const COLORS = ["vermilion", "gold", "peacock", "sky", "thunder"];
 // 打字机效果组件
 function TypewriterText({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
-  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     let i = 0;
@@ -48,22 +47,13 @@ function TypewriterText({ text }: { text: string }) {
     return () => clearInterval(timer);
   }, [text]);
 
-  useEffect(() => {
-    setStarted(true);
-  }, []);
-
-  return (
-    <span style={{ opacity: displayed ? 1 : 0 }}>
-      {displayed}
-    </span>
-  );
+  return <span style={{ opacity: displayed ? 1 : 0 }}>{displayed}</span>;
 }
 
 function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number }) {
-  const isCenter = cell.isCenter;
-  const symbol = isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol;
-  const label = isCenter ? "三秒" : cell.name;
-  const desc = isCenter ? "道法自然" : BAGUA_DESCS[cell.key];
+  const symbol = BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol;
+  const label = cell.name;
+  const desc = BAGUA_DESCS[cell.key];
 
   return (
     <Link
@@ -98,22 +88,17 @@ export default function HomePage() {
       {/* 顶部渐变细线 */}
       <div className="h-px gradient-border" />
 
-      {/* 视频播放器 - 左上角 */}
-      <div className="fixed top-20 left-6 w-44 z-40">
-        <video
-          id="home-video"
-          className="w-full rounded-xl"
-          style={{
-            filter: "blur(0.5px) brightness(0.95)",
-          }}
-          src="/dance-light.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-        />
-      </div>
+      {/* 视频背景 */}
+      <video
+        className="fixed top-4 left-4 w-[120px] aspect-[9/16] object-contain rounded-lg shadow-lg border pointer-events-none z-10"
+        style={{ borderColor: "var(--border)" }}
+        src="/dance-light.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+      />
 
       {/* 推理阁视频预加载 - 隐藏 */}
       <video
