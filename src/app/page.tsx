@@ -5,10 +5,10 @@ import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 
 const BAGUA_GRID = [
-  { key: "xun", name: "巽", direction: "东南", href: "/blog" },
+  { key: "xun", name: "巽", direction: "东南", href: "/tools" },
   { key: "li", name: "离", direction: "南", href: "/shan-hai-jing" },
   { key: "kun", name: "坤", direction: "西南", href: "/prompts" },
-  { key: "zhen", name: "震", direction: "东", href: "/blog" },
+  { key: "zhen", name: "震", direction: "东", href: "/bookmarks" },
   { key: "center", name: "中", direction: "宫", href: "/", isCenter: true },
   { key: "dui", name: "兑", direction: "西", href: "/bookmarks" },
   { key: "gen", name: "艮", direction: "东北", href: "/tools" },
@@ -17,10 +17,10 @@ const BAGUA_GRID = [
 ];
 
 const BAGUA_DESCS: Record<string, string> = {
-  "xun": "博客",
+  "xun": "工具箱",
   "li": "山海经",
   "kun": "提示词工程",
-  "zhen": "博客",
+  "zhen": "书签收藏",
   "dui": "书签收藏",
   "gen": "工具箱",
   "kan": "关于",
