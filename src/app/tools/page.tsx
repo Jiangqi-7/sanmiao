@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useMemo } from "react";
 
-type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "baseconvert" | "morse" | "daletou" | "shuangseqiu" | "hash" | "jwt" | "rmb" | "pomodoro" | "ascii";
+type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "baseconvert" | "morse" | "daletou" | "shuangseqiu" | "hash" | "jwt" | "rmb";
 
 const TOOLS = [
   { id: "base64" as Tool, name: "Base64", desc: "编解码" },
@@ -23,8 +23,6 @@ const TOOLS = [
   { id: "hash" as Tool, name: "哈希", desc: "MD5/SHA" },
   { id: "jwt" as Tool, name: "JWT", desc: "解码" },
   { id: "rmb" as Tool, name: "人民币", desc: "大写" },
-  { id: "pomodoro" as Tool, name: "番茄钟", desc: "专注计时" },
-  { id: "ascii" as Tool, name: "ASCII", desc: "艺术生成" },
 ];
 
 // Base64 Tool
@@ -752,117 +750,6 @@ function RMBTool() {
   );
 }
 
-// 番茄钟 Tool
-function PomodoroTool() {
-  const [minutes, setMinutes] = useState(25);
-  const [seconds, setSeconds] = useState(0);
-  const [running, setRunning] = useState(false);
-  const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    if (running) {
-      const id = setInterval(() => {
-        setSeconds((s) => {
-          if (s === 0) {
-            if (minutes === 0) {
-              setRunning(false);
-              return 0;
-            }
-            setMinutes((m) => m - 1);
-            return 59;
-          }
-          return s - 1;
-        });
-      }, 1000);
-      setIntervalId(id);
-      return () => clearInterval(id);
-    }
-  }, [running]);
-
-  const start = () => setRunning(true);
-  const pause = () => { setRunning(false); if (intervalId) clearInterval(intervalId); };
-  const reset = () => { setRunning(false); if (intervalId) clearInterval(intervalId); setMinutes(25); setSeconds(0); };
-
-  return (
-    <div className="space-y-6 text-center">
-      <div className="text-8xl font-light" style={{ fontFamily: "serif", color: "var(--text-primary)" }}>
-        {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
-      </div>
-      <div className="flex justify-center gap-4">
-        {!running ? (
-          <button onClick={start} className="px-8 py-3 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
-            开始
-          </button>
-        ) : (
-          <button onClick={pause} className="px-8 py-3 text-sm border" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
-            暂停
-          </button>
-        )}
-        <button onClick={reset} className="px-8 py-3 text-sm border" style={{ borderColor: "var(--border)", color: "var(--text-muted)" }}>
-          重置
-        </button>
-      </div>
-      <div className="flex justify-center gap-2">
-        {[15, 25, 45, 60].map((m) => (
-          <button key={m} onClick={() => { setMinutes(m); setSeconds(0); setRunning(false); }}
-            className="px-3 py-1 text-xs border" style={{ borderColor: minutes === m && seconds === 0 ? "var(--accent)" : "var(--border)", color: minutes === m && seconds === 0 ? "var(--accent)" : "var(--text-muted)" }}>
-            {m}分钟
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ASCII Art Tool
-function AsciiTool() {
-  const [input, setInput] = useState("三秒");
-  const [art, setArt] = useState("");
-
-  const fonts: Record<string, string[]> = {
-    "block": [
-      "┌─┐┌─┐┌─┐",
-      "│ ││ ││ │",
-      "└─┘└─┘└─┘",
-    ],
-    "banner": [
-      "╔═╗╔═╗╔═╗",
-      "║ ║║ ║║ ║",
-      "╚═╝╚═╝╚═╝",
-    ],
-  };
-
-  const simple = (text: string) => {
-    const chars: Record<string, string[]> = {
-      "三": ["┌─┐","│ │","└─┘"], "秒": ["┏━┓","┃ ┃","┗━┛"],
-      "道": ["┌─╮","│ │","└─╯"], "法": ["┌─┐","├─┤","└─┘"],
-      "自": ["┌─┐","  │","└─┘"], "然": ["┌─┐","│ │","└─┘"],
-    };
-    const lines = ["", "", ""];
-    for (const char of text) {
-      const pattern = chars[char] || [char, "", ""];
-      for (let i = 0; i < 3; i++) lines[i] += (pattern[i] || "  ") + " ";
-    }
-    return lines.join("\n");
-  };
-
-  return (
-    <div className="space-y-4">
-      <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="输入文字..."
-        className="w-full px-4 py-2 text-sm border" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
-      <button onClick={() => setArt(simple(input))}
-        className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
-        生成
-      </button>
-      {art && (
-        <pre className="p-4 border font-mono text-sm" style={{ borderColor: "var(--border)", color: "var(--accent)", backgroundColor: "var(--bg-card)" }}>
-          {art}
-        </pre>
-      )}
-    </div>
-  );
-}
-
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<Tool>("base64");
 
@@ -904,8 +791,6 @@ export default function ToolsPage() {
           {activeTool === "hash" && <HashTool />}
           {activeTool === "jwt" && <JWTTool />}
           {activeTool === "rmb" && <RMBTool />}
-          {activeTool === "pomodoro" && <PomodoroTool />}
-          {activeTool === "ascii" && <AsciiTool />}
         </div>
       </main>
 
