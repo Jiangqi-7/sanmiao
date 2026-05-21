@@ -521,7 +521,7 @@ export default function PromptsPage() {
               style={{
                 borderColor: filter === "全部" ? "var(--accent)" : "var(--border)",
                 backgroundColor: filter === "全部" ? "var(--accent)" : "var(--bg-card)",
-                color: filter === "全部" ? "#fff" : "var(--text-secondary)",
+                color: filter === "全部" ? "var(--bg-card)" : "var(--text-secondary)",
               }}
             >
               全部
@@ -534,7 +534,7 @@ export default function PromptsPage() {
                 style={{
                   borderColor: filter === cat ? "var(--accent)" : "var(--border)",
                   backgroundColor: filter === cat ? "var(--accent)" : "var(--bg-card)",
-                  color: filter === cat ? "#fff" : "var(--text-secondary)",
+                  color: filter === cat ? "var(--bg-primary)" : "var(--text-secondary)",
                 }}
               >
                 {cat}
@@ -555,7 +555,7 @@ export default function PromptsPage() {
                       {prompt.category}
                     </span>
                   </div>
-                  <p className="text-sm text-neutral-400">{prompt.description}</p>
+                  <p className="text-sm" style={{ color: "var(--text-muted)" }}>{prompt.description}</p>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleEdit(prompt)} className="px-3 py-1 text-xs border" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
@@ -575,7 +575,7 @@ export default function PromptsPage() {
               {/* 变量填充 */}
               {prompt.variables.length > 0 && (
                 <div className="mb-3">
-                  <div className="text-xs text-neutral-400 mb-2">变量填充</div>
+                  <div className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>变量填充</div>
                   <div className="flex gap-2 flex-wrap">
                     {prompt.variables.map((v) => (
                       <input
@@ -603,7 +603,7 @@ export default function PromptsPage() {
           ))}
 
           {filtered.length === 0 && (
-            <div className="p-8 text-center text-neutral-400">
+            <div className="p-8 text-center" style={{ color: "var(--text-muted)" }}>
               {search || filter !== "全部" ? "没有找到匹配的提示词" : "还没有提示词，点击新建添加"}
             </div>
           )}
@@ -620,7 +620,7 @@ export default function PromptsPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-neutral-400 mb-1">标题</label>
+                <label className="block text-sm mb-1" style={{ color: "var(--text-muted)" }}>标题</label>
                 <input
                   type="text"
                   value={formTitle}
@@ -632,7 +632,7 @@ export default function PromptsPage() {
               </div>
 
               <div>
-                <label className="block text-sm text-neutral-400 mb-1">分类</label>
+                <label className="block text-sm mb-1" style={{ color: "var(--text-muted)" }}>分类</label>
                 <div className="flex gap-2 flex-wrap">
                   {CATEGORIES.map((cat) => (
                     <button
@@ -642,7 +642,7 @@ export default function PromptsPage() {
                       style={{
                         borderColor: formCategory === cat ? "var(--accent)" : "var(--border)",
                         backgroundColor: formCategory === cat ? "var(--accent)" : "var(--bg-card)",
-                        color: formCategory === cat ? "#fff" : "var(--text-secondary)",
+                        color: formCategory === cat ? "var(--bg-primary)" : "var(--text-secondary)",
                       }}
                     >
                       {cat}
@@ -652,7 +652,7 @@ export default function PromptsPage() {
               </div>
 
               <div>
-                <label className="block text-sm text-neutral-400 mb-1">描述</label>
+                <label className="block text-sm mb-1" style={{ color: "var(--text-muted)" }}>描述</label>
                 <input
                   type="text"
                   value={formDescription}
@@ -664,7 +664,7 @@ export default function PromptsPage() {
               </div>
 
               <div>
-                <label className="block text-sm text-neutral-400 mb-1">内容（用 {"{变量名}"} 作为占位符）</label>
+                <label className="block text-sm mb-1" style={{ color: "var(--text-muted)" }}>内容（用 {"{变量名}"} 作为占位符）</label>
                 <textarea
                   value={formContent}
                   onChange={(e) => setFormContent(e.target.value)}
