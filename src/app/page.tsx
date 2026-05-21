@@ -107,10 +107,14 @@ export default function HomePage() {
   useEffect(() => {
     setLoaded(true);
 
-    // Preload video early
-    const video = document.getElementById('home-video') as HTMLVideoElement;
-    if (video) {
-      video.preload = "auto";
+    // Preload both videos early
+    const homeVideo = document.getElementById('home-video') as HTMLVideoElement;
+    if (homeVideo) {
+      homeVideo.preload = "auto";
+    }
+    const puzzleVideo = document.getElementById('puzzle-video') as HTMLVideoElement;
+    if (puzzleVideo) {
+      puzzleVideo.preload = "auto";
     }
   }, []);
 
@@ -135,6 +139,14 @@ export default function HomePage() {
           preload="auto"
         />
       </div>
+
+      {/* 推理阁视频预加载 - 隐藏 */}
+      <video
+        id="puzzle-video"
+        className="fixed top-0 left-0 w-0 h-0 opacity-0 pointer-events-none"
+        src="/thinking-light.mp4"
+        preload="auto"
+      />
 
       <main className="relative max-w-[900px] mx-auto px-6 py-20">
         {/* 标题区 */}
