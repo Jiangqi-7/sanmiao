@@ -87,7 +87,10 @@ export default function SearchPage() {
       }
       const bookmarkData = await bookmarkRes.json();
 
-      const searchResults: SearchResult[] = (bookmarkData.data || []).map((b: Bookmark) => ({
+      // API returns array directly, not { data: ... }
+      const bookmarks = Array.isArray(bookmarkData) ? bookmarkData : (bookmarkData.data || []);
+
+      const searchResults: SearchResult[] = bookmarks.map((b: Bookmark) => ({
         type: 'bookmark' as const,
         id: b.id,
         title: b.title,
