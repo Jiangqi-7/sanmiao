@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: "/shan-hai-jing", label: "山海经" },
   { href: "/tools", label: "工具箱" },
   { href: "/prompts", label: "提示词工程" },
+  { href: "/search", label: "搜索" },
   { href: "/about", label: "关于" },
 ];
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
+import { ClientComponents } from "@/components/client-components";
 
 export const metadata: Metadata = {
   title: "三秒 | AI 工具学习博客",
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="zh-CN" className="h-full antialiased">
       <body className="min-h-full flex flex-col" style={{ backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}>
         <ThemeProvider>
+          <ClientComponents />
           <Header />
           {children}
         </ThemeProvider>

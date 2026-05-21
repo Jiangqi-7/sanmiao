@@ -36,6 +36,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const toggleThemeRef = { current: toggleTheme };
+
+  // Listen for keyboard shortcut toggle
+  useEffect(() => {
+    function handleToggleEvent() {
+      toggleThemeRef.current();
+    }
+    document.addEventListener('toggle-theme', handleToggleEvent);
+    return () => document.removeEventListener('toggle-theme', handleToggleEvent);
+  }, []);
+
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
