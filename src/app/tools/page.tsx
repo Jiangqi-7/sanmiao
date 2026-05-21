@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useMemo } from "react";
 
-type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password";
+type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "uuid" | "baseconvert" | "morse" | "daletou" | "shuangseqiu";
 
 const TOOLS = [
   { id: "base64" as Tool, name: "Base64", desc: "编解码" },
@@ -16,6 +16,11 @@ const TOOLS = [
   { id: "json" as Tool, name: "JSON", desc: "格式化" },
   { id: "regex" as Tool, name: "正则", desc: "测试" },
   { id: "password" as Tool, name: "密码", desc: "生成" },
+  { id: "uuid" as Tool, name: "UUID", desc: "生成" },
+  { id: "baseconvert" as Tool, name: "进制转换", desc: "2/8/10/16" },
+  { id: "morse" as Tool, name: "摩斯电码", desc: "互转" },
+  { id: "daletou" as Tool, name: "大乐透", desc: "随机" },
+  { id: "shuangseqiu" as Tool, name: "双色球", desc: "随机" },
 ];
 
 // Base64 Tool
@@ -438,6 +443,215 @@ function PasswordTool() {
   );
 }
 
+// UUID Tool
+function UUIDTool() {
+  const [uuids, setUuids] = useState<string[]>([]);
+
+  const generate = (count: number = 1) => {
+    const newUuids = [];
+    for (let i = 0; i < count; i++) {
+      newUuids.push(crypto.randomUUID());
+    }
+    setUuids(newUuids);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4">
+        <button onClick={() => generate(1)} className="px-4 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+          生成1个
+        </button>
+        <button onClick={() => generate(5)} className="px-4 py-2 text-sm border" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+          生成5个
+        </button>
+      </div>
+      {uuids.map((uuid, i) => (
+        <div key={i} className="p-3 border font-mono text-sm" style={{ borderColor: "var(--border)" }}>
+          {uuid}
+          <button onClick={() => navigator.clipboard.writeText(uuid)} className="ml-4 text-xs opacity-50 hover:opacity-100">
+            复制
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Base Convert Tool
+function BaseConvertTool() {
+  const [input, setInput] = useState("");
+  const [fromBase, setFromBase] = useState(10);
+  const [results, setResults] = useState<Record<number, string>>({});
+
+  const convert = () => {
+    try {
+      const num = parseInt(input, fromBase);
+      if (isNaN(num)) return;
+      setResults({
+        2: num.toString(2),
+        8: num.toString(8),
+        10: num.toString(10),
+        16: num.toString(16).toUpperCase(),
+      });
+    } catch {}
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4">
+        <select value={fromBase} onChange={(e) => { setFromBase(Number(e.target.value)); convert(); }}
+          className="px-4 py-2 text-sm border" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }}>
+          <option value={2}>2进制</option>
+          <option value={8}>8进制</option>
+          <option value={10}>10进制</option>
+          <option value={16}>16进制</option>
+        </select>
+        <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="输入数字"
+          className="flex-1 px-4 py-2 text-sm border font-mono"
+          style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
+        <button onClick={convert} className="px-4 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+          转换
+        </button>
+      </div>
+      <div className="grid grid-cols-4 gap-3">
+        {Object.entries(results).map(([base, value]) => (
+          <div key={base} className="p-4 border text-center" style={{ borderColor: "var(--border)" }}>
+            <div className="text-xs mb-1" style={{ color: "var(--text-muted)" }}>{base}进制</div>
+            <div className="text-lg font-mono" style={{ color: "var(--accent)" }}>{value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Morse Code Tool
+function MorseTool() {
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [mode, setMode] = useState<"toMorse" | "fromMorse">("toMorse");
+
+  const morseMap: Record<string, string> = {
+    "A": ".-", "B": "-...", "C": "-.-.", "D": "-..", "E": ".", "F": "..-.", "G": "--.", "H": "....", "I": "..", "J": ".---",
+    "K": "-.-", "L": ".-..", "M": "--", "N": "-.", "O": "---", "P": ".--.", "Q": "--.-", "R": ".-.", "S": "...", "T": "-",
+    "U": "..-", "V": "...-", "W": ".--", "X": "-..-", "Y": "-.--", "Z": "--..",
+    "0": "-----", "1": ".----", "2": "..---", "3": "...--", "4": "....-", "5": ".....", "6": "-....", "7": "--...", "8": "---..", "9": "----.",
+  };
+  const reverseMorse = Object.fromEntries(Object.entries(morseMap).map(([k, v]) => [v, k]));
+
+  const handle = () => {
+    if (mode === "toMorse") {
+      setOutput(input.toUpperCase().split("").map(c => morseMap[c] || c).join(" "));
+    } else {
+      setOutput(input.split(" ").map(s => reverseMorse[s] || s).join(""));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4">
+        <button onClick={() => { setMode("toMorse"); setOutput(""); }}
+          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "toMorse" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "toMorse" ? "var(--accent)" : "var(--bg-card)", color: mode === "toMorse" ? "var(--bg-primary)" : "var(--text-secondary)" }}>
+          文字→摩斯
+        </button>
+        <button onClick={() => { setMode("fromMorse"); setOutput(""); }}
+          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "fromMorse" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "fromMorse" ? "var(--accent)" : "var(--bg-card)", color: mode === "fromMorse" ? "var(--bg-primary)" : "var(--text-secondary)" }}>
+          摩斯→文字
+        </button>
+      </div>
+      <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder={mode === "toMorse" ? "输入文字..." : "输入摩斯电码，用空格分隔..."}
+        className="w-full h-32 p-3 text-sm border resize-none" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
+      <button onClick={handle} className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+        转换
+      </button>
+      {output && (
+        <div className="p-4 border" style={{ borderColor: "var(--border)" }}>
+          <div className="font-mono text-lg break-all" style={{ color: "var(--accent)" }}>{output}</div>
+          <button onClick={() => navigator.clipboard.writeText(output)} className="mt-3 px-4 py-2 text-sm border" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
+            复制
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 大乐透 Tool
+function DaletouTool() {
+  const [numbers, setNumbers] = useState<string[]>([]);
+
+  const generate = () => {
+    const front = Array.from({ length: 35 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 5);
+    const back = Array.from({ length: 12 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 2);
+    setNumbers([...front.sort((a, b) => a - b), ...back.sort((a, b) => a - b)]);
+  };
+
+  return (
+    <div className="space-y-4">
+      <button onClick={generate} className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+        生成一注
+      </button>
+      {numbers.length > 0 && (
+        <div className="flex gap-6">
+          <div>
+            <div className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>前区（35选5）</div>
+            <div className="flex gap-2">
+              {numbers.slice(0, 5).map((n, i) => (
+                <span key={i} className="w-10 h-10 flex items-center justify-center border rounded-full" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>{n}</span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>后区（12选2）</div>
+            <div className="flex gap-2">
+              {numbers.slice(5).map((n, i) => (
+                <span key={i} className="w-10 h-10 flex items-center justify-center border rounded-full" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>{n}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 双色球 Tool
+function ShuangseqiuTool() {
+  const [numbers, setNumbers] = useState<string[]>([]);
+
+  const generate = () => {
+    const red = Array.from({ length: 33 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 6);
+    const blue = Array.from({ length: 16 }, (_, i) => i + 1).sort(() => Math.random() - 0.5).slice(0, 1);
+    setNumbers([...red.sort((a, b) => a - b), ...blue]);
+  };
+
+  return (
+    <div className="space-y-4">
+      <button onClick={generate} className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+        生成一注
+      </button>
+      {numbers.length > 0 && (
+        <div className="flex gap-6">
+          <div>
+            <div className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>红球（33选6）</div>
+            <div className="flex gap-2">
+              {numbers.slice(0, 6).map((n, i) => (
+                <span key={i} className="w-10 h-10 flex items-center justify-center border rounded-full" style={{ borderColor: "#c43a3a", color: "#c43a3a" }}>{n}</span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>蓝球（16选1）</div>
+            <div className="flex gap-2">
+              <span className="w-10 h-10 flex items-center justify-center border rounded-full" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>{numbers[6]}</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<Tool>("base64");
 
@@ -472,6 +686,11 @@ export default function ToolsPage() {
           {activeTool === "json" && <JSONTool />}
           {activeTool === "regex" && <RegexTool />}
           {activeTool === "password" && <PasswordTool />}
+          {activeTool === "uuid" && <UUIDTool />}
+          {activeTool === "baseconvert" && <BaseConvertTool />}
+          {activeTool === "morse" && <MorseTool />}
+          {activeTool === "daletou" && <DaletouTool />}
+          {activeTool === "shuangseqiu" && <ShuangseqiuTool />}
         </div>
       </main>
 
