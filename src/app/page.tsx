@@ -99,33 +99,20 @@ export default function HomePage() {
       <div className="h-px gradient-border" />
 
       {/* 视频播放器 - 左上角 */}
-      <div className="fixed top-20 left-6 w-48 z-40">
-        <div
-          className="relative rounded-2xl overflow-hidden"
+      <div className="fixed top-20 left-6 w-44 z-40">
+        <video
+          id="home-video"
+          className="w-full rounded-xl"
           style={{
-            boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-            backdropFilter: "blur(10px)",
+            filter: "blur(0.5px) brightness(0.95)",
           }}
-        >
-          <video
-            id="home-video"
-            className="w-full block"
-            src="/dance-light.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-          />
-          {/* 半透明边框融合效果 */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: "16px",
-            }}
-          />
-        </div>
+          src="/dance-light.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+        />
       </div>
 
       {/* 推理阁视频预加载 - 隐藏 */}
