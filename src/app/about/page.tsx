@@ -16,7 +16,7 @@ export default function AboutPage() {
             我是三秒，爱好广泛，正在学习 AI 领域相关知识与内容。
           </p>
           <p>
-            这个网站用来记录些想记录的东西希望大家一起学习交流。
+            这个网站用来记录些想记录的东西，希望大家一起学习交流。
           </p>
 
           <div className="mt-12 pt-8 border-t" style={{ borderColor: "var(--border)" }}>
