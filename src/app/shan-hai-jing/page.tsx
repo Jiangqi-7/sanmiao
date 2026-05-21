@@ -101,8 +101,52 @@ const CATEGORY_BAGUA: Record<string, string> = {
   "大荒经": "qian",
   "海外经": "kun",
   "海内经": "xun",
-  "附录专题": "li",
+  "附录专题": "center",
 };
+
+const CATEGORY_ICONS: Record<string, string> = {
+  "南山经": "🦎",
+  "西山经": "🐯",
+  "北山经": "🐺",
+  "东山经": "🐉",
+  "中山经": "🐍",
+  "大荒经": "🔥",
+  "海外经": "🌀",
+  "海内经": "🌊",
+  "附录专题": "✨",
+};
+
+function CategoryNavGrid() {
+  const order = ["海内经", "南山经", "西山经", "东山经", "附录专题", "北山经", "中山经", "大荒经", "海外经"];
+
+  return (
+    <div className="grid grid-cols-3 gap-3 p-4">
+      {order.map((cat) => {
+        const baguaKey = CATEGORY_BAGUA[cat] as keyof typeof BAGUA.positions;
+        const icon = CATEGORY_ICONS[cat] || "◉";
+        const symbol = cat === "附录专题" ? "☯" : (BAGUA.positions[baguaKey]?.symbol || "☯");
+
+        return (
+          <a
+            key={cat}
+            href={`#${cat}`}
+            className="group flex items-center gap-3 p-3 rounded-lg border transition-all duration-300 hover:shadow-md"
+            style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)" }}
+          >
+            <span className="text-2xl">{icon}</span>
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>{cat}</div>
+              <div className="text-xs" style={{ color: "var(--text-muted)" }}>{CREATURES_BY_CATEGORY[cat as keyof typeof CREATURES_BY_CATEGORY].length} 种</div>
+            </div>
+            <span className="text-xl opacity-30 group-hover:opacity-60 transition-opacity" style={{ fontFamily: "serif" }}>
+              {symbol}
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function ShanHaiJingPage() {
   return (
@@ -143,30 +187,14 @@ export default function ShanHaiJingPage() {
         </div>
       </section>
 
-      {/* 目录导航 */}
-      <section
-        className="py-4 sticky top-16 z-40 backdrop-blur-xl border-b"
-        style={{
-          backgroundColor: "color-mix(in srgb, var(--bg-primary) 90%, transparent)",
-          borderColor: "var(--border)",
-        }}
-      >
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex items-center gap-2 text-sm overflow-x-auto">
-            <span style={{ opacity: 0.5 }}>{BAGUA.positions.kun.symbol}</span>
-            <span>导航：</span>
-            {Object.keys(CREATURES_BY_CATEGORY).map((cat, i) => {
-              const keys = Object.keys(CREATURES_BY_CATEGORY);
-              return (
-                <span key={cat} className="flex items-center gap-2">
-                  <Link href={`#${cat}`} className="px-2 py-1 rounded transition-colors hover:bg-[var(--bg-secondary)]">
-                    {cat}
-                  </Link>
-                  {i < keys.length - 1 && <span className="opacity-30">·</span>}
-                </span>
-              );
-            })}
+      {/* 分类导航 - 八卦九宫格 */}
+      <section className="py-6 border-b" style={{ borderColor: "var(--border)" }}>
+        <div className="max-w-[900px] mx-auto px-6">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-lg">{BAGUA.positions.kun.symbol}</span>
+            <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>九经分类</span>
           </div>
+          <CategoryNavGrid />
         </div>
       </section>
 
