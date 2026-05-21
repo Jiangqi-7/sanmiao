@@ -68,8 +68,12 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
   return (
     <Link
       href={cell.href}
-      className="group block p-6 transition-all duration-300 border glow-hover color-card"
-      style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)" }}
+      className="group block p-6 transition-all duration-300 border glow-hover color-card bagua-cell"
+      style={{
+        backgroundColor: "var(--bg-card)",
+        borderColor: "var(--border)",
+        animationDelay: `${index * 0.1}s`
+      }}
     >
       <div className="mb-4 flex items-center justify-between">
         <span className="text-xs tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>{cell.direction}</span>
@@ -84,7 +88,7 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
       </h3>
       <div className="flex items-center justify-between">
         <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{desc}</span>
-        <span className="text-4xl opacity-20 transition-opacity duration-300 group-hover:opacity-40 breath thunder-glow" style={{ fontFamily: "serif" }}>
+        <span className="text-4xl opacity-20 transition-opacity duration-300 group-hover:opacity-40 breath thunder-glow bagua-symbol" style={{ fontFamily: "serif" }}>
           {symbol}
         </span>
       </div>
@@ -164,7 +168,7 @@ export default function HomePage() {
         {/* 九宫格 */}
         <div className="grid grid-cols-3 gap-4">
           {BAGUA_GRID.map((cell, index) => (
-            <div key={cell.key}>
+            <div key={cell.key} className="fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
               <BaguaCell cell={cell} index={index} />
             </div>
           ))}

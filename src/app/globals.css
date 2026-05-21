@@ -362,6 +362,94 @@ a {
   box-shadow: 0 4px 20px rgba(32,178,170,0.15), 0 0 0 1px rgba(32,178,170,0.1);
 }
 
+/* 入场动画 - 九宫格依次淡入 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* 滚动渐显动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  opacity: 0;
+}
+
+.scroll-reveal.revealed {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* 页面切换过渡 */
+.page-transition {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* 九宫格 hover 增强效果 */
+.bagua-cell {
+  transition: all 0.3s ease;
+}
+
+.bagua-cell:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+[data-theme="colorful"] .bagua-cell:hover {
+  box-shadow: 0 8px 30px rgba(196,58,58,0.15), 0 0 0 1px var(--vermilion);
+}
+
+/* 符号呼吸增强 */
+@keyframes symbol-breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.35;
+  }
+}
+
+.bagua-symbol {
+  transition: all 0.3s ease;
+}
+
+.bagua-cell:hover .bagua-symbol {
+  opacity: 0.5 !important;
+  animation: symbol-breathe 2s ease-in-out infinite;
+}
+
 /* 呼吸动画 - 卡片符号 */
 @keyframes breath {
   0%, 100% { opacity: 0.2; transform: scale(1); }
