@@ -5,16 +5,27 @@ import Link from "next/link";
 import { BAGUA } from "@/lib/design-system";
 
 const BAGUA_GRID = [
-  { key: "xun", name: "巽", direction: "东南", href: "/tools", desc: "工具箱" },
+  { key: "xun", name: "巽", direction: "东南", href: "/blog" },
   { key: "li", name: "离", direction: "南", href: "/shan-hai-jing" },
-  { key: "kun", name: "坤", direction: "西南", href: "/about" },
-  { key: "zhen", name: "震", direction: "东", href: "/blog?category=video" },
+  { key: "kun", name: "坤", direction: "西南", href: "/prompts" },
+  { key: "zhen", name: "震", direction: "东", href: "/blog" },
   { key: "center", name: "中", direction: "宫", href: "/", isCenter: true },
-  { key: "dui", name: "兑", direction: "西", href: "/bookmarks", desc: "书签收藏" },
-  { key: "gen", name: "艮", direction: "东北", href: "/puzzles", desc: "推理阁" },
-  { key: "kan", name: "坎", direction: "北", href: "/prompts", desc: "提示词工程" },
-  { key: "qian", name: "乾", direction: "西北", href: "/about", desc: "关于" },
+  { key: "dui", name: "兑", direction: "西", href: "/bookmarks" },
+  { key: "gen", name: "艮", direction: "东北", href: "/tools" },
+  { key: "kan", name: "坎", direction: "北", href: "/about" },
+  { key: "qian", name: "乾", direction: "西北", href: "/puzzles" },
 ];
+
+const BAGUA_DESCS: Record<string, string> = {
+  "xun": "博客",
+  "li": "山海经",
+  "kun": "提示词工程",
+  "zhen": "博客",
+  "dui": "书签收藏",
+  "gen": "工具箱",
+  "kan": "关于",
+  "qian": "推理阁",
+};
 
 const BAGUA_SYMBOLS = ["kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian"];
 const COLORS = ["vermilion", "gold", "peacock", "sky", "thunder"];
@@ -23,7 +34,7 @@ function BaguaCell({ cell, index }: { cell: typeof BAGUA_GRID[0]; index: number 
   const isCenter = cell.isCenter;
   const symbol = isCenter ? "☯" : BAGUA.positions[cell.key as keyof typeof BAGUA.positions]?.symbol;
   const label = isCenter ? "三秒" : cell.name;
-  const desc = isCenter ? "道法自然" : ("desc" in cell ? cell.desc : cell.direction);
+  const desc = isCenter ? "道法自然" : BAGUA_DESCS[cell.key];
 
   return (
     <Link
