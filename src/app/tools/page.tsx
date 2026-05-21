@@ -44,11 +44,11 @@ function Base64Tool() {
     <div className="space-y-4">
       <div className="flex gap-4">
         <button onClick={() => { setMode("encode"); handleEncode(); }}
-          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "encode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "encode" ? "var(--accent)" : "var(--bg-card)", color: mode === "encode" ? "#fff" : "var(--text-secondary)" }}>
+          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "encode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "encode" ? "var(--accent)" : "var(--bg-card)", color: mode === "encode" ? "var(--bg-primary)" : "var(--text-secondary)" }}>
           编码
         </button>
         <button onClick={() => { setMode("decode"); handleDecode(); }}
-          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "decode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "decode" ? "var(--accent)" : "var(--bg-card)", color: mode === "decode" ? "#fff" : "var(--text-secondary)" }}>
+          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "decode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "decode" ? "var(--accent)" : "var(--bg-card)", color: mode === "decode" ? "var(--bg-primary)" : "var(--text-secondary)" }}>
           解码
         </button>
       </div>
@@ -99,7 +99,7 @@ function CountTool() {
         ].map((item) => (
           <div key={item.label} className="p-3 border text-center" style={{ borderColor: "var(--border)" }}>
             <div className="text-xl" style={{ color: "var(--accent)" }}>{item.value}</div>
-            <div className="text-xs text-neutral-400 mt-1">{item.label}</div>
+            <div className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>{item.label}</div>
           </div>
         ))}
       </div>
@@ -150,9 +150,9 @@ function ColorTool() {
         <div className="flex gap-6 items-center">
           <div className="w-20 h-20 border" style={{ backgroundColor: input, borderColor: "var(--border)" }} />
           <div className="space-y-1 text-sm">
-            <div><span className="text-neutral-400">HEX: </span><span style={{ color: "var(--text-primary)" }}>{input}</span></div>
-            <div><span className="text-neutral-400">RGB: </span><span style={{ color: "var(--text-primary)" }}>{output.rgb}</span></div>
-            <div><span className="text-neutral-400">HSL: </span><span style={{ color: "var(--text-primary)" }}>{output.hsl}</span></div>
+            <div><span style={{ color: "var(--text-muted)" }}>HEX: </span><span style={{ color: "var(--text-primary)" }}>{input}</span></div>
+            <div><span style={{ color: "var(--text-muted)" }}>RGB: </span><span style={{ color: "var(--text-primary)" }}>{output.rgb}</span></div>
+            <div><span style={{ color: "var(--text-muted)" }}>HSL: </span><span style={{ color: "var(--text-primary)" }}>{output.hsl}</span></div>
           </div>
         </div>
       )}
@@ -209,11 +209,11 @@ function URLTool() {
     <div className="space-y-4">
       <div className="flex gap-4">
         <button onClick={() => { setMode("encode"); setOutput(encodeURIComponent(input)); }}
-          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "encode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "encode" ? "var(--accent)" : "var(--bg-card)", color: mode === "encode" ? "#fff" : "var(--text-secondary)" }}>
+          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "encode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "encode" ? "var(--accent)" : "var(--bg-card)", color: mode === "encode" ? "var(--bg-primary)" : "var(--text-secondary)" }}>
           编码
         </button>
         <button onClick={() => { setMode("decode"); setOutput(decodeURIComponent(input)); }}
-          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "decode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "decode" ? "var(--accent)" : "var(--bg-card)", color: mode === "decode" ? "#fff" : "var(--text-secondary)" }}>
+          className="px-4 py-2 text-sm border" style={{ borderColor: mode === "decode" ? "var(--accent)" : "var(--border)", backgroundColor: mode === "decode" ? "var(--accent)" : "var(--bg-card)", color: mode === "decode" ? "var(--bg-primary)" : "var(--text-secondary)" }}>
           解码
         </button>
       </div>
@@ -260,9 +260,9 @@ function TimestampTool() {
   return (
     <div className="space-y-4">
       <div className="p-4 border" style={{ borderColor: "var(--border)" }}>
-        <div className="text-xs text-neutral-400 mb-2">当前时间戳</div>
+        <div className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>当前时间戳</div>
         <div className="text-2xl font-mono" style={{ color: "var(--accent)" }}>{now}</div>
-        <div className="text-sm text-neutral-400 mt-1">{toDate(now)}</div>
+        <div className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>{toDate(now)}</div>
       </div>
 
       <div className="flex gap-4">
@@ -274,10 +274,10 @@ function TimestampTool() {
           复制
         </button>
       </div>
-      <div className="text-sm text-neutral-400">{toDate(ts)}</div>
+      <div className="text-sm" style={{ color: "var(--text-muted)" }}>{toDate(ts)}</div>
 
       <div className="border-t pt-4" style={{ borderColor: "var(--border)" }}>
-        <div className="text-xs text-neutral-400 mb-2">时间戳转日期</div>
+        <div className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>时间戳转日期</div>
         <div className="flex gap-4">
           <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="输入时间戳或日期"
             className="flex-1 px-4 py-2 text-sm border" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
@@ -377,11 +377,11 @@ function RegexTool() {
         className="w-full h-32 p-3 text-sm border resize-none"
         style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
       <div className="space-y-1">
-        <div className="text-xs text-neutral-400">匹配结果 ({matches.length})</div>
+        <div className="text-xs" style={{ color: "var(--text-muted)" }}>匹配结果 ({matches.length})</div>
         {matches.map((m, i) => (
           <div key={i} className="flex gap-4 text-sm font-mono p-2 border" style={{ borderColor: "var(--border)" }}>
-            <span className="px-2" style={{ backgroundColor: "var(--accent)", color: "#fff" }}>{m.match}</span>
-            <span className="text-neutral-400">@{m.index}</span>
+            <span className="px-2" style={{ backgroundColor: "var(--accent)", color: "var(--bg-primary)" }}>{m.match}</span>
+            <span style={{ color: "var(--text-muted)" }}>@{m.index}</span>
           </div>
         ))}
       </div>
@@ -411,7 +411,7 @@ function PasswordTool() {
     <div className="space-y-4">
       <div className="flex gap-4 items-center">
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-400">长度</label>
+          <label className="text-sm" style={{ color: "var(--text-muted)" }}>长度</label>
           <input type="number" value={length} onChange={(e) => setLength(Number(e.target.value))}
             min={8} max={64} className="w-20 px-2 py-1 text-sm border text-center"
             style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />

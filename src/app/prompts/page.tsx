@@ -521,7 +521,7 @@ export default function PromptsPage() {
               style={{
                 borderColor: filter === "全部" ? "var(--accent)" : "var(--border)",
                 backgroundColor: filter === "全部" ? "var(--accent)" : "var(--bg-card)",
-                color: filter === "全部" ? "var(--bg-card)" : "var(--text-secondary)",
+                color: filter === "全部" ? "var(--bg-primary)" : "var(--text-secondary)",
               }}
             >
               全部

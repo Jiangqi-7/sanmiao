@@ -323,7 +323,12 @@ export default function BookmarksPage() {
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => handleCategoryChange('all')}
-              className={`px-3 py-1.5 text-xs ${category === 'all' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'}`}
+              className="px-3 py-1.5 text-xs border transition-colors"
+              style={{
+                borderColor: category === 'all' ? "var(--accent)" : "var(--border)",
+                backgroundColor: category === 'all' ? "var(--accent)" : "var(--bg-card)",
+                color: category === 'all' ? "var(--bg-primary)" : "var(--text-muted)",
+              }}
             >
               全部
             </button>
@@ -331,7 +336,12 @@ export default function BookmarksPage() {
               <button
                 key={cat}
                 onClick={() => handleCategoryChange(cat)}
-                className={`px-3 py-1.5 text-xs ${category === cat ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)] hover:bg-[var(--bg-secondary)]'}`}
+                className="px-3 py-1.5 text-xs border transition-colors"
+                style={{
+                  borderColor: category === cat ? "var(--accent)" : "var(--border)",
+                  backgroundColor: category === cat ? "var(--accent)" : "var(--bg-card)",
+                  color: category === cat ? "var(--bg-primary)" : "var(--text-muted)",
+                }}
               >
                 {cat}
               </button>
@@ -341,8 +351,8 @@ export default function BookmarksPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)]"
-              style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+              className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:border-[var(--accent)]"
+              style={{ borderColor: "var(--border)", color: "var(--text-secondary)", backgroundColor: "var(--bg-card)" }}
             >
               {showAddForm ? '取消' : '+ 添加'}
             </button>
@@ -417,7 +427,7 @@ export default function BookmarksPage() {
               style={{ borderColor: "var(--border)", backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
               rows={2}
             />
-            <button type="submit" className="px-6 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:text-white" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+            <button type="submit" className="px-6 py-2 text-sm border transition-colors" style={{ borderColor: "var(--accent)", color: "var(--accent)", backgroundColor: "var(--bg-card)" }}>
               保存书签
             </button>
           </form>
@@ -488,7 +498,7 @@ export default function BookmarksPage() {
                       rows={2}
                     />
                     <div className="flex items-center gap-2">
-                      <button type="submit" className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--accent)] hover:text-white" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+                      <button type="submit" className="px-4 py-2 text-sm border transition-colors" style={{ borderColor: "var(--accent)", color: "var(--accent)", backgroundColor: "var(--bg-card)" }}>
                         保存
                       </button>
                       <button type="button" onClick={cancelEdit} className="px-4 py-2 text-sm border transition-colors hover:bg-[var(--bg-secondary)]" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>
@@ -539,8 +549,8 @@ export default function BookmarksPage() {
                         href={bookmark.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs px-3 py-1 border hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-colors"
-                        style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                        className="text-xs px-3 py-1 border transition-colors hover:bg-[var(--accent)] hover:border-[var(--accent)]"
+                        style={{ borderColor: "var(--border)", color: "var(--text-secondary)", backgroundColor: "var(--bg-card)" }}
                       >
                         访问
                       </a>
@@ -585,10 +595,12 @@ export default function BookmarksPage() {
                 <button
                   key={p}
                   onClick={() => setPage(p as number)}
-                  className={`px-3 py-1 text-sm border ${
-                    page === p ? 'bg-[var(--accent)] text-white border-[var(--accent)]' : 'hover:bg-[var(--bg-secondary)]'
-                  }`}
-                  style={{ borderColor: "var(--border)", color: page === p ? "white" : "var(--text-secondary)" }}
+                  className="px-3 py-1 text-sm border transition-colors hover:bg-[var(--bg-secondary)]"
+                  style={{
+                    borderColor: page === p ? "var(--accent)" : "var(--border)",
+                    backgroundColor: page === p ? "var(--accent)" : "var(--bg-card)",
+                    color: page === p ? "var(--bg-primary)" : "var(--text-secondary)",
+                  }}
                 >
                   {p}
                 </button>
