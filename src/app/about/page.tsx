@@ -1,6 +1,6 @@
 "use client";
 
-import { Comments } from "@/components/comments";
+// 评论区已移除，如需开启请参考 giscus.app
 
 export default function AboutPage() {
   return (
@@ -39,8 +39,6 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
-
-        <Comments path="/about" />
       </main>
 
       <div className="h-px gradient-border" />
