@@ -118,7 +118,7 @@ function CreatureCard({ creature }: { creature: typeof CREATURES_BY_CATEGORY["�
 
   return (
     <article
-      className="group rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-xl"
+      className="rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-xl"
       style={{
         backgroundColor: "var(--bg-card)",
         borderColor: "var(--border)",
@@ -155,17 +155,16 @@ function CreatureCard({ creature }: { creature: typeof CREATURES_BY_CATEGORY["�
         ))}
       </div>
 
-      <details className="group/prompt">
+      <details className="w-full">
         <summary
-          className="flex items-center justify-between px-4 py-3 cursor-pointer list-none text-sm font-medium"
+          className="flex items-center justify-between px-4 py-3 cursor-pointer text-sm font-medium"
           style={{ color: "var(--text-primary)" }}
         >
           <span className="flex items-center gap-2">
             <span style={{ opacity: 0.5 }}>{BAGUA.positions.li.symbol}</span>
             提示词
           </span>
-          <span className="text-xs opacity-50 group-open/prompt:hidden block">点击展开</span>
-          <span className="text-xs opacity-50 group-open/prompt:block hidden">点击收起</span>
+          <span className="text-xs opacity-50">点击展开</span>
         </summary>
 
         <div className="px-4 pb-4 space-y-3">
