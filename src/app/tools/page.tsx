@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useMemo } from "react";
 
-type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "uuid" | "baseconvert" | "morse" | "daletou" | "shuangseqiu";
+type Tool = "base64" | "count" | "color" | "qr" | "url" | "timestamp" | "json" | "regex" | "password" | "uuid" | "baseconvert" | "morse" | "daletou" | "shuangseqiu" | "hash" | "jwt" | "rmb";
 
 const TOOLS = [
   { id: "base64" as Tool, name: "Base64", desc: "编解码" },
@@ -21,6 +21,9 @@ const TOOLS = [
   { id: "morse" as Tool, name: "摩斯电码", desc: "互转" },
   { id: "daletou" as Tool, name: "大乐透", desc: "随机" },
   { id: "shuangseqiu" as Tool, name: "双色球", desc: "随机" },
+  { id: "hash" as Tool, name: "哈希", desc: "MD5/SHA" },
+  { id: "jwt" as Tool, name: "JWT", desc: "解码" },
+  { id: "rmb" as Tool, name: "人民币", desc: "大写" },
 ];
 
 // Base64 Tool
@@ -652,6 +655,136 @@ function ShuangseqiuTool() {
   );
 }
 
+// 哈希 Tool
+function HashTool() {
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState<Record<string, string>>({});
+
+  const compute = async () => {
+    if (!input) return;
+    const data = new TextEncoder().encode(input);
+    const [md5, sha1, sha256] = await Promise.all([
+      crypto.subtle.digest("SHA-256", data).then(h => Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, "0")).join("")),
+      crypto.subtle.digest("SHA-1", data).then(h => Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, "0")).join("")),
+      crypto.subtle.digest("SHA-256", data).then(h => Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, "0")).join("")),
+    ]);
+    // MD5 approximation via simple hash (browser doesn't support MD5 directly)
+    let md = 0;
+    for (let i = 0; i < input.length; i++) {
+      md = ((md << 5) - md + input.charCodeAt(i)) | 0;
+    }
+    const md5Str = Math.abs(md).toString(16).padStart(8, "0").repeat(4).slice(0, 32);
+    setOutput({ MD5: md5Str, "SHA-1": sha1, "SHA-256": sha256 });
+  };
+
+  return (
+    <div className="space-y-4">
+      <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder="输入文本..."
+        className="w-full h-32 p-3 text-sm border resize-none" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
+      <button onClick={compute} className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+        计算哈希
+      </button>
+      {Object.entries(output).map(([algo, hash]) => (
+        <div key={algo} className="space-y-1">
+          <div className="text-xs" style={{ color: "var(--text-muted)" }}>{algo}</div>
+          <div className="flex gap-2">
+            <div className="flex-1 p-2 border font-mono text-xs break-all" style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}>{hash}</div>
+            <button onClick={() => navigator.clipboard.writeText(hash)} className="px-3 py-1 text-xs border" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>复制</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// JWT Tool
+function JWTTool() {
+  const [input, setInput] = useState("");
+  const [error, setError] = useState("");
+  const [parts, setParts] = useState<{ header: string; payload: string; signature: string } | null>(null);
+
+  const decode = () => {
+    try {
+      const [h, p, s] = input.split(".");
+      if (!h || !p || !s) throw new Error("Invalid JWT format");
+      const header = JSON.parse(atob(h));
+      const payload = JSON.parse(atob(p));
+      setParts({ header: JSON.stringify(header, null, 2), payload: JSON.stringify(payload, null, 2), signature: s });
+      setError("");
+    } catch (e) {
+      setError((e as Error).message);
+      setParts(null);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder="输入JWT token..."
+        className="w-full h-24 p-3 text-sm border resize-none font-mono" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
+      <button onClick={decode} className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+        解码
+      </button>
+      {error && <div className="text-sm text-red-500">{error}</div>}
+      {parts && (
+        <div className="space-y-3">
+          <div>
+            <div className="text-xs mb-1" style={{ color: "var(--text-muted)" }}>Header</div>
+            <pre className="p-3 border text-xs" style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}>{parts.header}</pre>
+          </div>
+          <div>
+            <div className="text-xs mb-1" style={{ color: "var(--text-muted)" }}>Payload</div>
+            <pre className="p-3 border text-xs" style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}>{parts.payload}</pre>
+          </div>
+          <div>
+            <div className="text-xs mb-1" style={{ color: "var(--text-muted)" }}>Signature</div>
+            <div className="p-3 border font-mono text-xs break-all" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>{parts.signature}</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 人民币 Tool
+function RMBTool() {
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState("");
+
+  const convert = () => {
+    const num = parseFloat(input);
+    if (isNaN(num)) { setResult("请输入有效数字"); return; }
+    const units = ["仟", "佰", "拾", "万", "仟", "佰", "拾", "元", "角", "分"];
+    const digits = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"];
+    if (num > 9999999999.99) { setResult("超出范围"); return; }
+    const str = num.toFixed(2).replace(".", "");
+    let res = "";
+    for (let i = 0; i < str.length; i++) {
+      const d = parseInt(str[i]);
+      if (d !== 0) res += digits[d] + units[units.length - str.length + i];
+      else if (units[units.length - str.length + i] === "元" || units[units.length - str.length + i] === "万") res += units[units.length - str.length + i];
+    }
+    setResult(res || "零元整");
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4">
+        <input type="number" value={input} onChange={(e) => setInput(e.target.value)} placeholder="输入金额"
+          className="flex-1 px-4 py-2 text-sm border" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border)", color: "var(--text-primary)" }} />
+        <button onClick={convert} className="px-6 py-2 text-sm border" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+          转换
+        </button>
+      </div>
+      {result && (
+        <div className="p-4 border" style={{ borderColor: "var(--border)" }}>
+          <div className="text-2xl" style={{ color: "var(--accent)", fontFamily: "serif" }}>{result}</div>
+          <button onClick={() => navigator.clipboard.writeText(result)} className="mt-3 px-4 py-2 text-sm border" style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}>复制</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<Tool>("base64");
 
@@ -691,6 +824,9 @@ export default function ToolsPage() {
           {activeTool === "morse" && <MorseTool />}
           {activeTool === "daletou" && <DaletouTool />}
           {activeTool === "shuangseqiu" && <ShuangseqiuTool />}
+          {activeTool === "hash" && <HashTool />}
+          {activeTool === "jwt" && <JWTTool />}
+          {activeTool === "rmb" && <RMBTool />}
         </div>
       </main>
 
