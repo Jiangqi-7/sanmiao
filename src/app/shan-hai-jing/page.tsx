@@ -138,7 +138,7 @@ export default function ShanHaiJingPage() {
           </p>
 
           <p className="text-xs mt-2" style={{ color: "var(--text-muted)" }}>
-            共收录 {CATEGORIES.reduce((sum, cat) => sum + CREATURES_BY_CATEGORY[cat].length, 0)} 种异兽
+            共收录 {Object.values(CREATURES_BY_CATEGORY).reduce((sum, arr) => sum + arr.length, 0)} 种异兽
           </p>
         </div>
       </section>
@@ -155,14 +155,17 @@ export default function ShanHaiJingPage() {
           <div className="flex items-center gap-2 text-sm overflow-x-auto">
             <span style={{ opacity: 0.5 }}>{BAGUA.positions.kun.symbol}</span>
             <span>导航：</span>
-            {CATEGORIES.map((cat, i) => (
-              <span key={cat} className="flex items-center gap-2">
-                <Link href={`#${cat}`} className="px-2 py-1 rounded transition-colors hover:bg-[var(--bg-secondary)]">
-                  {cat}
-                </Link>
-                {i < CATEGORIES.length - 1 && <span className="opacity-30">·</span>}
-              </span>
-            ))}
+            {Object.keys(CREATURES_BY_CATEGORY).map((cat, i) => {
+              const keys = Object.keys(CREATURES_BY_CATEGORY);
+              return (
+                <span key={cat} className="flex items-center gap-2">
+                  <Link href={`#${cat}`} className="px-2 py-1 rounded transition-colors hover:bg-[var(--bg-secondary)]">
+                    {cat}
+                  </Link>
+                  {i < keys.length - 1 && <span className="opacity-30">·</span>}
+                </span>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -170,8 +173,8 @@ export default function ShanHaiJingPage() {
       {/* 异兽展示 */}
       <section className="py-12 flex-1">
         <div className="max-w-[1400px] mx-auto px-6 space-y-16">
-          {CATEGORIES.map((category) => {
-            const creatures = CREATURES_BY_CATEGORY[category];
+          {Object.keys(CREATURES_BY_CATEGORY).map((category) => {
+            const creatures = CREATURES_BY_CATEGORY[category as keyof typeof CREATURES_BY_CATEGORY];
             const baguaKey = CATEGORY_BAGUA[category] as keyof typeof BAGUA.positions;
             const baguaSymbol = BAGUA.positions[baguaKey]?.symbol || "☯";
 
